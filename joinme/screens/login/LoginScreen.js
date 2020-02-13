@@ -62,10 +62,11 @@ export default class LoginScreen extends Component {
 
     return re.test(email);
   }
-
+  
   login() {
     const { email, password } = this.state;
     this.setState({ isLoading: true });
+    
     // Simulate an API call
     setTimeout(() => {
       LayoutAnimation.easeInEaseOut();
@@ -75,11 +76,15 @@ export default class LoginScreen extends Component {
         isPasswordValid: password.length >= 8 || this.passwordInput.shake(),
       });
     }, 1500);
+
+    //Recieve token here and send back to BottomTabNavigator
+    
   }
 
   signUp() {
     const { email, password, passwordConfirmation } = this.state;
     this.setState({ isLoading: true });
+    
     // Simulate an API call
     setTimeout(() => {
       LayoutAnimation.easeInEaseOut();
@@ -89,8 +94,12 @@ export default class LoginScreen extends Component {
         isPasswordValid: password.length >= 8 || this.passwordInput.shake(),
         isConfirmationValid:
           password === passwordConfirmation || this.confirmationInput.shake(),
+        
       });
     }, 1500);
+
+    //after sign up successfully, switch to log in
+    
   }
 
   render() {
@@ -217,15 +226,15 @@ export default class LoginScreen extends Component {
                 />
                 {isSignUpPage && (
                   <Input
-                    icon={
-                      <Icon
-                        name="lock"
-                        type="simple-line-icon"
-                        color="rgba(0, 0, 0, 0.38)"
-                        size={25}
-                        style={{ backgroundColor: 'transparent' }}
-                      />
-                    }
+                   leftIcon={
+                    <Icon
+                      name="lock"
+                      type="simple-line-icon"
+                      color="rgba(0, 0, 0, 0.38)"
+                      size={25}
+                      style={{ backgroundColor: 'transparent' }}
+                    />
+                  }
                     value={passwordConfirmation}
                     secureTextEntry={true}
                     keyboardAppearance="light"

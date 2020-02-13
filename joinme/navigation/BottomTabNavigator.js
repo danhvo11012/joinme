@@ -13,36 +13,51 @@ export default function BottomTabNavigator({ navigation, route }) {
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
   navigation.setOptions({ headerShown: false});
-  
+  const token = 'sdas';// Get this token from LoginScreen
   return (
     <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
-      <BottomTab.Screen
-        name="Login"
-        component={LoginScreen}
-        options={{
-          title: 'Get Started',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
-        }}
-      />
-      <BottomTab.Screen
-        name="Links"
-        component={LinksScreen}
-        options={{
-          title: 'Resources',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
-        }}
-      />
+      { token != null ? (
+        <BottomTab.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{
+            title: 'Get Started',
+            tabBarVisible: false
+          }}
+        /> ) : ([
+        <BottomTab.Screen
+          name="Home"
+          key= '1'
+          component={HomeScreen}
+          options={{
+            title: 'Resources',
+            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
+            tabBarVisible: true
+          }}
+        />,
+        <BottomTab.Screen
+          name="Link"
+          key= '2'
+          component={LinksScreen}
+          options={{
+            title: 'Resources',
+            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
+            tabBarVisible: true
+          }}
+        />]
+        )
+      }
     </BottomTab.Navigator>
   );
 }
 
-function getHeaderTitle(route) {
-  const routeName = route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
+// function getHeaderTitle(route) {
+//   const routeName = route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
 
-  switch (routeName) {
-    case 'Login':
-      return 'How to get started';
-    case 'Links':
-      return 'Links to learn more';
-  }
-}
+//   switch (routeName) {
+//     case 'Login':
+//       return 'How to get started';
+//     case 'Home':
+//       return 'Links to learn more';
+//   }
+// }
