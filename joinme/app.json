@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Tab Navigation Template",
+    "name": "Join Me",
     "slug": "joinme",
     "privacy": "public",
     "sdkVersion": "36.0.0",
@@ -27,5 +27,6 @@
     "ios": {
       "supportsTablet": true
     }
-  }
+  },
+  "name":"Join Me"
 }

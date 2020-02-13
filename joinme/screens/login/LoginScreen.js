@@ -1,21 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  StyleSheet,
   View,
   Text,
   ImageBackground,
-  Dimensions,
   LayoutAnimation,
   UIManager,
   KeyboardAvoidingView,
 } from 'react-native';
 import { Input, Button, Icon } from 'react-native-elements';
+import styles from './styles';
 
-const SCREEN_WIDTH = Dimensions.get('window').width;
-const SCREEN_HEIGHT = Dimensions.get('window').height;
 
-const BG_IMAGE = require('../assets/images/bg_screen4.jpg');
+const BG_IMAGE = require('../../assets/images/bg_screen4.jpg');
 
 // Enable LayoutAnimation on Android
 UIManager.setLayoutAnimationEnabledExperimental &&
@@ -120,11 +117,9 @@ export default class LoginScreen extends Component {
             >
               <View style={styles.titleContainer}>
                 <View style={{ flexDirection: 'row' }}>
-                  <Text style={styles.titleText}>BEAUX</Text>
+                  <Text style={styles.titleText}>JOIN ME</Text>
                 </View>
-                <View style={{ marginTop: -10, marginLeft: 10 }}>
-                  <Text style={styles.titleText}>VOYAGES</Text>
-                </View>
+                
               </View>
               <View style={{ flexDirection: 'row' }}>
                 <Button
@@ -285,92 +280,3 @@ export default class LoginScreen extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingBottom:20
-  },
-  rowSelector: {
-    height: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  selectorContainer: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  selected: {
-    position: 'absolute',
-    borderRadius: 50,
-    height: 0,
-    width: 0,
-    top: -5,
-    borderRightWidth: 70,
-    borderBottomWidth: 70,
-    borderColor: 'white',
-    backgroundColor: 'white',
-  },
-  loginContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  loginTextButton: {
-    fontSize: 16,
-    color: 'white',
-    fontWeight: 'bold',
-  },
-  loginButton: {
-    backgroundColor: 'rgba(232, 147, 142, 1)',
-    borderRadius: 10,
-    height: 50,
-    width: 200,
-  },
-  titleContainer: {
-    height: 150,
-    backgroundColor: 'transparent',
-    justifyContent: 'center',
-  },
-  formContainer: {
-    backgroundColor: 'white',
-    width: SCREEN_WIDTH - 30,
-    borderRadius: 10,
-    paddingTop: 32,
-    paddingBottom: 32,
-    alignItems: 'center',
-  },
-  loginText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: 'white',
-  },
-  bgImage: {
-    flex: 1,
-    top: 0,
-    left: 0,
-    width: SCREEN_WIDTH,
-    height: SCREEN_HEIGHT,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  categoryText: {
-    textAlign: 'center',
-    color: 'white',
-    fontSize: 24,
-    fontFamily: 'light',
-    backgroundColor: 'transparent',
-    opacity: 0.54,
-  },
-  selectedCategoryText: {
-    opacity: 1,
-  },
-  titleText: {
-    color: 'white',
-    fontSize: 30,
-    fontFamily: 'regular',
-  },
-  helpContainer: {
-    height: 64,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

@@ -5,9 +5,9 @@ export default [
   {
     Ionicons: require('@expo/vector-icons/src/vendor/react-native-vector-icons/Fonts/Ionicons.ttf'),
   },
-  // {
-  //   Entypo: require('@expo/vector-icons/src/vendor/react-native-vector-icons/Fonts/Entypo.ttf'),
-  // },
+  {
+    Entypo: require('@expo/vector-icons/src/vendor/react-native-vector-icons/Fonts/Entypo.ttf'),
+  },
   {
     SimpleLineIcons: require('@expo/vector-icons/src/vendor/react-native-vector-icons/Fonts/SimpleLineIcons.ttf'),
   },
