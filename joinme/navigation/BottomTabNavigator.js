@@ -2,7 +2,7 @@ import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 import LoginScreen from '../screens/login/LoginScreen';
 
 const BottomTab = createBottomTabNavigator();
@@ -16,7 +16,7 @@ export default function BottomTabNavigator({ navigation, route }) {
   const token = 'sdas';// Get this token from LoginScreen
   return (
     <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
-      { token != null ? (
+      { token == null ? (
         <BottomTab.Screen
           name="Login"
           component={LoginScreen}
@@ -32,17 +32,17 @@ export default function BottomTabNavigator({ navigation, route }) {
           options={{
             title: 'Resources',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
-            tabBarVisible: true
+            
           }}
         />,
         <BottomTab.Screen
-          name="Link"
+          name="Profile"
           key= '2'
-          component={LinksScreen}
+          component={ProfileScreen}
           options={{
             title: 'Resources',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
-            tabBarVisible: true
+            
           }}
         />]
         )
