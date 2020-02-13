@@ -7,6 +7,7 @@ import {
   LayoutAnimation,
   UIManager,
   KeyboardAvoidingView,
+  TouchableOpacity
 } from 'react-native';
 import { Input, Button, Icon } from 'react-native-elements';
 import styles from './styles';
@@ -42,12 +43,22 @@ export default class LoginScreen extends Component {
       isEmailValid: true,
       isPasswordValid: true,
       isConfirmationValid: true,
+      showPass: false,
     };
 
     this.selectCategory = this.selectCategory.bind(this);
     this.login = this.login.bind(this);
     this.signUp = this.signUp.bind(this);
   }
+
+  ShowOrHidePass =() => {
+    if(this.state.showPass)
+      this.setState({showPass:false});
+    else
+      this.setState({showPass:true});
+  }
+
+  
 
   selectCategory(selectedCategory) {
     LayoutAnimation.easeInEaseOut();
@@ -193,18 +204,29 @@ export default class LoginScreen extends Component {
                 <Input
                   leftIcon={
                     <Icon
-                      name="lock"
+                      name="key"
                       type="simple-line-icon"
                       color="rgba(0, 0, 0, 0.38)"
                       size={25}
                       style={{ backgroundColor: 'transparent' }}
                     />
                   }
+                  rightIcon={
+                    <TouchableOpacity onPress={this.ShowOrHidePass.bind(this)}>
+                      <Icon
+                        name={this.state.showPass ? "lock-open" :"lock"}
+                        type="simple-line-icon"
+                        color="rgba(0, 0, 0, 0.38)"
+                        size={25}
+                        style={{ backgroundColor: 'transparent' }}
+                      />
+                    </TouchableOpacity>
+                  }
                   value={password}
                   keyboardAppearance="light"
                   autoCapitalize="none"
                   autoCorrect={false}
-                  secureTextEntry={true}
+                  secureTextEntry={!this.state.showPass}
                   returnKeyType={isSignUpPage ? 'next' : 'done'}
                   blurOnSubmit={true}
                   containerStyle={{
@@ -227,16 +249,17 @@ export default class LoginScreen extends Component {
                 {isSignUpPage && (
                   <Input
                    leftIcon={
-                    <Icon
-                      name="lock"
-                      type="simple-line-icon"
-                      color="rgba(0, 0, 0, 0.38)"
-                      size={25}
-                      style={{ backgroundColor: 'transparent' }}
-                    />
-                  }
+                      <Icon
+                        name="key"
+                        type="simple-line-icon"
+                        color="rgba(0, 0, 0, 0.38)"
+                        size={25}
+                        style={{ backgroundColor: 'transparent' }}
+                      />
+                    }
+                    
                     value={passwordConfirmation}
-                    secureTextEntry={true}
+                    secureTextEntry={!this.state.showPass}
                     keyboardAppearance="light"
                     autoCapitalize="none"
                     autoCorrect={false}
