@@ -86,7 +86,7 @@ const styles = {
     titleText: {
       color: 'white',
       fontSize: 30,
-      fontFamily: 'bold',
+      fontFamily: 'regular',
     },
     helpContainer: {
       height: 64,
