@@ -16,7 +16,7 @@ export default function BottomTabNavigator({ navigation, route }) {
   const token = 'sdas';// Get this token from LoginScreen
   return (
     <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
-      { token === null ? (
+      { token !== null ? (
         <BottomTab.Screen
           name="Login"
           component={LoginScreen}
