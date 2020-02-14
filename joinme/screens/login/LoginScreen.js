@@ -58,8 +58,6 @@ export default class LoginScreen extends Component {
       this.setState({showPass:true});
   }
 
-  
-
   selectCategory(selectedCategory) {
     LayoutAnimation.easeInEaseOut();
     this.setState({
