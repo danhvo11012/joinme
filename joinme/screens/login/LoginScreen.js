@@ -10,6 +10,7 @@ import {
   TouchableOpacity
 } from 'react-native';
 import { Input, Button, Icon } from 'react-native-elements';
+import { LinearGradient } from 'expo-linear-gradient';
 import styles from './styles';
 
 
@@ -282,6 +283,7 @@ export default class LoginScreen extends Component {
                     }
                   />
                 )}
+                
                 <Button
                   buttonStyle={styles.loginButton}
                   containerStyle={{ marginTop: 32, flex: 0 }}
@@ -291,7 +293,14 @@ export default class LoginScreen extends Component {
                   titleStyle={styles.loginTextButton}
                   loading={isLoading}
                   disabled={isLoading}
+                  // linearGradientProps={{
+                  //   colors: ['rgba(232,117,0,1)', 'rgba(201,81,0,1)'],
+                  //   start: [0, 0],
+                  //   end: [1, 0],
+                  // }}
+                  // ViewComponent={LinearGradient}
                 />
+              
               </View>
             </KeyboardAvoidingView>
             <View style={styles.helpContainer}>

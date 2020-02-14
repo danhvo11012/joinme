@@ -10,7 +10,7 @@ import {
   StatusBar,
 } from 'react-native';
 import { Button } from 'react-native-elements';
-import { LinearGradient } from '../components/LinearGradient';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -75,7 +75,7 @@ export default class ProfileScreen extends Component {
               <Image
                 source={{
                   uri:
-                    'https://static.pexels.com/photos/428336/pexels-photo-428336.jpeg',
+                    'https://static.pexels.com/photos/428336/pexels-photo-428336.jpeg',    
                 }}
                 style={{
                   width: IMAGE_SIZE,
