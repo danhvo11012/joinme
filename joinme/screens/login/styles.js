@@ -1,7 +1,8 @@
-import { Dimensions, Platform } from "react-native";
-
+import { Dimensions } from "react-native";
+import Colors from "./../../constants/Colors"
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
+
 const styles = {
 
     container: {
@@ -38,7 +39,7 @@ const styles = {
       fontWeight: 'bold',
     },
     loginButton: {
-      backgroundColor: '#e87500',
+      backgroundColor: Colors.primary,
       borderRadius: 10,
       height: 50,
       width: 200,
@@ -75,17 +76,17 @@ const styles = {
       textAlign: 'center',
       color: 'white',
       fontSize: 24,
-      fontFamily: 'light',
+      fontFamily: 'regular',
       backgroundColor: 'transparent',
-      opacity: 0.54,
+      opacity: 0.7,
     },
     selectedCategoryText: {
-      opacity: 1,
+      opacity: 1.2,
     },
     titleText: {
       color: 'white',
       fontSize: 30,
-      fontFamily: 'regular',
+      fontFamily: 'bold',
     },
     helpContainer: {
       height: 64,
