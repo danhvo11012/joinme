@@ -12,10 +12,10 @@ import {
   TouchableOpacity
 } from 'react-native';
 import { Input, Button, Icon } from 'react-native-elements';
-import { LinearGradient } from 'expo-linear-gradient';
+// import { LinearGradient } from 'expo-linear-gradient';
 
 // import AppContainer from '../navigation';
-import BottomTabNavigator from '../navigation/BottomTabNavigator';
+// import BottomTabNavigator from '../navigation/BottomTabNavigator';
 
 // Import Stitch features
 import { Stitch, UserPasswordCredential, UserPasswordAuthProviderClient } from 'mongodb-stitch-react-native-sdk';
@@ -54,21 +54,17 @@ export default class LoginScreen extends Component {
       isPasswordValid: true,
       isConfirmationValid: true,
       showPass: false,
-      currentUserId: undefined,
       client: undefined,
+      currentUserId: undefined,
     };
 
+    this.loadClient = this.loadClient.bind(this);
     this.selectCategory = this.selectCategory.bind(this);
     this.login = this.login.bind(this);
     this.signUp = this.signUp.bind(this);
-
-    this.loadClient = this.loadClient.bind(this);
     // this._onPressLogout = this._onPressLogout.bind(this);
   }
 
-  componentDidMount() {
-    this.loadClient();
-  }
 
   /** 
    * loadClient()
@@ -78,15 +74,17 @@ export default class LoginScreen extends Component {
    * @param none
    * @returns none
    */
-  loadClient = () => {
+  loadClient = async () => {
     Stitch.initializeDefaultAppClient('joinme-ufpra').then(client => {
       this.setState({ client: client });
-      // console.log(this.client);
+
       if(client.auth.isLoggedIn) {
         this.setState({ currentUserId: client.auth.user.id });
-        console.log('Currently loggedIn user: ' + this.currentUserId);
+
+        console.log('Currently loggedIn user: ' + this.state.currentUserId);
       }
     });
+
   }
 
   /** 
@@ -97,7 +95,7 @@ export default class LoginScreen extends Component {
    * @param none
    * @returns none
    */
-  showOrHidePass =() => {
+  showOrHidePass = () => {
     if(this.state.showPass)
       this.setState({showPass:false});
     else
@@ -135,38 +133,46 @@ export default class LoginScreen extends Component {
     //   'danhvo11012@gmail.com',  // Testing
     //   '12345678',
     // );
+    // this.setState({email: 'danhvo11012@gmail.com', password: '12345678'});
     const credential = new UserPasswordCredential(this.state.email, this.state.password);
 
     LayoutAnimation.easeInEaseOut();
 
+    // console.log(this.state.client);
+
     // Handle login with user credential
-    this.state.client.then(client => {
+    this.setState({
+      isLoading: false,
+      isEmailValid: this.validateEmail(email) || this.emailInput.shake(),
+      isPasswordValid: password.length >= 8 || this.passwordInput.shake(),
+    });
 
-      this.setState({
-        isLoading: false,
-        isEmailValid: this.validateEmail(email) || this.emailInput.shake(),
-        isPasswordValid: password.length >= 8 || this.passwordInput.shake(),
-      });
-
-      if (this.state.isEmailValid && this.state.isPasswordValid) {
-        client.auth.loginWithCredential(credential)
-        // Returns a promise that resolves to the authenticated user
+    if (this.state.isEmailValid && this.state.isPasswordValid) {
+      this.state.client.auth.loginWithCredential(credential)      // Returns a promise that resolves to the authenticated user
         .then(authedUser => {
-          alert(`Successfully logged in: ${authedUser.isLoggedIn}`);
+          console.log(`Successfully logged in: ${authedUser.isLoggedIn}`);
 
           this.setState({ currentUserId: authedUser.id}); // Set currentUserId
           
           this.props.navigation.navigate('App');  // Navigate to App route. See navigation/AuthNavigator.js
-          client.auth.logout();
         })
         .catch(err => { 
           // console.error(`login failed with error: ${err}`);
           alert(`Looks like there's no user account associated with your login. Please signup for your account.`);
           this.selectCategory(1);
         });
-      }
-    });
+    }
   }    
+
+  logout = async () => {
+    this.state.client.auth.logout().then(user => {
+        console.log(`Successfully logged out`);
+        this.setState({ currentUserId: undefined })
+    }).catch(err => {
+        console.log(`Failed to log out: ${err}`);
+        this.setState({ currentUserId: undefined })
+    });
+  }
 
   /** 
    * signUp()
@@ -209,6 +215,10 @@ export default class LoginScreen extends Component {
       });
   }
 
+  componentDidMount() {
+    this.loadClient();
+  }
+
   render() {
     const {
       selectedCategory,
@@ -219,6 +229,8 @@ export default class LoginScreen extends Component {
       email,
       password,
       passwordConfirmation,
+      currentUserId,
+      client,
     } = this.state;
     const isLoginPage = selectedCategory === 0;
     const isSignUpPage = selectedCategory === 1;
@@ -407,13 +419,10 @@ export default class LoginScreen extends Component {
                   titleStyle={styles.loginTextButton}
                   loading={isLoading}
                   disabled={isLoading}
-                  // linearGradientProps={{
-                  //   colors: ['rgba(232,117,0,1)', 'rgba(201,81,0,1)'],
-                  //   start: [0, 0],
-                  //   end: [1, 0],
-                  // }}
-                  // ViewComponent={LinearGradient}
                 />
+                <Button
+                    onPress={this.logout}
+                    title="Logout"/>
               
               </View>
             </KeyboardAvoidingView>

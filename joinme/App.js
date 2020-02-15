@@ -18,8 +18,6 @@ export default function App(props) {
   
   const [isLoadingComplete, setLoadingComplete] = useState(false);
   const [initialNavigationState, setInitialNavigationState] = useState();
-  const [ currentId, setCurrentId ] = useState(undefined);
-  const [ client, setClient ] = useState(undefined);
   const containerRef = useRef();
   const { getInitialState } = useLinking(containerRef);
 
