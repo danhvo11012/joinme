@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import TabBarIcon from '../components/TabBarIcon';
-import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
-// import LoginScreen from '../screens/LoginScreen';
+import BoardScreen from '../screens/BoardScreen';
+import RecruitScreen from '../screens/RecruitScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 import MyDeskScreen from '../screens/MyDeskScreen';
 
 const BottomTab = createBottomTabNavigator();
@@ -28,18 +28,26 @@ export default function BottomTabNavigator({ navigation, route }) {
           }}
         />
         <BottomTab.Screen
-          name="Home"
-          component={HomeScreen}
+          name="Board"
+          component={BoardScreen}
           options={{
-            title: 'Home',
+            title: 'Board',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
           }}
         />
         <BottomTab.Screen
-          name="Links"
-          component={LinksScreen}
+          name="Recruit"
+          component={RecruitScreen}
           options={{
-            title: 'Resources',
+            title: 'Recruit',
+            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
+          }}
+        />
+        <BottomTab.Screen
+          name="Profile"
+          component={ProfileScreen}
+          options={{
+            title: 'Profile',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
           }}
         />

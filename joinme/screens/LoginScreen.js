@@ -467,7 +467,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     color: 'white',
-    fontSize: 40,
+    fontSize: 25,
     fontFamily: 'regular',
   },
   helpContainer: {
