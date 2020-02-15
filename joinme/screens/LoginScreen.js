@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
+  StyleSheet,
   View,
   Text,
   ImageBackground,
@@ -11,7 +12,6 @@ import {
 } from 'react-native';
 import { Input, Button, Icon } from 'react-native-elements';
 import { LinearGradient } from 'expo-linear-gradient';
-<<<<<<< HEAD:joinme/joinme/screens/LoginScreen.js
 
 // import AppContainer from '../navigation';
 import BottomTabNavigator from '../navigation/BottomTabNavigator';
@@ -19,12 +19,8 @@ import BottomTabNavigator from '../navigation/BottomTabNavigator';
 // Import Stitch features
 import { Stitch, AnonymousCredential, UserPasswordCredential } from 'mongodb-stitch-react-native-sdk';
 // import MyDeskScreen from "./MyDeskScreen";
-=======
-import styles from './styles';
->>>>>>> 04887e14ed184a84274cb0f9c0630697d72cb802:joinme/screens/login/LoginScreen.js
 
-
-const BG_IMAGE = require('../../assets/images/bg_screen4.jpg');
+const BG_IMAGE = require('../assets/images/bg_screen4.jpg');
 
 // Enable LayoutAnimation on Android
 UIManager.setLayoutAnimationEnabledExperimental &&
@@ -85,7 +81,6 @@ export default class LoginScreen extends Component {
     return re.test(email);
   }
   
-<<<<<<< HEAD:joinme/joinme/screens/LoginScreen.js
   login = async () => {
     const { email, password } = this.state;
     this.setState({ isLoading: true });
@@ -100,21 +95,12 @@ export default class LoginScreen extends Component {
 
     // Handle login with user credential
     app.then(client => {
-=======
-  login() {
-    const { email, password } = this.state;
-    this.setState({ isLoading: true });
-    
-    // Simulate an API call
-    setTimeout(() => {
-      LayoutAnimation.easeInEaseOut();
->>>>>>> 04887e14ed184a84274cb0f9c0630697d72cb802:joinme/screens/login/LoginScreen.js
+
       this.setState({
         isLoading: false,
         isEmailValid: this.validateEmail(email) || this.emailInput.shake(),
         isPasswordValid: password.length >= 8 || this.passwordInput.shake(),
       });
-<<<<<<< HEAD:joinme/joinme/screens/LoginScreen.js
 
       if (this.state.isEmailValid && this.state.isPasswordValid) {
         client.auth.loginWithCredential(credential)
@@ -132,14 +118,6 @@ export default class LoginScreen extends Component {
       }
     });
   }    
-  
-=======
-    }, 1500);
-
-    //Recieve token here and send back to BottomTabNavigator
-    
-  }
->>>>>>> 04887e14ed184a84274cb0f9c0630697d72cb802:joinme/screens/login/LoginScreen.js
 
   signUp() {
     const { email, password, passwordConfirmation } = this.state;
@@ -369,11 +347,10 @@ export default class LoginScreen extends Component {
   }
 }
 
-<<<<<<< HEAD:joinme/joinme/screens/LoginScreen.js
 import { Dimensions } from "react-native";
 import Colors from "../constants/Colors"
-// const SCREEN_WIDTH = Dimensions.get('window').width;
-// const SCREEN_HEIGHT = Dimensions.get('window').height;
+const SCREEN_WIDTH = Dimensions.get('window').width;
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 
 const styles = StyleSheet.create({
@@ -465,5 +442,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-=======
->>>>>>> 04887e14ed184a84274cb0f9c0630697d72cb802:joinme/screens/login/LoginScreen.js
