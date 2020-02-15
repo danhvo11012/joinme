@@ -422,7 +422,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   loginButton: {
-    backgroundColor: 'rgba(232, 147, 142, 1)',
+    backgroundColor: Colors.primary,
     borderRadius: 10,
     height: 50,
     width: 200,

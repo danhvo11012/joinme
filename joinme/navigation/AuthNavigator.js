@@ -9,12 +9,11 @@ const Stack = createStackNavigator();
 function AuthNavigator() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator >
         <Stack.Screen name="Auth" component={LoginScreen}/>
-        <Stack.Screen name="App" component={BottomTabNavigator} />
+        <Stack.Screen name="App"  component={BottomTabNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
   )
 }
-
 export default AuthNavigator;
