@@ -1,19 +1,14 @@
+// @ts-nocheck
 import * as React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { SplashScreen } from 'expo';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-
-import BottomTabNavigator from './navigation/BottomTabNavigator';
 import useLinking from './navigation/useLinking';
 import { cacheImages, cacheFonts } from './helpers/AssetsCaching';
 import vectorFonts from './helpers/vector-fonts';
 
 import AppContainer from './navigation';
-
-const Stack = createStackNavigator();
 
 export default function App(props) {
   
@@ -50,9 +45,7 @@ export default function App(props) {
 
         //load images
         const imageAssets = cacheImages([
-         
           require('./assets/images/bg_screen4.jpg'),
-         
         ]);
     
         await Promise.all([...imageAssets, ...fontAssets]);
@@ -72,14 +65,6 @@ export default function App(props) {
     return null;
   } else {
     return (
-      // <View style={styles.container}>
-      //   {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-      //   <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
-      //     <Stack.Navigator>
-      //       <Stack.Screen name="Auth" component={BottomTabNavigator} />
-      //     </Stack.Navigator>
-      //   </NavigationContainer>
-      // </View>
       <AppContainer />
     );
   }

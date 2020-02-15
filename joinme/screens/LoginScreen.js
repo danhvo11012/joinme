@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -17,8 +18,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import BottomTabNavigator from '../navigation/BottomTabNavigator';
 
 // Import Stitch features
-import { Stitch, AnonymousCredential, UserPasswordCredential } from 'mongodb-stitch-react-native-sdk';
-// import MyDeskScreen from "./MyDeskScreen";
+import { Stitch, UserPasswordCredential, UserPasswordAuthProviderClient } from 'mongodb-stitch-react-native-sdk';
 
 const BG_IMAGE = require('../assets/images/bg_screen4.jpg');
 
@@ -39,7 +39,7 @@ TabSelector.propTypes = {
 };
 
 // Initialize Stitch client
-const app = Stitch.initializeAppClient('joinme-ufpra');
+const app = Stitch.initializeDefaultAppClient('joinme-ufpra');
 
 export default class LoginScreen extends Component {
   constructor(props) {
@@ -61,6 +61,13 @@ export default class LoginScreen extends Component {
     this.signUp = this.signUp.bind(this);
   }
 
+  /** ShowOrHidePass
+   * Toggle password visibility
+   * 
+   * @author Khiem
+   * @param none
+   * @return none
+   */
   ShowOrHidePass =() => {
     if(this.state.showPass)
       this.setState({showPass:false});
@@ -81,6 +88,14 @@ export default class LoginScreen extends Component {
     return re.test(email);
   }
   
+  /** login()
+   *  Set states: email, password and perform login operation after validating them.
+   * @memberof LoginScreen
+   * 
+   * @author Danh
+   * @param none
+   * @return none
+   */
   login = async () => {
     const { email, password } = this.state;
     this.setState({ isLoading: true });
@@ -119,25 +134,44 @@ export default class LoginScreen extends Component {
     });
   }    
 
-  signUp() {
+  /** signUp()
+   * Signup new email account 
+   *
+   * @memberof LoginScreen
+   * 
+   * @author Danh
+   * @param none
+   * @return none
+   */
+  signUp = async () => {
     const { email, password, passwordConfirmation } = this.state;
     this.setState({ isLoading: true });
     
-    // Simulate an API call
-    setTimeout(() => {
-      LayoutAnimation.easeInEaseOut();
-      this.setState({
-        isLoading: false,
-        isEmailValid: this.validateEmail(email) || this.emailInput.shake(),
-        isPasswordValid: password.length >= 8 || this.passwordInput.shake(),
-        isConfirmationValid:
-          password === passwordConfirmation || this.confirmationInput.shake(),
-        
-      });
-    }, 1500);
+    LayoutAnimation.easeInEaseOut();
 
-    //after sign up successfully, switch to log in
-    
+    // Email + password validation 
+    this.setState({
+      isLoading: false,
+      isEmailValid: this.validateEmail(email) || this.emailInput.shake(),
+      isPasswordValid: password.length >= 8 || this.passwordInput.shake(),
+      isConfirmationValid:
+        password === passwordConfirmation || this.confirmationInput.shake(),
+    });
+
+    // Initialize stitch's emailPasswordClient
+    const emailPasswordClient = Stitch.defaultAppClient.auth
+      .getProviderClient(UserPasswordAuthProviderClient.factory);
+
+    // Register email
+    emailPasswordClient.registerWithEmail(email, password)
+      .then(() => {
+        alert("Successfully created new account with email: " + email);
+        this.selectCategory(0); // Focus on signIn
+      })
+      .catch(err => {
+        alert("Looks like your email: " + email + " already in use. Please try again.")
+        console.log("Error registering new user:", err)
+      });
   }
 
   render() {
@@ -263,9 +297,8 @@ export default class LoginScreen extends Component {
                   inputStyle={{ marginLeft: 10 }}
                   placeholder={'Password'}
                   ref={input => (this.passwordInput = input)}
-                  onSubmitEditing={() =>
-                    isSignUpPage ? this.confirmationInput.focus() : {} //this.login()
-                  }
+                  // Disabled onSubmitEditing. Only submit by pressing button
+                  // onSubmitEditing={() => isSignUpPage ? this.confirmationInput.focus() : this.login() } 
                   onChangeText={password => this.setState({ password })}
                   errorMessage={
                     isPasswordValid
@@ -300,7 +333,8 @@ export default class LoginScreen extends Component {
                     inputStyle={{ marginLeft: 10 }}
                     placeholder={'Confirm password'}
                     ref={input => (this.confirmationInput = input)}
-                    onSubmitEditing={this.signUp}
+                    // Disabled onSubmitEditing. Only submit by pressing button
+                    // onSubmitEditing={this.signUp}
                     onChangeText={passwordConfirmation =>
                       this.setState({ passwordConfirmation })
                     }
