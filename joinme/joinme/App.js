@@ -11,9 +11,12 @@ import useLinking from './navigation/useLinking';
 import { cacheImages, cacheFonts } from './helpers/AssetsCaching';
 import vectorFonts from './helpers/vector-fonts';
 
+import AppContainer from './navigation';
+
 const Stack = createStackNavigator();
 
 export default function App(props) {
+  
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
   const [initialNavigationState, setInitialNavigationState] = React.useState();
   const containerRef = React.useRef();
@@ -69,14 +72,15 @@ export default function App(props) {
     return null;
   } else {
     return (
-      <View style={styles.container}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
-          <Stack.Navigator>
-            <Stack.Screen name="Root" component={BottomTabNavigator} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </View>
+      // <View style={styles.container}>
+      //   {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+      //   <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
+      //     <Stack.Navigator>
+      //       <Stack.Screen name="Auth" component={BottomTabNavigator} />
+      //     </Stack.Navigator>
+      //   </NavigationContainer>
+      // </View>
+      <AppContainer />
     );
   }
 }

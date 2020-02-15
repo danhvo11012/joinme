@@ -5,12 +5,20 @@ import {
   View,
   Text,
   ImageBackground,
-  Dimensions,
   LayoutAnimation,
   UIManager,
   KeyboardAvoidingView,
+  TouchableOpacity
 } from 'react-native';
 import { Input, Button, Icon } from 'react-native-elements';
+import { LinearGradient } from 'expo-linear-gradient';
+
+// import AppContainer from '../navigation';
+import BottomTabNavigator from '../navigation/BottomTabNavigator';
+
+// Import Stitch features
+import { Stitch, AnonymousCredential, UserPasswordCredential } from 'mongodb-stitch-react-native-sdk';
+// import MyDeskScreen from "./MyDeskScreen";
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -33,6 +41,9 @@ TabSelector.propTypes = {
   selected: PropTypes.bool.isRequired,
 };
 
+// Initialize Stitch client
+const app = Stitch.initializeAppClient('joinme-ufpra');
+
 export default class LoginScreen extends Component {
   constructor(props) {
     super(props);
@@ -45,11 +56,19 @@ export default class LoginScreen extends Component {
       isEmailValid: true,
       isPasswordValid: true,
       isConfirmationValid: true,
+      showPass: false,
     };
 
     this.selectCategory = this.selectCategory.bind(this);
     this.login = this.login.bind(this);
     this.signUp = this.signUp.bind(this);
+  }
+
+  ShowOrHidePass =() => {
+    if(this.state.showPass)
+      this.setState({showPass:false});
+    else
+      this.setState({showPass:true});
   }
 
   selectCategory(selectedCategory) {
@@ -62,27 +81,51 @@ export default class LoginScreen extends Component {
 
   validateEmail(email) {
     var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
     return re.test(email);
   }
-
-  login() {
+  
+  login = async () => {
     const { email, password } = this.state;
     this.setState({ isLoading: true });
-    // Simulate an API call
-    setTimeout(() => {
-      LayoutAnimation.easeInEaseOut();
+
+    // const credential = new UserPasswordCredential(
+    //   'danhvo11012@gmail.com',  // Testing
+    //   '12345678',
+    // );
+    const credential = new UserPasswordCredential(this.state.email, this.state.password);
+
+    LayoutAnimation.easeInEaseOut();
+
+    // Handle login with user credential
+    app.then(client => {
       this.setState({
         isLoading: false,
         isEmailValid: this.validateEmail(email) || this.emailInput.shake(),
         isPasswordValid: password.length >= 8 || this.passwordInput.shake(),
       });
-    }, 1500);
-  }
+
+      if (this.state.isEmailValid && this.state.isPasswordValid) {
+        client.auth.loginWithCredential(credential)
+        // Returns a promise that resolves to the authenticated user
+        .then(authedUser => {
+          alert(`Successfully logged in: ${authedUser.isLoggedIn}`);
+          
+          this.props.navigation.navigate('App');  // Navigate to App route. See navigation/AuthNavigator.js
+        })
+        .catch(err => { 
+          // console.error(`login failed with error: ${err}`);
+          alert(`Looks like there's no user account associated with your login. Please signup for your account.`);
+          this.selectCategory(1);
+        });
+      }
+    });
+  }    
+  
 
   signUp() {
     const { email, password, passwordConfirmation } = this.state;
     this.setState({ isLoading: true });
+    
     // Simulate an API call
     setTimeout(() => {
       LayoutAnimation.easeInEaseOut();
@@ -92,8 +135,12 @@ export default class LoginScreen extends Component {
         isPasswordValid: password.length >= 8 || this.passwordInput.shake(),
         isConfirmationValid:
           password === passwordConfirmation || this.confirmationInput.shake(),
+        
       });
     }, 1500);
+
+    //after sign up successfully, switch to log in
+    
   }
 
   render() {
@@ -120,11 +167,9 @@ export default class LoginScreen extends Component {
             >
               <View style={styles.titleContainer}>
                 <View style={{ flexDirection: 'row' }}>
-                  <Text style={styles.titleText}>BEAUX</Text>
+                  <Text style={styles.titleText}>CONNECT WITH US</Text>
                 </View>
-                <View style={{ marginTop: -10, marginLeft: 10 }}>
-                  <Text style={styles.titleText}>VOYAGES</Text>
-                </View>
+                
               </View>
               <View style={{ flexDirection: 'row' }}>
                 <Button
@@ -189,18 +234,29 @@ export default class LoginScreen extends Component {
                 <Input
                   leftIcon={
                     <Icon
-                      name="lock"
+                      name="key"
                       type="simple-line-icon"
                       color="rgba(0, 0, 0, 0.38)"
                       size={25}
                       style={{ backgroundColor: 'transparent' }}
                     />
                   }
+                  rightIcon={
+                    <TouchableOpacity onPress={this.ShowOrHidePass.bind(this)}>
+                      <Icon
+                        name={this.state.showPass ? "lock-open" :"lock"}
+                        type="simple-line-icon"
+                        color="rgba(0, 0, 0, 0.38)"
+                        size={25}
+                        style={{ backgroundColor: 'transparent' }}
+                      />
+                    </TouchableOpacity>
+                  }
                   value={password}
                   keyboardAppearance="light"
                   autoCapitalize="none"
                   autoCorrect={false}
-                  secureTextEntry={true}
+                  secureTextEntry={!this.state.showPass}
                   returnKeyType={isSignUpPage ? 'next' : 'done'}
                   blurOnSubmit={true}
                   containerStyle={{
@@ -211,7 +267,7 @@ export default class LoginScreen extends Component {
                   placeholder={'Password'}
                   ref={input => (this.passwordInput = input)}
                   onSubmitEditing={() =>
-                    isSignUpPage ? this.confirmationInput.focus() : this.login()
+                    isSignUpPage ? this.confirmationInput.focus() : {} //this.login()
                   }
                   onChangeText={password => this.setState({ password })}
                   errorMessage={
@@ -222,17 +278,18 @@ export default class LoginScreen extends Component {
                 />
                 {isSignUpPage && (
                   <Input
-                    icon={
+                   leftIcon={
                       <Icon
-                        name="lock"
+                        name="key"
                         type="simple-line-icon"
                         color="rgba(0, 0, 0, 0.38)"
                         size={25}
                         style={{ backgroundColor: 'transparent' }}
                       />
                     }
+                    
                     value={passwordConfirmation}
-                    secureTextEntry={true}
+                    secureTextEntry={!this.state.showPass}
                     keyboardAppearance="light"
                     autoCapitalize="none"
                     autoCorrect={false}
@@ -257,6 +314,7 @@ export default class LoginScreen extends Component {
                     }
                   />
                 )}
+                
                 <Button
                   buttonStyle={styles.loginButton}
                   containerStyle={{ marginTop: 32, flex: 0 }}
@@ -266,7 +324,14 @@ export default class LoginScreen extends Component {
                   titleStyle={styles.loginTextButton}
                   loading={isLoading}
                   disabled={isLoading}
+                  // linearGradientProps={{
+                  //   colors: ['rgba(232,117,0,1)', 'rgba(201,81,0,1)'],
+                  //   start: [0, 0],
+                  //   end: [1, 0],
+                  // }}
+                  // ViewComponent={LinearGradient}
                 />
+              
               </View>
             </KeyboardAvoidingView>
             <View style={styles.helpContainer}>
@@ -284,6 +349,12 @@ export default class LoginScreen extends Component {
     );
   }
 }
+
+import { Dimensions } from "react-native";
+import Colors from "../constants/Colors"
+// const SCREEN_WIDTH = Dimensions.get('window').width;
+// const SCREEN_HEIGHT = Dimensions.get('window').height;
+
 
 const styles = StyleSheet.create({
   container: {
@@ -365,7 +436,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     color: 'white',
-    fontSize: 30,
+    fontSize: 40,
     fontFamily: 'regular',
   },
   helpContainer: {

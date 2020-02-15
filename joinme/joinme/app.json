@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Tab Navigation Template",
+    "name": "Join Me",
     "slug": "joinme",
     "privacy": "public",
     "sdkVersion": "36.0.0",
@@ -14,8 +14,8 @@
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
+      "image": "./assets/images/splash.jpg",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "updates": {
@@ -27,5 +27,6 @@
     "ios": {
       "supportsTablet": true
     }
-  }
+  },
+  "name":"Join Me"
 }
