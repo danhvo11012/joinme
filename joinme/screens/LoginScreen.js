@@ -38,8 +38,8 @@ TabSelector.propTypes = {
   selected: PropTypes.bool.isRequired,
 };
 
-// Initialize Stitch client
-const app = Stitch.initializeDefaultAppClient('joinme-ufpra');
+// // Initialize Stitch client
+// const app = Stitch.initializeDefaultAppClient('joinme-ufpra');
 
 export default class LoginScreen extends Component {
   constructor(props) {
@@ -54,21 +54,50 @@ export default class LoginScreen extends Component {
       isPasswordValid: true,
       isConfirmationValid: true,
       showPass: false,
+      currentUserId: undefined,
+      client: undefined,
     };
 
     this.selectCategory = this.selectCategory.bind(this);
     this.login = this.login.bind(this);
     this.signUp = this.signUp.bind(this);
+
+    this.loadClient = this.loadClient.bind(this);
+    // this._onPressLogout = this._onPressLogout.bind(this);
   }
 
-  /** ShowOrHidePass
-   * Toggle password visibility
+  componentDidMount() {
+    this.loadClient();
+  }
+
+  /** 
+   * loadClient()
+   *  Load Stitch client and check for logged in user
+   * 
+   * @author Danh
+   * @param none
+   * @returns none
+   */
+  loadClient = () => {
+    Stitch.initializeDefaultAppClient('joinme-ufpra').then(client => {
+      this.setState({ client: client });
+      // console.log(this.client);
+      if(client.auth.isLoggedIn) {
+        this.setState({ currentUserId: client.auth.user.id });
+        console.log('Currently loggedIn user: ' + this.currentUserId);
+      }
+    });
+  }
+
+  /** 
+   * showOrHidePass()
+   *  Toggle password visibility
    * 
    * @author Khiem
    * @param none
-   * @return none
+   * @returns none
    */
-  ShowOrHidePass =() => {
+  showOrHidePass =() => {
     if(this.state.showPass)
       this.setState({showPass:false});
     else
@@ -88,13 +117,15 @@ export default class LoginScreen extends Component {
     return re.test(email);
   }
   
-  /** login()
+  /** 
+   * login()
    *  Set states: email, password and perform login operation after validating them.
+   * 
    * @memberof LoginScreen
    * 
    * @author Danh
    * @param none
-   * @return none
+   * @returns none
    */
   login = async () => {
     const { email, password } = this.state;
@@ -109,7 +140,7 @@ export default class LoginScreen extends Component {
     LayoutAnimation.easeInEaseOut();
 
     // Handle login with user credential
-    app.then(client => {
+    this.state.client.then(client => {
 
       this.setState({
         isLoading: false,
@@ -122,8 +153,11 @@ export default class LoginScreen extends Component {
         // Returns a promise that resolves to the authenticated user
         .then(authedUser => {
           alert(`Successfully logged in: ${authedUser.isLoggedIn}`);
+
+          this.setState({ currentUserId: authedUser.id}); // Set currentUserId
           
           this.props.navigation.navigate('App');  // Navigate to App route. See navigation/AuthNavigator.js
+          client.auth.logout();
         })
         .catch(err => { 
           // console.error(`login failed with error: ${err}`);
@@ -134,8 +168,9 @@ export default class LoginScreen extends Component {
     });
   }    
 
-  /** signUp()
-   * Signup new email account 
+  /** 
+   * signUp()
+   *  Signup new email account 
    *
    * @memberof LoginScreen
    * 
@@ -159,7 +194,7 @@ export default class LoginScreen extends Component {
     });
 
     // Initialize stitch's emailPasswordClient
-    const emailPasswordClient = Stitch.defaultAppClient.auth
+    const emailPasswordClient = this.client.auth
       .getProviderClient(UserPasswordAuthProviderClient.factory);
 
     // Register email
@@ -187,6 +222,23 @@ export default class LoginScreen extends Component {
     } = this.state;
     const isLoginPage = selectedCategory === 0;
     const isSignUpPage = selectedCategory === 1;
+
+    // ------------------------------------------------------------------------------------------------
+    let loginStatus = "Currently logged out."
+
+    if(this.state.currentUserId) {
+      loginStatus = `Currently logged in as ${this.state.currentUserId}!`
+    }
+
+    loginButton = <Button
+                    onPress={this._onPressLogin}
+                    title="Login"/>
+
+    logoutButton = <Button
+                    onPress={this._onPressLogout}
+                    title="Logout"/>
+    // ------------------------------------------------------------------------------------------------
+
 
     return (
       <View style={styles.container}>
@@ -273,7 +325,7 @@ export default class LoginScreen extends Component {
                     />
                   }
                   rightIcon={
-                    <TouchableOpacity onPress={this.ShowOrHidePass.bind(this)}>
+                    <TouchableOpacity onPress={this.showOrHidePass.bind(this)}>
                       <Icon
                         name={this.state.showPass ? "lock-open" :"lock"}
                         type="simple-line-icon"

@@ -1,5 +1,6 @@
 // @ts-nocheck
 import * as React from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { SplashScreen } from 'expo';
 import * as Font from 'expo-font';
@@ -10,15 +11,21 @@ import vectorFonts from './helpers/vector-fonts';
 
 import AppContainer from './navigation';
 
+import { Stitch } from 'mongodb-stitch-react-native-sdk';
+import { Button } from 'react-native-elements';
+
 export default function App(props) {
   
-  const [isLoadingComplete, setLoadingComplete] = React.useState(false);
-  const [initialNavigationState, setInitialNavigationState] = React.useState();
-  const containerRef = React.useRef();
+  const [isLoadingComplete, setLoadingComplete] = useState(false);
+  const [initialNavigationState, setInitialNavigationState] = useState();
+  const [ currentId, setCurrentId ] = useState(undefined);
+  const [ client, setClient ] = useState(undefined);
+  const containerRef = useRef();
   const { getInitialState } = useLinking(containerRef);
 
+
   // Load any resources or data that we need prior to rendering the app
-  React.useEffect(() => {
+  useEffect(() => {
     async function loadResourcesAndDataAsync() {
       try {
         SplashScreen.preventAutoHide();
@@ -56,7 +63,7 @@ export default function App(props) {
         setLoadingComplete(true);
         SplashScreen.hide();
       }
-    }
+    };
 
     loadResourcesAndDataAsync();
   }, []);
@@ -68,7 +75,7 @@ export default function App(props) {
       <AppContainer />
     );
   }
-}
+};
 
 const styles = StyleSheet.create({
   container: {
