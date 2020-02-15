@@ -19,6 +19,10 @@ import BottomTabNavigator from '../navigation/BottomTabNavigator';
 // Import Stitch features
 import { Stitch, AnonymousCredential, UserPasswordCredential } from 'mongodb-stitch-react-native-sdk';
 // import MyDeskScreen from "./MyDeskScreen";
+=======
+import styles from './styles';
+>>>>>>> 04887e14ed184a84274cb0f9c0630697d72cb802:joinme/screens/login/LoginScreen.js
+
 
 const BG_IMAGE = require('../../assets/images/bg_screen4.jpg');
 
@@ -96,12 +100,21 @@ export default class LoginScreen extends Component {
 
     // Handle login with user credential
     app.then(client => {
-
+=======
+  login() {
+    const { email, password } = this.state;
+    this.setState({ isLoading: true });
+    
+    // Simulate an API call
+    setTimeout(() => {
+      LayoutAnimation.easeInEaseOut();
+>>>>>>> 04887e14ed184a84274cb0f9c0630697d72cb802:joinme/screens/login/LoginScreen.js
       this.setState({
         isLoading: false,
         isEmailValid: this.validateEmail(email) || this.emailInput.shake(),
         isPasswordValid: password.length >= 8 || this.passwordInput.shake(),
       });
+<<<<<<< HEAD:joinme/joinme/screens/LoginScreen.js
 
       if (this.state.isEmailValid && this.state.isPasswordValid) {
         client.auth.loginWithCredential(credential)
@@ -119,6 +132,14 @@ export default class LoginScreen extends Component {
       }
     });
   }    
+  
+=======
+    }, 1500);
+
+    //Recieve token here and send back to BottomTabNavigator
+    
+  }
+>>>>>>> 04887e14ed184a84274cb0f9c0630697d72cb802:joinme/screens/login/LoginScreen.js
 
   signUp() {
     const { email, password, passwordConfirmation } = this.state;
