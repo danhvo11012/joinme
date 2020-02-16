@@ -7,7 +7,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 import MyDeskScreen from '../screens/MyDeskScreen';
 
 const BottomTab = createBottomTabNavigator();
-const INITIAL_ROUTE_NAME = 'MyDeskScreen';
+const INITIAL_ROUTE_NAME = 'MyDesk';
 
 export default function BottomTabNavigator({ navigation, route }) {
   // export default function BottomTabNavigator({ navigation, route }) {
@@ -15,7 +15,10 @@ export default function BottomTabNavigator({ navigation, route }) {
   // Set the header title on the parent stack navigator depending on the
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
-  navigation.setOptions({ headerTitle:null });
+  const { currentUserId } = route.params;
+  const { user } = route.params;
+
+  navigation.setOptions({ headerTitle: getHeaderTitle(route) });
 
   return (
       <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
@@ -26,6 +29,7 @@ export default function BottomTabNavigator({ navigation, route }) {
             title: 'My Desk',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
           }}
+          initialParams={{ currentUserId: currentUserId, user: user }}
         />
         <BottomTab.Screen
           name="Board"
@@ -34,6 +38,7 @@ export default function BottomTabNavigator({ navigation, route }) {
             title: 'Board',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
           }}
+          initialParams={{ currentUserId: currentUserId, user: user }}
         />
         <BottomTab.Screen
           name="Recruit"
@@ -42,6 +47,7 @@ export default function BottomTabNavigator({ navigation, route }) {
             title: 'Recruit',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
           }}
+          initialParams={{ currentUserId: currentUserId, user: user }}
         />
         <BottomTab.Screen
           name="Profile"
@@ -50,21 +56,24 @@ export default function BottomTabNavigator({ navigation, route }) {
             title: 'Profile',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
           }}
+          initialParams={{ currentUserId: currentUserId, user: user }}
         />
       </BottomTab.Navigator>
     
   );
 }
 
-// function getHeaderTitle(route) {
-//   const routeName = route.state?.routes[route.state.index]?.name ?? 'Home';
+function getHeaderTitle(route) {
+  const routeName = route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
 
-//   switch (routeName) {
-//     case 'Home':
-//       return 'How to get started';
-//     case 'MyDesk':
-//       return 'What\'s on my desk?';
-//     case 'Links':
-//       return 'Links to learn more';
-//   }
-//}
+  switch (routeName) {
+    case 'MyDesk':
+      return 'My desk';
+    case 'Board':
+      return 'Bulletin Board';
+    case 'Recruit':
+      return 'Find your crew';
+    case 'Profile':
+      return 'Profile'
+  }
+}
