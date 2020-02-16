@@ -31,4 +31,4 @@ function ProfieScreen() {
   );
 };
 
-export default RecruitScreen;
+export default ProfieScreen;
