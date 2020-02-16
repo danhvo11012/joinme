@@ -12,10 +12,6 @@ import {
   TouchableOpacity
 } from 'react-native';
 import { Input, Button, Icon } from 'react-native-elements';
-// import { LinearGradient } from 'expo-linear-gradient';
-
-// import AppContainer from '../navigation';
-// import BottomTabNavigator from '../navigation/BottomTabNavigator';
 
 // Import Stitch features
 import { Stitch, UserPasswordCredential, UserPasswordAuthProviderClient } from 'mongodb-stitch-react-native-sdk';
@@ -62,7 +58,7 @@ export default class LoginScreen extends Component {
     this.selectCategory = this.selectCategory.bind(this);
     this.login = this.login.bind(this);
     this.signUp = this.signUp.bind(this);
-    // this._onPressLogout = this._onPressLogout.bind(this);
+    this.logOut = this.logOut.bind(this);
   }
 
 
@@ -80,8 +76,8 @@ export default class LoginScreen extends Component {
 
       if(client.auth.isLoggedIn) {
         this.setState({ currentUserId: client.auth.user.id });
-
         console.log('Currently loggedIn user: ' + this.state.currentUserId);
+        this.props.navigation.navigate('App');
       }
     });
 
@@ -151,26 +147,25 @@ export default class LoginScreen extends Component {
       this.state.client.auth.loginWithCredential(credential)      // Returns a promise that resolves to the authenticated user
         .then(authedUser => {
           console.log(`Successfully logged in: ${authedUser.isLoggedIn}`);
-
           this.setState({ currentUserId: authedUser.id}); // Set currentUserId
-          
+          console.log(`User currently login is ${this.state.currentUserId}`);
           this.props.navigation.navigate('App');  // Navigate to App route. See navigation/AuthNavigator.js
         })
         .catch(err => { 
-          // console.error(`login failed with error: ${err}`);
           alert(`Looks like there's no user account associated with your login. Please signup for your account.`);
           this.selectCategory(1);
+          // console.error(`Login failed with error: ${err}`);
         });
     }
   }    
 
-  logout = async () => {
+  logOut = async () => {
     this.state.client.auth.logout().then(user => {
-        console.log(`Successfully logged out`);
+        console.log(`User ${this.state.currentUserId} successfully logged out`);
         this.setState({ currentUserId: undefined })
     }).catch(err => {
-        console.log(`Failed to log out: ${err}`);
-        this.setState({ currentUserId: undefined })
+        console.log(`User ${user} failed to log out: ${err}`);
+        // this.setState({ currentUserId: undefined })
     });
   }
 
@@ -211,7 +206,7 @@ export default class LoginScreen extends Component {
       })
       .catch(err => {
         alert("Looks like your email: " + email + " already in use. Please try again.")
-        console.log("Error registering new user:", err)
+        // console.log("Error registering new user:", err)
       });
   }
 
@@ -236,20 +231,20 @@ export default class LoginScreen extends Component {
     const isSignUpPage = selectedCategory === 1;
 
     // ------------------------------------------------------------------------------------------------
-    let loginStatus = "Currently logged out."
+    // let loginStatus = "Currently logged out."
 
-    if(this.state.currentUserId) {
-      loginStatus = `Currently logged in as ${this.state.currentUserId}!`
-    }
+    // if(this.state.currentUserId) {
+    //   loginStatus = `Currently logged in as ${this.state.currentUserId}!`
+    // }
 
-    loginButton = <Button
-                    onPress={this._onPressLogin}
-                    title="Login"/>
+    // loginButton = <Button
+    //                 onPress={this._onPressLogin}
+    //                 title="Login"/>
 
-    logoutButton = <Button
-                    onPress={this._onPressLogout}
-                    title="Logout"/>
-    // ------------------------------------------------------------------------------------------------
+    // logoutButton = <Button
+    //                 onPress={this._onPressLogout}
+    //                 title="Logout"/>
+    // // ------------------------------------------------------------------------------------------------
 
 
     return (
@@ -421,7 +416,7 @@ export default class LoginScreen extends Component {
                   disabled={isLoading}
                 />
                 <Button
-                    onPress={this.logout}
+                    onPress={this.logOut}
                     title="Logout"/>
               
               </View>
