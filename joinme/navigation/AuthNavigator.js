@@ -10,7 +10,7 @@ function AuthNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator >
-        <Stack.Screen name="Auth" component={LoginScreen}/>
+        <Stack.Screen name="Auth" component={LoginScreen} />
         <Stack.Screen name="App"  component={BottomTabNavigator} />
       </Stack.Navigator>
     </NavigationContainer>

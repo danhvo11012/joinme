@@ -5,7 +5,9 @@ import * as WebBrowser from 'expo-web-browser';
 
 import { MonoText } from '../components/StyledText';
 
-export default function HomeScreen() {
+export default function HomeScreen({ route, navigation }) {
+
+
   return (
     <View style={styles.container}>
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>

@@ -7,6 +7,7 @@ import LinksScreen from '../screens/LinksScreen';
 import MyDeskScreen from '../screens/MyDeskScreen';
 
 const BottomTab = createBottomTabNavigator();
+
 const INITIAL_ROUTE_NAME = 'MyDeskScreen';
 
 export default function BottomTabNavigator({ navigation, route }) {
@@ -15,7 +16,11 @@ export default function BottomTabNavigator({ navigation, route }) {
   // Set the header title on the parent stack navigator depending on the
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
-  navigation.setOptions({ headerTitle:null });
+
+  const { currentUserId } = route.params;
+  const { user } = route.params;
+
+  navigation.setOptions({ headerTitle: getHeaderTitle(route) });
 
   return (
       <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
@@ -26,6 +31,7 @@ export default function BottomTabNavigator({ navigation, route }) {
             title: 'My Desk',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
           }}
+          initialParams={{ currentUserId: currentUserId, user: user }}
         />
         <BottomTab.Screen
           name="Home"
@@ -48,15 +54,15 @@ export default function BottomTabNavigator({ navigation, route }) {
   );
 }
 
-// function getHeaderTitle(route) {
-//   const routeName = route.state?.routes[route.state.index]?.name ?? 'Home';
+function getHeaderTitle(route) {
+  const routeName = route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
 
-//   switch (routeName) {
-//     case 'Home':
-//       return 'How to get started';
-//     case 'MyDesk':
-//       return 'What\'s on my desk?';
-//     case 'Links':
-//       return 'Links to learn more';
-//   }
-//}
+  switch (routeName) {
+    case 'Home':
+      return 'How to get started';
+    case 'MyDeskScreen':
+      return 'What\'s on my desk?';
+    case 'Links':
+      return 'Links to learn more';
+  }
+}

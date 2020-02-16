@@ -77,7 +77,23 @@ export default class LoginScreen extends Component {
       if(client.auth.isLoggedIn) {
         this.setState({ currentUserId: client.auth.user.id });
         console.log('Currently loggedIn user: ' + this.state.currentUserId);
-        this.props.navigation.navigate('App');
+
+        const userN = {
+          id: client.auth.user.id,
+          // customData: client.auth.user.customData,
+          isLoggedIn: client.auth.user.isLoggedIn,
+          lastAuthActivity: client.auth.user.lastAuthActivity,
+          profile: client.auth.user.profile,
+          identities: client.auth.user.identities,
+          userType: client.auth.user.userType,
+          loggedInProviderName: client.auth.user.loggedInProviderName,
+          loggedInProviderType: client.auth.user.loggedInProviderType,
+        };
+        
+        this.props.navigation.navigate('App', {  
+          currentUserId: this.state.currentUserId,
+          user: JSON.stringify(userN),
+        });
       }
     });
 
@@ -149,7 +165,23 @@ export default class LoginScreen extends Component {
           console.log(`Successfully logged in: ${authedUser.isLoggedIn}`);
           this.setState({ currentUserId: authedUser.id}); // Set currentUserId
           console.log(`User currently login is ${this.state.currentUserId}`);
-          this.props.navigation.navigate('App');  // Navigate to App route. See navigation/AuthNavigator.js
+          
+          const userN = {
+            id: authedUser.id,
+            customData: authhedUser.customData,
+            isLoggedIn: authedUser.isLoggedIn,
+            lastAuthActivity: authedUser.lastAuthActivity,
+            profile: authedUser.profile,
+            identities: authedUser.identities,
+            userType: authedUser.userType,
+            loggedInProviderName: authedUser.loggedInProviderName,
+            loggedInProviderType: authedUser.loggedInProviderType,
+          };
+
+          this.props.navigation.navigate('App', {
+            currentUserId: this.state.currentUserId,
+            user: JSON.stringify(userN),
+          });  // Navigate to App route. See navigation/AuthNavigator.js
         })
         .catch(err => { 
           alert(`Looks like there's no user account associated with your login. Please signup for your account.`);
@@ -229,23 +261,6 @@ export default class LoginScreen extends Component {
     } = this.state;
     const isLoginPage = selectedCategory === 0;
     const isSignUpPage = selectedCategory === 1;
-
-    // ------------------------------------------------------------------------------------------------
-    // let loginStatus = "Currently logged out."
-
-    // if(this.state.currentUserId) {
-    //   loginStatus = `Currently logged in as ${this.state.currentUserId}!`
-    // }
-
-    // loginButton = <Button
-    //                 onPress={this._onPressLogin}
-    //                 title="Login"/>
-
-    // logoutButton = <Button
-    //                 onPress={this._onPressLogout}
-    //                 title="Logout"/>
-    // // ------------------------------------------------------------------------------------------------
-
 
     return (
       <View style={styles.container}>
