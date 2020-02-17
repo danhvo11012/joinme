@@ -61,7 +61,6 @@ export default class LoginScreen extends Component {
     this.logOut = this.logOut.bind(this);
   }
 
-
   /** 
    * loadClient()
    *  Load Stitch client and check for logged in user
@@ -96,7 +95,6 @@ export default class LoginScreen extends Component {
         });
       }
     });
-
   }
 
   /** 
@@ -162,21 +160,22 @@ export default class LoginScreen extends Component {
     if (this.state.isEmailValid && this.state.isPasswordValid) {
       this.state.client.auth.loginWithCredential(credential)      // Returns a promise that resolves to the authenticated user
         .then(authedUser => {
+
+          const userN = {
+            id: this.state.client.auth.id,
+            // customData: this.state.client.auth.customData,
+            isLoggedIn: this.state.client.auth.isLoggedIn,
+            lastAuthActivity: this.state.client.auth.lastAuthActivity,
+            profile: this.state.client.auth.profile,
+            identities: this.state.client.auth.identities,
+            userType: this.state.client.auth.userType,
+            loggedInProviderName: this.state.client.auth.loggedInProviderName,
+            loggedInProviderType: this.state.client.auth.loggedInProviderType,
+          };
+
           console.log(`Successfully logged in: ${authedUser.isLoggedIn}`);
           this.setState({ currentUserId: authedUser.id}); // Set currentUserId
           console.log(`User currently login is ${this.state.currentUserId}`);
-          
-          const userN = {
-            id: authedUser.id,
-            customData: authhedUser.customData,
-            isLoggedIn: authedUser.isLoggedIn,
-            lastAuthActivity: authedUser.lastAuthActivity,
-            profile: authedUser.profile,
-            identities: authedUser.identities,
-            userType: authedUser.userType,
-            loggedInProviderName: authedUser.loggedInProviderName,
-            loggedInProviderType: authedUser.loggedInProviderType,
-          };
 
           this.props.navigation.navigate('App', {
             currentUserId: this.state.currentUserId,
@@ -186,7 +185,8 @@ export default class LoginScreen extends Component {
         .catch(err => { 
           alert(`Looks like there's no user account associated with your login. Please signup for your account.`);
           this.selectCategory(1);
-          // console.error(`Login failed with error: ${err}`);
+
+          console.error(`Login failed with error: ${err}`);
         });
     }
   }    

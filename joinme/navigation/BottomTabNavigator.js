@@ -1,14 +1,13 @@
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import TabBarIcon from '../components/TabBarIcon';
-import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
-// import LoginScreen from '../screens/LoginScreen';
+import BoardScreen from '../screens/BoardScreen';
+import RecruitScreen from '../screens/RecruitScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 import MyDeskScreen from '../screens/MyDeskScreen';
 
 const BottomTab = createBottomTabNavigator();
-
-const INITIAL_ROUTE_NAME = 'MyDeskScreen';
+const INITIAL_ROUTE_NAME = 'MyDesk';
 
 export default function BottomTabNavigator({ navigation, route }) {
   // export default function BottomTabNavigator({ navigation, route }) {
@@ -16,7 +15,6 @@ export default function BottomTabNavigator({ navigation, route }) {
   // Set the header title on the parent stack navigator depending on the
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
-
   const { currentUserId } = route.params;
   const { user } = route.params;
 
@@ -34,20 +32,31 @@ export default function BottomTabNavigator({ navigation, route }) {
           initialParams={{ currentUserId: currentUserId, user: user }}
         />
         <BottomTab.Screen
-          name="Home"
-          component={HomeScreen}
+          name="Board"
+          component={BoardScreen}
           options={{
-            title: 'Home',
+            title: 'Board',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
           }}
+          initialParams={{ currentUserId: currentUserId, user: user }}
         />
         <BottomTab.Screen
-          name="Links"
-          component={LinksScreen}
+          name="Recruit"
+          component={RecruitScreen}
           options={{
-            title: 'Resources',
+            title: 'Recruit',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
           }}
+          initialParams={{ currentUserId: currentUserId, user: user }}
+        />
+        <BottomTab.Screen
+          name="Profile"
+          component={ProfileScreen}
+          options={{
+            title: 'Profile',
+            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
+          }}
+          initialParams={{ currentUserId: currentUserId, user: user }}
         />
       </BottomTab.Navigator>
     
@@ -58,11 +67,13 @@ function getHeaderTitle(route) {
   const routeName = route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
 
   switch (routeName) {
-    case 'Home':
-      return 'How to get started';
-    case 'MyDeskScreen':
-      return 'What\'s on my desk?';
-    case 'Links':
-      return 'Links to learn more';
+    case 'MyDesk':
+      return 'My desk';
+    case 'Board':
+      return 'Bulletin Board';
+    case 'Recruit':
+      return 'Find your crew';
+    case 'Profile':
+      return 'Profile'
   }
 }
