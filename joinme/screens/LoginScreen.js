@@ -145,7 +145,7 @@ export default class LoginScreen extends Component {
     //   '12345678',
     // );
     // this.setState({email: 'danhvo11012@gmail.com', password: '12345678'});
-    const credential = new UserPasswordCredential(this.state.email, this.state.password);
+   
 
     LayoutAnimation.easeInEaseOut();
 
@@ -154,38 +154,40 @@ export default class LoginScreen extends Component {
       isLoading: false,
       isEmailValid: this.validateEmail(email) || this.emailInput.shake(),
       isPasswordValid: password.length >= 8 || this.passwordInput.shake(),
+    }, () => { // setState callback
+      const credential = new UserPasswordCredential(this.state.email, this.state.password);
+      if (this.state.isEmailValid && this.state.isPasswordValid) {
+        this.state.client.auth.loginWithCredential(credential)      // Returns a promise that resolves to the authenticated user
+          .then(authedUser => {
+  
+            console.log(`Successfully logged in: ${authedUser.isLoggedIn}`);
+            this.setState({ currentUserId: authedUser.id}); // Set currentUserId
+            console.log(`User currently login is ${this.state.currentUserId}`);
+            //clear password
+            this.clear_password();
+            // Navigate to App route. See navigation/AuthNavigator.js
+  
+            this.props.navigation.navigate('App', {
+              currentUserId: this.state.currentUserId,
+              user: {
+                id: authedUser.id,
+                email: authedUser.profile.data.email,
+                isLoggedIn: authedUser.isLoggedIn,
+                lastAuthActivity: JSON.stringify(authedUser.lastAuthActivity),
+                loggedInProviderName: authedUser.loggedInProviderName,
+                loggedInProviderType: authedUser.loggedInProviderType,
+                identities: JSON.stringify(authedUser.identities),
+              }
+            });  
+          })
+          .catch(err => { 
+            alert(`Looks like there's no user account associated with your login. Please signup for your account.`);
+            this.selectCategory(1);
+            console.error(`Login failed with error: ${err}`);
+          });
+      }
+
     });
-
-    if (this.state.isEmailValid && this.state.isPasswordValid) {
-      this.state.client.auth.loginWithCredential(credential)      // Returns a promise that resolves to the authenticated user
-        .then(authedUser => {
-
-          console.log(`Successfully logged in: ${authedUser.isLoggedIn}`);
-          this.setState({ currentUserId: authedUser.id}); // Set currentUserId
-          console.log(`User currently login is ${this.state.currentUserId}`);
-          //clear password
-          this.clear_password();
-          // Navigate to App route. See navigation/AuthNavigator.js
-
-          this.props.navigation.navigate('App', {
-            currentUserId: this.state.currentUserId,
-            user: {
-              id: authedUser.id,
-              email: authedUser.profile.data.email,
-              isLoggedIn: authedUser.isLoggedIn,
-              lastAuthActivity: JSON.stringify(authedUser.lastAuthActivity),
-              loggedInProviderName: authedUser.loggedInProviderName,
-              loggedInProviderType: authedUser.loggedInProviderType,
-              identities: JSON.stringify(authedUser.identities),
-            }
-          });  
-        })
-        .catch(err => { 
-          alert(`Looks like there's no user account associated with your login. Please signup for your account.`);
-          this.selectCategory(1);
-          console.error(`Login failed with error: ${err}`);
-        });
-    }
   }    
 
   /** 
@@ -211,22 +213,22 @@ export default class LoginScreen extends Component {
       isPasswordValid: password.length >= 8 || this.passwordInput.shake(),
       isConfirmationValid:
         password === passwordConfirmation || this.confirmationInput.shake(),
-    });
-
-    // Initialize stitch's emailPasswordClient
-    const emailPasswordClient = this.state.client.auth
+    }, () => { // setState callback()
+      // Initialize stitch's emailPasswordClient
+      const emailPasswordClient = this.state.client.auth
       .getProviderClient(UserPasswordAuthProviderClient.factory);
 
-    // Register email
-    emailPasswordClient.registerWithEmail(email, password)
-      .then(() => {
-        alert("Successfully created new account with email: " + email);
-        this.selectCategory(0); // Focus on signIn
-      })
-      .catch(err => {
-        alert("Looks like your email: " + email + " already in use. Please try again.")
-        // console.log("Error registering new user:", err)
-      });
+      // Register email
+      emailPasswordClient.registerWithEmail(email, password)
+        .then(() => {
+          alert("Successfully created new account with email: " + email);
+          this.selectCategory(0); // Focus on signIn
+        })
+        .catch(err => {
+          alert("Looks like your email: " + email + " already in use. Please try again.")
+          // console.log("Error registering new user:", err)
+        });
+    });
   }
 
   componentDidMount() {
@@ -426,7 +428,7 @@ export default class LoginScreen extends Component {
                 titleStyle={{ color: 'white' }}
                 buttonStyle={{ backgroundColor: 'transparent' }}
                 underlayColor="transparent"
-                onPress={() => console.log('Account created')}
+                onPress={() => alert('I\'m busy. Go help yourself.')}
               />
             </View>
           </View>
