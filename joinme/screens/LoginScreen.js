@@ -214,6 +214,7 @@ export default class LoginScreen extends Component {
       isConfirmationValid:
         password === passwordConfirmation || this.confirmationInput.shake(),
     }, () => { // setState callback()
+      
       // Initialize stitch's emailPasswordClient
       const emailPasswordClient = this.state.client.auth
       .getProviderClient(UserPasswordAuthProviderClient.factory);
