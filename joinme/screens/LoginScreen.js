@@ -75,21 +75,19 @@ export default class LoginScreen extends Component {
       if(client.auth.isLoggedIn) {
         this.setState({ currentUserId: client.auth.user.id });
         console.log('Currently loggedIn user: ' + this.state.currentUserId);
-
-        const userN = {
-          id: client.auth.user.id,
-          isLoggedIn: client.auth.user.isLoggedIn,
-          lastAuthActivity: client.auth.user.lastAuthActivity,
-          profile: client.auth.user.profile,
-          identities: client.auth.user.identities,
-          userType: client.auth.user.userType,
-          loggedInProviderName: client.auth.user.loggedInProviderName,
-          loggedInProviderType: client.auth.user.loggedInProviderType,
-        };
         
+
         this.props.navigation.navigate('App', {  
           currentUserId: this.state.currentUserId,
-          userProfile: userN.profile,
+          user: {
+            id: client.auth.user.id,
+            email: client.auth.user.profile.data.email,
+            isLoggedIn: client.auth.user.isLoggedIn,
+            lastAuthActivity: JSON.stringify(client.auth.user.lastAuthActivity),
+            loggedInProviderName: client.auth.user.loggedInProviderName,
+            loggedInProviderType: client.auth.user.loggedInProviderType,
+            identities: JSON.stringify(client.auth.user.identities),
+          }
         });
       }
     });
@@ -151,8 +149,6 @@ export default class LoginScreen extends Component {
 
     LayoutAnimation.easeInEaseOut();
 
-    // console.log(this.state.client);
-
     // Handle login with user credential
     this.setState({
       isLoading: false,
@@ -164,27 +160,24 @@ export default class LoginScreen extends Component {
       this.state.client.auth.loginWithCredential(credential)      // Returns a promise that resolves to the authenticated user
         .then(authedUser => {
 
-          const userN = {
-            id: this.state.client.auth.id,
-            // customData: this.state.client.auth.customData,
-            isLoggedIn: this.state.client.auth.isLoggedIn,
-            lastAuthActivity: this.state.client.auth.lastAuthActivity,
-            profile: this.state.client.auth.profile,
-            identities: this.state.client.auth.identities,
-            userType: this.state.client.auth.userType,
-            loggedInProviderName: this.state.client.auth.loggedInProviderName,
-            loggedInProviderType: this.state.client.auth.loggedInProviderType,
-          };
-
           console.log(`Successfully logged in: ${authedUser.isLoggedIn}`);
           this.setState({ currentUserId: authedUser.id}); // Set currentUserId
           console.log(`User currently login is ${this.state.currentUserId}`);
           //clear password
           this.clear_password();
           // Navigate to App route. See navigation/AuthNavigator.js
+
           this.props.navigation.navigate('App', {
             currentUserId: this.state.currentUserId,
-            userProfile: userN.profile,
+            user: {
+              id: authedUser.id,
+              email: authedUser.profile.data.email,
+              isLoggedIn: authedUser.isLoggedIn,
+              lastAuthActivity: JSON.stringify(authedUser.lastAuthActivity),
+              loggedInProviderName: authedUser.loggedInProviderName,
+              loggedInProviderType: authedUser.loggedInProviderType,
+              identities: JSON.stringify(authedUser.identities),
+            }
           });  
         })
         .catch(err => { 
@@ -221,7 +214,7 @@ export default class LoginScreen extends Component {
     });
 
     // Initialize stitch's emailPasswordClient
-    const emailPasswordClient = this.client.auth
+    const emailPasswordClient = this.state.client.auth
       .getProviderClient(UserPasswordAuthProviderClient.factory);
 
     // Register email

@@ -15,19 +15,22 @@ import {
 import { Input, Button, Icon } from 'react-native-elements';
 
 
-function RecruitScreen() {
-  
+function RecruitScreen({ route, navigation }) {
+  const { currentUserId, user } = route.params;
+
   // const [ currentUserId, setCurrentUserId ] = useState( null );
   const [ email, setEmail ] = useState( '' );
   const [ UserAuth, setUserAuth ] = useState(null);
 
  
   return(
-    <>
-      <Text containerStyle={{justifyContent: "center"}}>Welcome back, user!</Text>
-      <Input placeHolder="Email" />
-      <Button title="Do nothing" containerStyle={{justifyContent: "center", alignItems: "center"}} style={{width: 200}} />
-    </>
+    <View style={{ alignItems: 'center', marginTop: 10}}>
+      <Text>Welcome back, {user.email}!</Text>
+      <Button 
+        title="Recruit new crews"         
+        style={{ marginVertical: 50 }}
+      />
+    </View>
   );
 };
 

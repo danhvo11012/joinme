@@ -14,13 +14,10 @@ import {
 
 import { Input, Button, Icon } from 'react-native-elements';
 
-function ProfileScreen( { navigation,route }) {
-  
-  // const [ currentUserId, setCurrentUserId ] = useState( null );
-  const { user,currentUserId } = route.params;
-  
+function ProfileScreen( { route, navigation }) {
+  const { currentUserId, user } = route.params;
 
-  logOut = async () => {
+  const logOut = async () => {
        const client = Stitch.getAppClient("joinme-ufpra");
       
         client.auth.logout().then(user => {
@@ -31,18 +28,18 @@ function ProfileScreen( { navigation,route }) {
           }); 
         }).catch(err => {
           console.log(`User ${user} failed to log out: ${err}`);
-          // this.setState({ currentUserId: undefined })
         });
       
   }
  
   return(
-    <View style={{justifyContent: "center"}}>
-       <Button
-          style={{justifyContent: "center", marginTop: '50%'}}
-          title="Logout"
-          onPress={logOut}
-          />
+    <View style={{ alignItems: 'center', marginTop: 10}}>
+      <Text>My Profile is here!</Text>
+      <Button 
+        title="Log out"         
+        style={{ marginVertical: 50 }}
+        onPress={logOut}
+      />
     </View>
   );
 };
