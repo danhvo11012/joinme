@@ -184,10 +184,11 @@ export default class LoginScreen extends Component {
           console.log(`User currently login is ${this.state.currentUserId}`);
           //clear password
           this.clear_password();
+          // Navigate to App route. See navigation/AuthNavigator.js
           this.props.navigation.navigate('App', {
             currentUserId: this.state.currentUserId,
             user: JSON.stringify(userN),
-          });  // Navigate to App route. See navigation/AuthNavigator.js
+          });  
         })
         .catch(err => { 
           alert(`Looks like there's no user account associated with your login. Please signup for your account.`);
