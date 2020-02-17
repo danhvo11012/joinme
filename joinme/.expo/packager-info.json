@@ -1,9 +1,9 @@
 {
   "devToolsPort": 19002,
   "expoServerPort": 19000,
-  "packagerPort": 19001,
-  "packagerPid": 8584,
-  "expoServerNgrokUrl": "https://pv-8rs.anonymous.joinme.exp.direct",
-  "packagerNgrokUrl": "https://packager.pv-8rs.anonymous.joinme.exp.direct",
-  "ngrokPid": 14280
+  "packagerPort": 19004,
+  "packagerPid": 13222,
+  "expoServerNgrokUrl": "https://va-6ac.anonymous.joinme.exp.direct",
+  "packagerNgrokUrl": "https://packager.va-6ac.anonymous.joinme.exp.direct",
+  "ngrokPid": 13234
 }

@@ -14,20 +14,36 @@ import {
 
 import { Input, Button, Icon } from 'react-native-elements';
 
-
-function ProfieScreen() {
+function ProfieScreen( { navigation,route }) {
   
   // const [ currentUserId, setCurrentUserId ] = useState( null );
-  const [ email, setEmail ] = useState( '' );
-  const [ UserAuth, setUserAuth ] = useState(null);
+  const { user,currentUserId } = route.params;
+  
 
+  logOut = async () => {
+       const client = Stitch.getAppClient("joinme-ufpra");
+      
+        client.auth.logout().then(user => {
+          console.log(`User ${currentUserId} successfully logged out`);
+          
+          navigation.navigate('Auth', {
+            currentUserId: currentUserId
+          }); 
+        }).catch(err => {
+          console.log(`User ${user} failed to log out: ${err}`);
+          // this.setState({ currentUserId: undefined })
+        });
+      
+  }
  
   return(
-    <>
-      <Text containerStyle={{justifyContent: "center"}}>Welcome back, user!</Text>
-      <Input placeHolder="Email" />
-      <Button title="Do nothing" containerStyle={{justifyContent: "center", alignItems: "center"}} style={{width: 200}} />
-    </>
+    <View style={{justifyContent: "center"}}>
+       <Button
+          style={{justifyContent: "center", marginTop: '50%'}}
+          title="Logout"
+          onPress={logOut}
+          />
+    </View>
   );
 };
 

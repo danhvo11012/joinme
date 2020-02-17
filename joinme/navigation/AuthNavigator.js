@@ -9,7 +9,7 @@ const Stack = createStackNavigator();
 function AuthNavigator() {
   return (
     <NavigationContainer>
-      <Stack.Navigator >
+      <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen name="Auth" component={LoginScreen}/>
         <Stack.Screen name="App"  component={BottomTabNavigator} />
       </Stack.Navigator>
