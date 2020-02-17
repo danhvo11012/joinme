@@ -57,8 +57,7 @@ export default class LoginScreen extends Component {
     this.loadClient = this.loadClient.bind(this);
     this.selectCategory = this.selectCategory.bind(this);
     this.login = this.login.bind(this);
-    this.signUp = this.signUp.bind(this);
-    this.logOut = this.logOut.bind(this);
+    this.signUp = this.signUp.bind(this);    
   }
 
   /** 
@@ -79,7 +78,6 @@ export default class LoginScreen extends Component {
 
         const userN = {
           id: client.auth.user.id,
-          // customData: client.auth.user.customData,
           isLoggedIn: client.auth.user.isLoggedIn,
           lastAuthActivity: client.auth.user.lastAuthActivity,
           profile: client.auth.user.profile,
@@ -91,10 +89,11 @@ export default class LoginScreen extends Component {
         
         this.props.navigation.navigate('App', {  
           currentUserId: this.state.currentUserId,
-          user: JSON.stringify(userN),
+          userProfile: userN.profile,
         });
       }
     });
+
   }
 
   /** 
@@ -110,6 +109,10 @@ export default class LoginScreen extends Component {
       this.setState({showPass:false});
     else
       this.setState({showPass:true});
+  }
+  //clear password
+  clear_password = () => {
+    this.setState({password:''});
   }
 
   selectCategory(selectedCategory) {
@@ -176,30 +179,21 @@ export default class LoginScreen extends Component {
           console.log(`Successfully logged in: ${authedUser.isLoggedIn}`);
           this.setState({ currentUserId: authedUser.id}); // Set currentUserId
           console.log(`User currently login is ${this.state.currentUserId}`);
-
+          //clear password
+          this.clear_password();
+          // Navigate to App route. See navigation/AuthNavigator.js
           this.props.navigation.navigate('App', {
             currentUserId: this.state.currentUserId,
-            user: JSON.stringify(userN),
-          });  // Navigate to App route. See navigation/AuthNavigator.js
+            userProfile: userN.profile,
+          });  
         })
         .catch(err => { 
           alert(`Looks like there's no user account associated with your login. Please signup for your account.`);
           this.selectCategory(1);
-
           console.error(`Login failed with error: ${err}`);
         });
     }
   }    
-
-  logOut = async () => {
-    this.state.client.auth.logout().then(user => {
-        console.log(`User ${this.state.currentUserId} successfully logged out`);
-        this.setState({ currentUserId: undefined })
-    }).catch(err => {
-        console.log(`User ${user} failed to log out: ${err}`);
-        // this.setState({ currentUserId: undefined })
-    });
-  }
 
   /** 
    * signUp()
@@ -430,10 +424,7 @@ export default class LoginScreen extends Component {
                   loading={isLoading}
                   disabled={isLoading}
                 />
-                <Button
-                    onPress={this.logOut}
-                    title="Logout"/>
-              
+                
               </View>
             </KeyboardAvoidingView>
             <View style={styles.helpContainer}>

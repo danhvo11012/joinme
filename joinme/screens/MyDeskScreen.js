@@ -15,9 +15,9 @@ import {
 
 import { Input, Button, Icon } from 'react-native-elements';
 
-function MyDeskScreen({ route, navigation }) {
+function MyDeskScreen({ navigation, route }) {
   const { currentUserId } = route.params;
-  const { user } = route.params;
+  const { user} = route.params;
 
   console.log('ID from my desk screen: ', currentUserId);
   console.log('User from my desk screen: ', user);
@@ -31,7 +31,7 @@ function MyDeskScreen({ route, navigation }) {
  
   return(
     <View>
-      <Text containerStyle={{justifyContent: "center"}}>Welcome back, {user}!</Text>
+      <Text containerStyle={{justifyContent: "center"}}>Welcome back, User-{user}!</Text>
       <Input placeHolder="Email" />
       <Button title="Do nothing" containerStyle={{justifyContent: "center", alignItems: "center"}} style={{width: 200}} />
     </View>
