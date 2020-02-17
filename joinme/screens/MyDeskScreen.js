@@ -31,7 +31,7 @@ function MyDeskScreen({ route, navigation }) {
  
   return(
     <View>
-      <Text containerStyle={{justifyContent: "center"}}>Welcome back, User-{currentUserId}!</Text>
+      <Text containerStyle={{justifyContent: "center"}}>Welcome back, {user}!</Text>
       <Input placeHolder="Email" />
       <Button title="Do nothing" containerStyle={{justifyContent: "center", alignItems: "center"}} style={{width: 200}} />
     </View>
