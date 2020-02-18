@@ -5,7 +5,6 @@ import BoardScreen from '../screens/BoardScreen';
 import RecruitScreen from '../screens/RecruitScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import MyDeskScreen from '../screens/MyDeskScreen';
-import { TransitionSpecs } from '@react-navigation/stack';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs'
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs'
 
@@ -75,7 +74,6 @@ const BottomTab = createMaterialTopTabNavigator();
 
 function getHeaderTitle(route) {
   const routeName = route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
-
   switch (routeName) {
     case 'MyDesk':
       return 'My desk';
