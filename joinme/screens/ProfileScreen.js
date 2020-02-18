@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Stitch, AnonymousCredential, UserPasswordCredential } from 'mongodb-stitch-react-native-sdk';
+import { Stitch, RemoteMongoClient } from 'mongodb-stitch-react-native-sdk';
 
 import {
   StyleSheet,
@@ -12,14 +12,38 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 
-import { Input, Button, Icon } from 'react-native-elements';
+import { Input, Button, Icon, Image } from 'react-native-elements';
 
 function ProfileScreen( { route, navigation }) {
-  const { currentUserId, user } = route.params;
 
-  const logOut = async () => {
-       const client = Stitch.getAppClient("joinme-ufpra");
-      
+  const client =  Stitch.defaultAppClient;
+  const mongoClient = client.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas')
+  const db = mongoClient.db('joinme');
+  const profileDetails = db.collection('profiles');
+
+  const { currentUserId, user } = route.params;
+  const [ loadingComplete, setLoadingComplete] = useState(false);
+  const [ profile, setProfile ] = useState(null);
+
+  useEffect(() => {
+
+    const handleSetProfile = (e) => {
+      setProfile(e);
+    }
+
+    profileDetails.findOne({})
+      .then(results => {
+        handleSetProfile(results);
+        setLoadingComplete(true);
+      });
+
+  }, []);
+
+  function editProfile() {
+    alert('Editing your profile...');
+  }
+
+  const logOut = async () => {      
         client.auth.logout().then(user => {
           console.log(`User ${currentUserId} successfully logged out`);
           
@@ -31,17 +55,32 @@ function ProfileScreen( { route, navigation }) {
         });
       
   }
- 
-  return(
-    <View style={{ alignItems: 'center', marginTop: 10}}>
-      <Text>My Profile is here!</Text>
-      <Button 
-        title="Log out"         
-        style={{ marginVertical: 50 }}
-        onPress={logOut}
-      />
-    </View>
-  );
+  if (!loadingComplete) {
+    return null;
+  } else {
+    return(
+      <View style={{ alignItems: 'center', marginTop: 10}}>
+        <Image
+          source={{uri: profile.avatar}}   
+          style={{width: 300, height: 300, marginBottom: 20}} 
+        />
+        <Text style={{fontSize: 20, marginVertical: 5}}>{profile.userEmail}</Text>
+        <Text style={{fontSize: 20, marginVertical: 5}}>{profile.firstName} {profile.lastName}</Text>
+    
+        <Button 
+          title="Edit profile"         
+          style={{ marginVertical: 5 }}
+          onPress={editProfile}
+        />
+  
+        <Button 
+          title="Log out"         
+          style={{ marginVertical: 50 }}
+          onPress={logOut}
+        />
+      </View>
+    );
+  }
 };
 
 export default ProfileScreen;
