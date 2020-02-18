@@ -5,7 +5,7 @@ import BoardScreen from '../screens/BoardScreen';
 import RecruitScreen from '../screens/RecruitScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import MyDeskScreen from '../screens/MyDeskScreen';
-import { fromLeft } from 'react-navigation-transitions';
+import { TransitionSpecs } from '@react-navigation/stack';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs'
 
 const INITIAL_ROUTE_NAME = 'MyDesk';
@@ -29,6 +29,10 @@ export default function BottomTabNavigator({ navigation, route }) {
           options={{
             title: 'My Desk',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-desktop" />,
+            transitionSpec: {
+              open: TransitionSpecs.TransitionIOSSpec,
+              close: TransitionSpecs.TransitionIOSSpec,
+            }
           }}
           navigationOptions= {{
             gesturesEnabled: false,
@@ -41,6 +45,10 @@ export default function BottomTabNavigator({ navigation, route }) {
           options={{
             title: 'Board',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-clipboard"/>,
+            transitionSpec: {
+              open: TransitionSpecs.TransitionIOSSpec,
+              close: TransitionSpecs.TransitionIOSSpec,
+            }
           }}
           initialParams={{ currentUserId: currentUserId, user: user }}
         />
@@ -50,6 +58,10 @@ export default function BottomTabNavigator({ navigation, route }) {
           options={{
             title: 'Recruit',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-person-add" />,
+            transitionSpec: {
+              open: TransitionSpecs.TransitionIOSSpec,
+              close: TransitionSpecs.TransitionIOSSpec,
+            }
           }}
           initialParams={{ currentUserId: currentUserId, user: user }}
         />
@@ -59,6 +71,10 @@ export default function BottomTabNavigator({ navigation, route }) {
           options={{
             title: 'Profile',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-person" />,
+            transitionSpec: {
+              open: TransitionSpecs.TransitionIOSSpec,
+              close: TransitionSpecs.TransitionIOSSpec,
+            }
           }}
           initialParams={{ currentUserId: currentUserId, user: user }}
         />
