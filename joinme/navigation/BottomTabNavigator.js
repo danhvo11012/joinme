@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 import TabBarIcon from '../components/TabBarIcon';
 import BoardScreen from '../screens/BoardScreen';
 import RecruitScreen from '../screens/RecruitScreen';
@@ -7,6 +7,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 import MyDeskScreen from '../screens/MyDeskScreen';
 import { TransitionSpecs } from '@react-navigation/stack';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs'
+import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs'
 
 const INITIAL_ROUTE_NAME = 'MyDesk';
 
