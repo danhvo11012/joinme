@@ -23,18 +23,7 @@ export default function BottomTabNavigator({ navigation, route }) {
     
   return (
       <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME} tabBarPosition={'bottom'}>
-        {createHomeScreen(currentUserId,user)}
-        {createBoardScreen(currentUserId,user)}
-        {createRecruitScreen(currentUserId,user)}
-        {createProfileScreen(currentUserId,user)}
-      </BottomTab.Navigator>
-    
-  );
-}
-const BottomTab = createMaterialTopTabNavigator();
-function createHomeScreen(currentUserId, user){
-  return (
-    <BottomTab.Screen
+        <BottomTab.Screen
           name="MyDesk"
           component={MyDeskScreen}
           options={{
@@ -46,11 +35,7 @@ function createHomeScreen(currentUserId, user){
           }}
           initialParams={{ currentUserId: currentUserId, user: user }}
         />
-  );
-}
-function createBoardScreen(currentUserId, user){
-  return (
-    <BottomTab.Screen
+        <BottomTab.Screen
           name="Board"
           component={BoardScreen}
           options={{
@@ -59,11 +44,7 @@ function createBoardScreen(currentUserId, user){
           }}
           initialParams={{ currentUserId: currentUserId, user: user }}
         />
-  );
-}
-function createRecruitScreen(currentUserId, user){
-  return (
-    <BottomTab.Screen
+        <BottomTab.Screen
           name="Recruit"
           component={RecruitScreen}
           options={{
@@ -72,11 +53,7 @@ function createRecruitScreen(currentUserId, user){
           }}
           initialParams={{ currentUserId: currentUserId, user: user }}
         />
-  );
-}
-function createProfileScreen(currentUserId, user){
-  return (
-    <BottomTab.Screen
+        <BottomTab.Screen
           name="Profile"
           component={ProfileScreen}
           options={{
@@ -85,8 +62,13 @@ function createProfileScreen(currentUserId, user){
           }}
           initialParams={{ currentUserId: currentUserId, user: user }}
         />
+    </BottomTab.Navigator>
+    
   );
 }
+
+const BottomTab = createBottomTabNavigator();
+
 function getHeaderTitle(route) {
   const routeName = route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
 
