@@ -5,8 +5,9 @@ import BoardScreen from '../screens/BoardScreen';
 import RecruitScreen from '../screens/RecruitScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import MyDeskScreen from '../screens/MyDeskScreen';
+import { fromLeft } from 'react-navigation-transitions';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs'
 
-const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'MyDesk';
 
 export default function BottomTabNavigator({ navigation, route }) {
@@ -18,11 +19,22 @@ export default function BottomTabNavigator({ navigation, route }) {
   const { currentUserId } = route.params;
   const { user } = route.params;
 
-  navigation.setOptions({ headerTitle: getHeaderTitle(route) });
-
+  navigation.setOptions({ headerTitle: getHeaderTitle(route)});
+  
   return (
-      <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
-        <BottomTab.Screen
+      <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME} swipeEnable={true} tabBarPosition={'bottom'}>
+        {createHomeScreen(currentUserId,user)}
+        {createBoardScreen(currentUserId,user)}
+        {createRecruitScreen(currentUserId,user)}
+        {createProfileScreen(currentUserId,user)}
+      </BottomTab.Navigator>
+    
+  );
+}
+const BottomTab = createMaterialTopTabNavigator();
+function createHomeScreen(currentUserId, user){
+  return (
+    <BottomTab.Screen
           name="MyDesk"
           component={MyDeskScreen}
           options={{
@@ -31,7 +43,11 @@ export default function BottomTabNavigator({ navigation, route }) {
           }}
           initialParams={{ currentUserId: currentUserId, user: user }}
         />
-        <BottomTab.Screen
+  );
+}
+function createBoardScreen(currentUserId, user){
+  return (
+    <BottomTab.Screen
           name="Board"
           component={BoardScreen}
           options={{
@@ -40,7 +56,11 @@ export default function BottomTabNavigator({ navigation, route }) {
           }}
           initialParams={{ currentUserId: currentUserId, user: user }}
         />
-        <BottomTab.Screen
+  );
+}
+function createRecruitScreen(currentUserId, user){
+  return (
+    <BottomTab.Screen
           name="Recruit"
           component={RecruitScreen}
           options={{
@@ -49,7 +69,11 @@ export default function BottomTabNavigator({ navigation, route }) {
           }}
           initialParams={{ currentUserId: currentUserId, user: user }}
         />
-        <BottomTab.Screen
+  );
+}
+function createProfileScreen(currentUserId, user){
+  return (
+    <BottomTab.Screen
           name="Profile"
           component={ProfileScreen}
           options={{
@@ -58,11 +82,8 @@ export default function BottomTabNavigator({ navigation, route }) {
           }}
           initialParams={{ currentUserId: currentUserId, user: user }}
         />
-      </BottomTab.Navigator>
-    
   );
 }
-
 function getHeaderTitle(route) {
   const routeName = route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
 

@@ -38,9 +38,14 @@ function ProfileScreen( { route, navigation }) {
       });
 
   }, []);
-
+  
   function editProfile() {
-    alert('Editing your profile...');
+    //alert('Editing your profile...');
+    
+  
+    navigation.navigate('Edit-Profile', {
+      currentUserId: currentUserId
+    }); 
   }
 
   const logOut = async () => {      
