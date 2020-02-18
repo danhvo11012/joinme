@@ -20,7 +20,7 @@ export default function BottomTabNavigator({ navigation, route }) {
   const { user } = route.params;
 
   navigation.setOptions({ headerTitle: getHeaderTitle(route)});
-  
+    
   return (
       <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME} swipeEnable={true} tabBarPosition={'bottom'}>
         {createHomeScreen(currentUserId,user)}
