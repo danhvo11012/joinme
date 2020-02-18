@@ -27,7 +27,7 @@ export default function BottomTabNavigator({ navigation, route }) {
           component={MyDeskScreen}
           options={{
             title: 'My Desk',
-            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
+            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-desktop" />,
           }}
           initialParams={{ currentUserId: currentUserId, user: user }}
         />
@@ -36,7 +36,7 @@ export default function BottomTabNavigator({ navigation, route }) {
           component={BoardScreen}
           options={{
             title: 'Board',
-            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
+            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-clipboard"/>,
           }}
           initialParams={{ currentUserId: currentUserId, user: user }}
         />
@@ -45,7 +45,7 @@ export default function BottomTabNavigator({ navigation, route }) {
           component={RecruitScreen}
           options={{
             title: 'Recruit',
-            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
+            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-person-add" />,
           }}
           initialParams={{ currentUserId: currentUserId, user: user }}
         />
@@ -54,7 +54,7 @@ export default function BottomTabNavigator({ navigation, route }) {
           component={ProfileScreen}
           options={{
             title: 'Profile',
-            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
+            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-person" />,
           }}
           initialParams={{ currentUserId: currentUserId, user: user }}
         />
