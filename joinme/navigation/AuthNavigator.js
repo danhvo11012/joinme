@@ -13,7 +13,7 @@ function AuthNavigator() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerLeft: null}}>
         <Stack.Screen name="Auth" component={LoginScreen} options={{ headerShown: false}}/>
-        <Stack.Screen name="App"  component={BottomTabNavigator} />
+        <Stack.Screen name="App"  component={BottomTabNavigator} options={{ gestureEnabled: false}}/>
         <Stack.Screen name="Edit-Profile" component={EditFormScreen} />
       </Stack.Navigator>
     </NavigationContainer>

@@ -22,21 +22,18 @@ export default function BottomTabNavigator({ navigation, route }) {
   navigation.setOptions({ headerTitle: getHeaderTitle(route)});
     
   return (
-      <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME} tabBarPosition={'bottom'}>
+      <BottomTab.Navigator 
+        tabBarOptions ={{showIcon: true}}
+        initialRouteName={INITIAL_ROUTE_NAME} tabBarPosition={'bottom'}>
         <BottomTab.Screen
           name="MyDesk"
           component={MyDeskScreen}
           options={{
             title: 'My Desk',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-desktop" />,
-            transitionSpec: {
-              open: TransitionSpecs.TransitionIOSSpec,
-              close: TransitionSpecs.TransitionIOSSpec,
-            }
+            
           }}
-          navigationOptions= {{
-            gesturesEnabled: false,
-          }}
+          
           initialParams={{ currentUserId: currentUserId, user: user }}
         />
         <BottomTab.Screen
@@ -45,10 +42,6 @@ export default function BottomTabNavigator({ navigation, route }) {
           options={{
             title: 'Board',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-clipboard"/>,
-            transitionSpec: {
-              open: TransitionSpecs.TransitionIOSSpec,
-              close: TransitionSpecs.TransitionIOSSpec,
-            }
           }}
           initialParams={{ currentUserId: currentUserId, user: user }}
         />
@@ -58,10 +51,7 @@ export default function BottomTabNavigator({ navigation, route }) {
           options={{
             title: 'Recruit',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-person-add" />,
-            transitionSpec: {
-              open: TransitionSpecs.TransitionIOSSpec,
-              close: TransitionSpecs.TransitionIOSSpec,
-            }
+           
           }}
           initialParams={{ currentUserId: currentUserId, user: user }}
         />
@@ -71,10 +61,7 @@ export default function BottomTabNavigator({ navigation, route }) {
           options={{
             title: 'Profile',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-person" />,
-            transitionSpec: {
-              open: TransitionSpecs.TransitionIOSSpec,
-              close: TransitionSpecs.TransitionIOSSpec,
-            }
+            
           }}
           initialParams={{ currentUserId: currentUserId, user: user }}
         />
@@ -83,7 +70,7 @@ export default function BottomTabNavigator({ navigation, route }) {
   );
 }
 
-const BottomTab = createBottomTabNavigator();
+const BottomTab = createMaterialTopTabNavigator();
 
 function getHeaderTitle(route) {
   const routeName = route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;

@@ -1,10 +1,10 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": 19000,
-  "packagerPort": 19001,
-  "packagerPid": 24072,
-  "expoServerNgrokUrl": "https://tr-vca.khiemhuynh952.joinme.exp.direct",
-  "packagerNgrokUrl": "https://packager.tr-vca.khiemhuynh952.joinme.exp.direct",
-  "ngrokPid": 612,
+  "expoServerPort": null,
+  "packagerPort": null,
+  "packagerPid": null,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null,
   "webpackServerPort": 19006
 }
