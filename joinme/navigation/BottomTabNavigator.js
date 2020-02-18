@@ -22,7 +22,7 @@ export default function BottomTabNavigator({ navigation, route }) {
   navigation.setOptions({ headerTitle: getHeaderTitle(route)});
     
   return (
-      <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME} swipeEnable={true} tabBarPosition={'bottom'}>
+      <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME} tabBarPosition={'bottom'}>
         {createHomeScreen(currentUserId,user)}
         {createBoardScreen(currentUserId,user)}
         {createRecruitScreen(currentUserId,user)}
@@ -40,6 +40,9 @@ function createHomeScreen(currentUserId, user){
           options={{
             title: 'My Desk',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-desktop" />,
+          }}
+          navigationOptions= {{
+            gesturesEnabled: false,
           }}
           initialParams={{ currentUserId: currentUserId, user: user }}
         />
