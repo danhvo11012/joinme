@@ -4,13 +4,14 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from '../screens/LoginScreen';
 import BottomTabNavigator from './BottomTabNavigator';
 import EditProfileScreen from '../screens/EditProfileScreen';
+import { TransitionSpecs } from '@react-navigation/stack';
 
 const Stack = createStackNavigator();
 
 function AuthNavigator() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerLeft: null}}>
+      <Stack.Navigator headerMode="float" screenOptions={{ headerLeft: null}}>
         <Stack.Screen name="Auth" 
                       component={LoginScreen} 
                       options={{ headerShown: false}}/>
@@ -19,7 +20,10 @@ function AuthNavigator() {
                       options={{ gestureEnabled: false}}/>
         <Stack.Screen name="Edit Profile" 
                       component={EditProfileScreen} 
-                      options={{ gestureEnabled: false}}/>
+                      options={[{ gestureEnabled: false},{transitionSpec: {
+                        open: TransitionSpecs.TransitionIOSSpec,
+                        close: TransitionSpecs.TransitionIOSSpec,
+                      },}]}/>
       </Stack.Navigator>
     </NavigationContainer>
   )

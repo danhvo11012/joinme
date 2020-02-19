@@ -6,7 +6,7 @@ import RecruitScreen from '../screens/RecruitScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import MyDeskScreen from '../screens/MyDeskScreen';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs'
-
+import {Button} from 'react-native'
 const INITIAL_ROUTE_NAME = 'MyDesk';
 
 export default function BottomTabNavigator({ navigation, route }) {
@@ -60,7 +60,9 @@ export default function BottomTabNavigator({ navigation, route }) {
           options={{
             title: 'Profile',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-person" />,
-            
+            headerRight: () => (
+              <Button title="Log Out" />
+            )
           }}
           initialParams={{ currentUserId: currentUserId, user: user }}
         />
@@ -81,8 +83,6 @@ function getHeaderTitle(route) {
     case 'Recruit':
       return 'Find your crew';
     case 'Profile':
-      return 'Profile'
-    case 'EditProfile':
-      return 'Edit Profile';
+      return 'Profile';
   }
 }

@@ -10,12 +10,15 @@ import {
   LayoutAnimation,
   UIManager,
   KeyboardAvoidingView,
+  Button
 } from 'react-native';
-
-import { Input, Button, Icon, Image } from 'react-native-elements';
-import Modal from 'react-native-modalbox';
+import { createStackNavigator } from '@react-navigation/stack';
+import { Input, Button as ElementsButton, Icon, Image } from 'react-native-elements';
 function ProfileScreen( { route, navigation }) {
 
+  // navigator.setOptions({headerRight: () => (
+  //   <Button onPress={logOut} title="Log Out" />
+  // )});
   const client =  Stitch.defaultAppClient;
   const mongoClient = client.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas')
   const db = mongoClient.db('joinme');
@@ -24,6 +27,7 @@ function ProfileScreen( { route, navigation }) {
   const { currentUserId, user } = route.params;
   const [ loadingComplete, setLoadingComplete] = useState(false);
   const [ profile, setProfile ] = useState(null);
+
 
   useEffect(() => {
 
@@ -38,7 +42,7 @@ function ProfileScreen( { route, navigation }) {
       });
 
   }, []);
-  
+
   function openEditScreen() {
     navigation.navigate('Edit Profile', {
       currentUserId: currentUserId, user:user
@@ -56,7 +60,6 @@ function ProfileScreen( { route, navigation }) {
         }).catch(err => {
           console.log(`User ${user} failed to log out: ${err}`);
         });
-      
   }
   if (!loadingComplete) {
     return null;
@@ -70,13 +73,13 @@ function ProfileScreen( { route, navigation }) {
         <Text style={{fontSize: 20, marginVertical: 5}}>{profile.userEmail}</Text>
         <Text style={{fontSize: 20, marginVertical: 5}}>{profile.firstName} {profile.lastName}</Text>
     
-        <Button 
+        <ElementsButton 
           title="Edit profile"         
           style={{ marginVertical: 5 }}
           onPress={openEditScreen}
         />
   
-        <Button 
+        <ElementsButton 
           title="Log out"         
           style={{ marginVertical: 50 }}
           onPress={logOut}
@@ -88,6 +91,3 @@ function ProfileScreen( { route, navigation }) {
 };
 
 export default ProfileScreen;
-const styles = StyleSheet.create({
-
-});
