@@ -72,7 +72,7 @@ function ProfileScreen( { route, navigation }) {
         />
         <Text style={{fontSize: 20, marginVertical: 5}}>{profile.userEmail}</Text>
         <Text style={{fontSize: 20, marginVertical: 5}}>{profile.firstName} {profile.lastName}</Text>
-    
+        
         <ElementsButton 
           title="Edit profile"         
           style={{ marginVertical: 5 }}
