@@ -6,7 +6,6 @@ import RecruitScreen from '../screens/RecruitScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import MyDeskScreen from '../screens/MyDeskScreen';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs'
-import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs'
 
 const INITIAL_ROUTE_NAME = 'MyDesk';
 

@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 
 import { Input, Button, Icon, Image } from 'react-native-elements';
+import EditProfileModal from './EditProfileModal';
 
 function ProfileScreen( { route, navigation }) {
 
@@ -41,11 +42,7 @@ function ProfileScreen( { route, navigation }) {
   
   function editProfile() {
     //alert('Editing your profile...');
-    
-  
-    navigation.navigate('Edit-Profile', {
-      currentUserId: currentUserId
-    }); 
+   
   }
 
   const logOut = async () => {      
@@ -83,6 +80,7 @@ function ProfileScreen( { route, navigation }) {
           style={{ marginVertical: 50 }}
           onPress={logOut}
         />
+        
       </View>
     );
   }
