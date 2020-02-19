@@ -16,9 +16,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Input, Button as ElementsButton, Icon, Image } from 'react-native-elements';
 function ProfileScreen( { route, navigation }) {
 
-  // navigator.setOptions({headerRight: () => (
-  //   <Button onPress={logOut} title="Log Out" />
-  // )});
   const client =  Stitch.defaultAppClient;
   const mongoClient = client.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas')
   const db = mongoClient.db('joinme');
@@ -30,17 +27,11 @@ function ProfileScreen( { route, navigation }) {
 
 
   useEffect(() => {
-
-    const handleSetProfile = (e) => {
-      setProfile(e);
-    }
-
     profileDetails.findOne({})
       .then(results => {
-        handleSetProfile(results);
+        setProfile(results);
         setLoadingComplete(true);
       });
-
   }, []);
 
   function openEditScreen() {

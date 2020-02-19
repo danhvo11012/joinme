@@ -2,16 +2,8 @@
   "devToolsPort": 19002,
   "expoServerPort": 19000,
   "packagerPort": 19001,
-<<<<<<< HEAD
-  "packagerPid": 10900,
+  "packagerPid": 9332,
   "expoServerNgrokUrl": "https://vz-h67.anonymous.joinme.exp.direct",
   "packagerNgrokUrl": "https://packager.vz-h67.anonymous.joinme.exp.direct",
-  "ngrokPid": 12812
-=======
-  "packagerPid": 9124,
-  "expoServerNgrokUrl": "https://tr-vca.khiemhuynh952.joinme.exp.direct",
-  "packagerNgrokUrl": "https://packager.tr-vca.khiemhuynh952.joinme.exp.direct",
-  "ngrokPid": 19396,
-  "webpackServerPort": 19006
->>>>>>> 4d6122af749f08da801c6a603e4bd7f492619453
+  "ngrokPid": 6636
 }
