@@ -155,8 +155,9 @@ export default class LoginScreen extends Component {
       isEmailValid: this.validateEmail(email) || this.emailInput.shake(),
       isPasswordValid: password.length >= 8 || this.passwordInput.shake(),
     }, () => { // setState callback
-      const credential = new UserPasswordCredential(this.state.email, this.state.password);
+      
       if (this.state.isEmailValid && this.state.isPasswordValid) {
+        const credential = new UserPasswordCredential(this.state.email, this.state.password);
         this.state.client.auth.loginWithCredential(credential)      // Returns a promise that resolves to the authenticated user
           .then(authedUser => {
   
@@ -214,7 +215,7 @@ export default class LoginScreen extends Component {
       isConfirmationValid:
         password === passwordConfirmation || this.confirmationInput.shake(),
     }, () => { // setState callback()
-      
+      if (this.state.isEmailValid && this.state.isPasswordValid && this.state.isConfirmationValid) {
       // Initialize stitch's emailPasswordClient
       const emailPasswordClient = this.state.client.auth
       .getProviderClient(UserPasswordAuthProviderClient.factory);
@@ -223,12 +224,13 @@ export default class LoginScreen extends Component {
       emailPasswordClient.registerWithEmail(email, password)
         .then(() => {
           alert("Successfully created new account with email: " + email);
-          this.selectCategory(0); // Focus on signIn
+          this.selectCategory(0); // Focus on signUp
         })
         .catch(err => {
           alert("Looks like your email: " + email + " already in use. Please try again.")
           // console.log("Error registering new user:", err)
         });
+      }
     });
   }
 
@@ -525,7 +527,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     color: 'white',
-    fontSize: 40,
+    fontSize: 30,
     fontFamily: 'regular',
   },
   helpContainer: {
