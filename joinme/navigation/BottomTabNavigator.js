@@ -82,5 +82,7 @@ function getHeaderTitle(route) {
       return 'Find your crew';
     case 'Profile':
       return 'Profile'
+    case 'EditProfile':
+      return 'Edit Profile';
   }
 }

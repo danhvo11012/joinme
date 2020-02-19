@@ -13,8 +13,7 @@ import {
 } from 'react-native';
 
 import { Input, Button, Icon, Image } from 'react-native-elements';
-import EditProfileModal from './EditProfileModal';
-
+import Modal from 'react-native-modalbox';
 function ProfileScreen( { route, navigation }) {
 
   const client =  Stitch.defaultAppClient;
@@ -40,9 +39,11 @@ function ProfileScreen( { route, navigation }) {
 
   }, []);
   
-  function editProfile() {
-    //alert('Editing your profile...');
-   
+  function openEditScreen() {
+    navigation.navigate('Edit Profile', {
+      currentUserId: currentUserId, user:user
+    }); 
+    
   }
 
   const logOut = async () => {      
@@ -72,7 +73,7 @@ function ProfileScreen( { route, navigation }) {
         <Button 
           title="Edit profile"         
           style={{ marginVertical: 5 }}
-          onPress={editProfile}
+          onPress={openEditScreen}
         />
   
         <Button 
@@ -87,3 +88,6 @@ function ProfileScreen( { route, navigation }) {
 };
 
 export default ProfileScreen;
+const styles = StyleSheet.create({
+
+});
