@@ -5,7 +5,7 @@ import LoginScreen from '../screens/LoginScreen';
 import BottomTabNavigator from './BottomTabNavigator';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import { TransitionSpecs } from '@react-navigation/stack';
-
+import ProfileSettingScreen from '../screens/profile-settings-2/ProfileSettingScreen';
 const Stack = createStackNavigator();
 
 function AuthNavigator() {
@@ -20,6 +20,7 @@ function AuthNavigator() {
                       options={{ gestureEnabled: false}}/>
         <Stack.Screen name="Edit Profile" 
                       component={EditProfileScreen} 
+<<<<<<< HEAD
                       options={{
                         gestureEnabled: false, 
                         transitionSpec: {
@@ -28,6 +29,14 @@ function AuthNavigator() {
                         },
                       }}
         />
+=======
+                      options={{ gestureEnabled: false}
+                      }/>
+        <Stack.Screen name="Profile Settings" 
+                      component={ProfileSettingScreen} 
+                      options={{ gestureEnabled: false}
+                      }/>
+>>>>>>> 71069b17eff22d12b73c6b193f05b4d69fd7c648
       </Stack.Navigator>
     </NavigationContainer>
   )
