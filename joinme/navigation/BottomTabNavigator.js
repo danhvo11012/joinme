@@ -5,21 +5,20 @@ import BoardScreen from '../screens/BoardScreen';
 import RecruitScreen from '../screens/RecruitScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import MyDeskScreen from '../screens/MyDeskScreen';
+
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs'
 import {Button} from 'react-native'
+
 const INITIAL_ROUTE_NAME = 'MyDesk';
 
 export default function BottomTabNavigator({ navigation, route }) {
-  // export default function BottomTabNavigator({ navigation, route }) {
-
-  // Set the header title on the parent stack navigator depending on the
-  // currently active tab. Learn more in the documentation:
-  // https://reactnavigation.org/docs/en/screen-options-resolution.html
   const { currentUserId } = route.params;
   const { user } = route.params;
 
   navigation.setOptions({ headerTitle: getHeaderTitle(route)});
-    
+
+  const BottomTab = createMaterialTopTabNavigator();
+
   return (
       <BottomTab.Navigator 
         tabBarOptions ={{showIcon: true}}
@@ -30,9 +29,7 @@ export default function BottomTabNavigator({ navigation, route }) {
           options={{
             title: 'My Desk',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-desktop" />,
-            
           }}
-          
           initialParams={{ currentUserId: currentUserId, user: user }}
         />
         <BottomTab.Screen
@@ -60,9 +57,6 @@ export default function BottomTabNavigator({ navigation, route }) {
           options={{
             title: 'Profile',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-person" />,
-            headerRight: () => (
-              <Button title="Log Out" />
-            )
           }}
           initialParams={{ currentUserId: currentUserId, user: user }}
         />
@@ -70,8 +64,6 @@ export default function BottomTabNavigator({ navigation, route }) {
     
   );
 }
-
-const BottomTab = createMaterialTopTabNavigator();
 
 function getHeaderTitle(route) {
   const routeName = route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
@@ -86,3 +78,4 @@ function getHeaderTitle(route) {
       return 'Profile';
   }
 }
+

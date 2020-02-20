@@ -10,6 +10,7 @@ import {
   LayoutAnimation,
   UIManager,
   KeyboardAvoidingView,
+  ScrollView,
 } from 'react-native';
 
 import { Input, Button, Icon } from 'react-native-elements';
@@ -24,13 +25,15 @@ function RecruitScreen({ route, navigation }) {
 
  
   return(
-    <View style={{ alignItems: 'center', marginTop: 10}}>
-      <Text>Welcome back, {user.email}!</Text>
-      <Button 
-        title="Recruit new crews"         
-        style={{ marginVertical: 50 }}
-      />
-    </View>
+    <ScrollView>
+      <View style={{ alignItems: 'center', marginTop: 10}}>
+        <Text>Welcome back, {user.email}!</Text>
+        <Button 
+          title="Recruit new crews"         
+          style={{ marginVertical: 50 }}
+        />
+      </View>
+    </ScrollView>
   );
 };
 

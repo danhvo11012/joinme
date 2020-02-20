@@ -1,7 +1,7 @@
 /** @format */
 
 import React, {Component } from "react";
-import { Text, View, StyleSheet, Button,Animated } from "react-native";
+import { Text, View, StyleSheet, Button,Animated, ScrollView, } from "react-native";
 import TabBarIcon from "../components/TabBarIcon";
 import { Button as ElementButton} from "react-native-elements";
 
@@ -20,30 +20,32 @@ export default function EditProfileScreen ({navigation, user, ref}){
   }
 
   return (
-    <View style={[styles.container]}>
-        <Animated.ScrollView
-          // ref={(c) => (this.list = c)}
-          overScrollMode="never"
-          
-          scrollEventThrottle={1}
-          onScroll={(event) => {
-            this.state.scrollY.setValue(event.nativeEvent.contentOffset.y);
-          }}>
-            <View>
-              <Text style={{ fontSize: 30 }}>This is a modal!</Text>
-            </View>
-          </Animated.ScrollView>
-      <View style={styles.saveBtnContainer}>
-        <ElementButton
-          titleStyle={styles.saveBtn}
-          onPress={submitChange}
-          title="Save"
-          buttonStyle={{
-            borderRadius: 0,
-          }}
-        />
-      </View> 
-    </View>
+    <ScrollView>
+      <View style={[styles.container]}>
+          <Animated.ScrollView
+            // ref={(c) => (this.list = c)}
+            overScrollMode="never"
+            
+            scrollEventThrottle={1}
+            onScroll={(event) => {
+              this.state.scrollY.setValue(event.nativeEvent.contentOffset.y);
+            }}>
+              <View>
+                <Text style={{ fontSize: 30 }}>This is a modal!</Text>
+              </View>
+            </Animated.ScrollView>
+        <View style={styles.saveBtnContainer}>
+          <ElementButton
+            titleStyle={styles.saveBtn}
+            onPress={submitChange}
+            title="Save"
+            buttonStyle={{
+              borderRadius: 0,
+            }}
+          />
+        </View> 
+      </View>
+    </ScrollView>
   );
 }
 

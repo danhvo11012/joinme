@@ -10,7 +10,8 @@ import {
   LayoutAnimation,
   UIManager,
   KeyboardAvoidingView,
-  Button
+  Button,
+  ScrollView,
 } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Input, Button as ElementsButton, Icon, Image } from 'react-native-elements';
@@ -60,27 +61,29 @@ function ProfileScreen( { route, navigation }) {
     return null;
   } else {
     return(
-      <View style={{ alignItems: 'center', marginTop: 10}}>
-        <Image
-          source={{uri: profile.avatar}}   
-          style={{width: 300, height: 300, marginBottom: 20}} 
-        />
-        <Text style={{fontSize: 20, marginVertical: 5}}>{profile.userEmail}</Text>
-        <Text style={{fontSize: 20, marginVertical: 5}}>{profile.firstName} {profile.lastName}</Text>
-        
-        <ElementsButton
-          title="Edit profile"
-          style={{ marginVertical: 5 }}
-          onPress={openEditScreen}
-        />
-  
-        <ElementsButton
-          title="Log out"         
-          style={{ marginVertical: 50 }}
-          onPress={logOut}
-        />
+      <ScrollView>
+        <View style={{ alignItems: 'center', marginTop: 10}}>
+          <Image
+            source={{uri: profile.avatar}}   
+            style={{width: 300, height: 300, marginBottom: 20}} 
+          />
+          <Text style={{fontSize: 20, marginVertical: 5}}>{profile.userEmail}</Text>
+          <Text style={{fontSize: 20, marginVertical: 5}}>{profile.firstName} {profile.lastName}</Text>
+          
+          <ElementsButton
+            title="Edit profile"
+            style={{ marginVertical: 5 }}
+            onPress={openEditScreen}
+          />
+    
+          <ElementsButton
+            title="Log out"         
+            style={{ marginVertical: 50 }}
+            onPress={logOut}
+          />
 
-      </View>
+        </View>
+      </ScrollView>
     );
   }
 };
