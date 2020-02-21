@@ -20,23 +20,12 @@ function AuthNavigator() {
                       options={{ gestureEnabled: false}}/>
         <Stack.Screen name="Edit Profile" 
                       component={EditProfileScreen} 
-<<<<<<< HEAD
-                      options={{
-                        gestureEnabled: false, 
-                        transitionSpec: {
-                          open: TransitionSpecs.TransitionIOSSpec,
-                          close: TransitionSpecs.TransitionIOSSpec,
-                        },
-                      }}
-        />
-=======
                       options={{ gestureEnabled: false}
                       }/>
         <Stack.Screen name="Profile Settings" 
                       component={ProfileSettingScreen} 
                       options={{ gestureEnabled: false}
                       }/>
->>>>>>> 71069b17eff22d12b73c6b193f05b4d69fd7c648
       </Stack.Navigator>
     </NavigationContainer>
   )
