@@ -9,7 +9,8 @@ import {
   LayoutAnimation,
   UIManager,
   KeyboardAvoidingView,
-  TouchableOpacity
+  TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import { Input, Button, Icon } from 'react-native-elements';
 
