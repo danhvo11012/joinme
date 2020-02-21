@@ -1,10 +1,18 @@
 {
   "devToolsPort": 19002,
   "expoServerPort": 19000,
+<<<<<<< .merge_file_ZNtwqU
   "packagerPort": 19005,
   "packagerPid": 20633,
   "expoServerNgrokUrl": null,
   "packagerNgrokUrl": null,
   "ngrokPid": null,
   "webpackServerPort": 19006
+=======
+  "packagerPort": 19001,
+  "packagerPid": 9332,
+  "expoServerNgrokUrl": "https://vz-h67.anonymous.joinme.exp.direct",
+  "packagerNgrokUrl": "https://packager.vz-h67.anonymous.joinme.exp.direct",
+  "ngrokPid": 6636
+>>>>>>> .merge_file_vi7GzQ
 }

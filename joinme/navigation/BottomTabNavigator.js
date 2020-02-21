@@ -1,13 +1,12 @@
 import * as React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 import TabBarIcon from '../components/TabBarIcon';
 import BoardScreen from '../screens/BoardScreen';
 import RecruitScreen from '../screens/RecruitScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import MyDeskScreen from '../screens/MyDeskScreen';
-import { fromLeft } from 'react-navigation-transitions';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs'
-
+import {Button} from 'react-native'
 const INITIAL_ROUTE_NAME = 'MyDesk';
 
 export default function BottomTabNavigator({ navigation, route }) {
@@ -22,6 +21,7 @@ export default function BottomTabNavigator({ navigation, route }) {
   navigation.setOptions({ headerTitle: getHeaderTitle(route)});
     
   return (
+<<<<<<< .merge_file_Lzcicx
       <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME} 
           
           
@@ -38,21 +38,24 @@ const BottomTab = createBottomTabNavigator();
 function createHomeScreen(currentUserId, user){
   return (
     <BottomTab.Screen
+=======
+      <BottomTab.Navigator 
+        tabBarOptions ={{showIcon: true}}
+        initialRouteName={INITIAL_ROUTE_NAME} tabBarPosition={'bottom'}>
+        <BottomTab.Screen
+>>>>>>> .merge_file_IYJ4GK
           name="MyDesk"
 
           component={MyDeskScreen}
           options={{
             title: 'My Desk',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-desktop" />,
+            
           }}
           
           initialParams={{ currentUserId: currentUserId, user: user }}
         />
-  );
-}
-function createBoardScreen(currentUserId, user){
-  return (
-    <BottomTab.Screen
+        <BottomTab.Screen
           name="Board"
           component={BoardScreen}
           options={{
@@ -61,37 +64,37 @@ function createBoardScreen(currentUserId, user){
           }}
           initialParams={{ currentUserId: currentUserId, user: user }}
         />
-  );
-}
-function createRecruitScreen(currentUserId, user){
-  return (
-    <BottomTab.Screen
+        <BottomTab.Screen
           name="Recruit"
           component={RecruitScreen}
           options={{
             title: 'Recruit',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-person-add" />,
+           
           }}
           initialParams={{ currentUserId: currentUserId, user: user }}
         />
-  );
-}
-function createProfileScreen(currentUserId, user){
-  return (
-    <BottomTab.Screen
+        <BottomTab.Screen
           name="Profile"
           component={ProfileScreen}
           options={{
             title: 'Profile',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-person" />,
+            headerRight: () => (
+              <Button title="Log Out" />
+            )
           }}
           initialParams={{ currentUserId: currentUserId, user: user }}
         />
+    </BottomTab.Navigator>
+    
   );
 }
+
+const BottomTab = createMaterialTopTabNavigator();
+
 function getHeaderTitle(route) {
   const routeName = route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
-
   switch (routeName) {
     case 'MyDesk':
       return 'My desk';
@@ -100,6 +103,6 @@ function getHeaderTitle(route) {
     case 'Recruit':
       return 'Find your crew';
     case 'Profile':
-      return 'Profile'
+      return 'Profile';
   }
 }

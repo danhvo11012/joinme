@@ -10,10 +10,10 @@ import {
   LayoutAnimation,
   UIManager,
   KeyboardAvoidingView,
+  Button
 } from 'react-native';
-
-import { Input, Button, Icon, Image } from 'react-native-elements';
-
+import { createStackNavigator } from '@react-navigation/stack';
+import { Input, Button as ElementsButton, Icon, Image } from 'react-native-elements';
 function ProfileScreen( { route, navigation }) {
 
   const client =  Stitch.defaultAppClient;
@@ -25,27 +25,20 @@ function ProfileScreen( { route, navigation }) {
   const [ loadingComplete, setLoadingComplete] = useState(false);
   const [ profile, setProfile ] = useState(null);
 
+
   useEffect(() => {
-
-    const handleSetProfile = (e) => {
-      setProfile(e);
-    }
-
     profileDetails.findOne({})
       .then(results => {
-        handleSetProfile(results);
+        setProfile(results);
         setLoadingComplete(true);
       });
-
   }, []);
-  
-  function editProfile() {
-    //alert('Editing your profile...');
-    
-  
-    navigation.navigate('Edit-Profile', {
-      currentUserId: currentUserId
+
+  function openEditScreen() {
+    navigation.navigate('Edit Profile', {
+      currentUserId: currentUserId, user:user
     }); 
+    
   }
 
   const logOut = async () => {      
@@ -58,7 +51,6 @@ function ProfileScreen( { route, navigation }) {
         }).catch(err => {
           console.log(`User ${user} failed to log out: ${err}`);
         });
-      
   }
   if (!loadingComplete) {
     return null;
@@ -71,18 +63,19 @@ function ProfileScreen( { route, navigation }) {
         />
         <Text style={{fontSize: 20, marginVertical: 5}}>{profile.userEmail}</Text>
         <Text style={{fontSize: 20, marginVertical: 5}}>{profile.firstName} {profile.lastName}</Text>
-    
-        <Button 
+        
+        <ElementsButton 
           title="Edit profile"         
           style={{ marginVertical: 5 }}
-          onPress={editProfile}
+          onPress={openEditScreen}
         />
   
-        <Button 
+        <ElementsButton 
           title="Log out"         
           style={{ marginVertical: 50 }}
           onPress={logOut}
         />
+        
       </View>
     );
   }

@@ -15,53 +15,58 @@ import {
 import { Input, Button, Icon } from 'react-native-elements';
 
 function MyDeskScreen({ route, navigation }) {
+  const client =  Stitch.defaultAppClient;
+  const mongoClient = client.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas')
+  const db = mongoClient.db('joinme');
+  const posts = db.collection('posts');
+
   const { currentUserId, user } = route.params;
 
+  const [ loadingComplete, setLoadingComplete] = useState(false);
+  const [ myPosts, setMyPosts] = useState(null);
+
   useEffect(()=> {
-    onLoad();
-  });
-
-  // console.log('ID from my desk screen: ', currentUserId);
-  // console.log('User from my desk screen: ', user);
-  function onLoad() {
-    // Get the existing Stitch client.
-    const stitchClient = Stitch.getAppClient("joinme-ufpra");
-
-    // Get a client of the Remote Mongo Service for database access
-    const mongoClient = stitchClient.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas')
-
-    // Retrieve a database object
-    const db = mongoClient.db('joinme')
-
-    // Retrieve the collection in the database
-    const movieDetails = db.collection('posts')
-
-    // Find 10 documents and log them to console.
-    movieDetails.find({}, {limit: 10})
+    posts.find({})
       .toArray()
-      .then(results => console.log('Results:', results))
-  }
+      .then(results => {
+        setMyPosts(results);
+        setLoadingComplete(true);
+      });
+  }, []);
+    
+  
 
   function createNewPost() {
     alert('Creating new post alert!');
     console.log()
   }
 
-  // const [ currentUserId, setCurrentUserId ] = useState( null );
-  const [ email, setEmail ] = useState(null);
-  const [ UserAuth, setUserAuth ] = useState(null);
+  if (!loadingComplete) { return null } 
+  else {
+    return(
+        <View style={{ alignItems: 'center', marginTop: 10}}>
+          <Text>Welcome back, {user.email}!</Text>
+            {myPosts.map((post, i) => {
+              <>
+                console.log(post);
+                <Text>Post id: {post._id}</Text>
+                <Text>Post owner: {post.owner}</Text>
+                <Text>Post owner email: {post.ownerEmail}</Text>
+                <Text>Posted date: {post.postDate}</Text>
+                <Text>Post content:</Text>
+                <Text>{post.content}</Text>
+              </>
+            })
+          }
 
- 
-  return(
-    <View style={{ alignItems: 'center', marginTop: 10}}>
-      <Text>Welcome back, {user.email}!</Text>
-      <Button 
-        title="Create a new post"         
-        style={{ marginVertical: 50 }}
-        onPress={createNewPost}
-      />
-    </View>
-  );
+          <Button 
+            title="Create a new post"         
+            style={{ marginVertical: 50 }}
+            onPress={createNewPost}
+          />
+        </View> 
+    );
+  }
 };
 
 export default MyDeskScreen;
