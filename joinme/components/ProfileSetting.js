@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
-import { Divider, Layout, LayoutProps, Text } from '@ui-kitten/components';
+import { StyleSheet, TextInput } from 'react-native';
+import { Divider, Layout, LayoutProps, Text, Input } from '@ui-kitten/components';
 
 export interface ProfileSettingProps extends LayoutProps {
   hint?: string;
@@ -9,8 +9,8 @@ export interface ProfileSettingProps extends LayoutProps {
 
 export const ProfileSetting = (props: ProfileSettingProps): React.ReactElement => {
 
-  const { style, hint, value, ...layoutProps } = props;
-
+  const { style, hint, value,type, ...layoutProps } = props;
+  //console.log(value);
   const renderHintElement = (): React.ReactElement => (
     <Text
       appearance='hint'
@@ -26,9 +26,13 @@ export const ProfileSetting = (props: ProfileSettingProps): React.ReactElement =
         {...layoutProps}
         style={[styles.container, style]}>
         {hint && renderHintElement()}
-        <Text category='s1'>
+        <TextInput category='s1'
+            style={type === 'name' ? styles.name : styles.input}
+            editable={hint==='Email' ? false:true}
+            color={hint==='Email' ? '#848c86' : "#000000"}
+            >
           {value}
-        </Text>
+        </TextInput >
       </Layout>
       <Divider/>
     </React.Fragment>
@@ -39,6 +43,16 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
   },
+  input :{
+    //borderColor: 'white',
+    width:'80%',
+    textAlign:'right'
+  },
+  name: {
+   
+    width:'100%',
+    textAlign:'left'
+  }
+  
 });

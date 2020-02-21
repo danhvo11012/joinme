@@ -25,7 +25,6 @@ function ProfileScreen( { route, navigation }) {
   const [ loadingComplete, setLoadingComplete] = useState(false);
   const [ profile, setProfile ] = useState(null);
 
-
   useEffect(() => {
     function handleSetProfile(results) {
       setProfile(results);
@@ -37,14 +36,23 @@ function ProfileScreen( { route, navigation }) {
         setLoadingComplete(true);
       });
   }, []);
-
+  console.log(profile);
   function openEditScreen() {
-    navigation.navigate('Edit Profile', {
-      currentUserId: currentUserId, user:user
+    navigation.navigate('Profile Settings', {
+      //pass profile data to edit screen
+      profile:{
+          firstName: profile.firstName,
+          lastName: profile.lastName,
+          email: profile.userEmail,
+          school: profile.school,
+          work: 'NASA',
+          summary: 'I am a big big girl in the big big world.',
+          avatar: profile.avatar
+       }
     }); 
     
   }
-
+  
   const logOut = async () => {      
         client.auth.logout().then(user => {
           console.log(`User ${currentUserId} successfully logged out`);

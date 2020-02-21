@@ -17,7 +17,7 @@ export const ProfileAvatar = (props: ProfileAvatarProps): React.ReactElement<Vie
   };
 
   const { style, editButton, ...restProps } = props;
-
+  
   return (
     <View style={style}>
       <Avatar
