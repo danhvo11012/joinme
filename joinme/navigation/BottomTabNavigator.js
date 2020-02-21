@@ -60,9 +60,6 @@ export default function BottomTabNavigator({ navigation, route }) {
           options={{
             title: 'Profile',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-person" />,
-            headerRight: () => (
-              <Button title="Log Out" />
-            )
           }}
           initialParams={{ currentUserId: currentUserId, user: user }}
         />

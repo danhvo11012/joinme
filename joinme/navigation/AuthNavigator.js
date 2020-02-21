@@ -4,11 +4,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from '../screens/LoginScreen';
 import BottomTabNavigator from './BottomTabNavigator';
 import EditProfileScreen from '../screens/EditProfileScreen';
-import { TransitionSpecs } from '@react-navigation/stack';
-<<<<<<< HEAD
+
 import ProfileSettingScreen from '../screens/ProfileSettingScreen';
-=======
->>>>>>> 4a88f891e45a4fe77d5ae7ca3e4fe8cc1504ca38
+
 const Stack = createStackNavigator();
 
 function AuthNavigator() {
