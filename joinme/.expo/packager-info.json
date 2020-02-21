@@ -1,1 +1,9 @@
-{}
+{
+  "expoServerPort": 19000,
+  "expoServerNgrokUrl": "https://hh-8hc.anonymous.joinme.exp.direct",
+  "packagerNgrokUrl": "https://packager.hh-8hc.anonymous.joinme.exp.direct",
+  "ngrokPid": 51766,
+  "devToolsPort": 19002,
+  "packagerPort": 19010,
+  "packagerPid": 51751
+}

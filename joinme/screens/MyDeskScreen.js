@@ -12,7 +12,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
 } from 'react-native';
-
+import Post from '../components/Post'
 import { Input, Button, Icon } from 'react-native-elements';
 
 function MyDeskScreen({ route, navigation }) {
