@@ -19,9 +19,10 @@ import { ProfileSocial } from '../components/ProfileSocial';
 import { Post, Profile } from './profile-7/extra/data';
 import TabBarIcon from '../components/TabBarIcon'
 import { Avatar, Button, List, StyleService, Text, useStyleSheet } from '@ui-kitten/components';
+
 function ProfileScreen( { route, navigation }) {
   YellowBox.ignoreWarnings(['VirtualizedLists should never be nested inside plain ScrollViews']);
-
+  
   //prepare data to call API
   const client =  Stitch.defaultAppClient;
   const mongoClient = client.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas')
@@ -33,9 +34,8 @@ function ProfileScreen( { route, navigation }) {
   const [ loadingComplete, setLoadingComplete] = useState(false);
   const [ profile, setProfile ] = useState(null);
 
-
-  //
-  //const isSameUser = fale
+  console.log(profile);
+ 
   const styles = useStyleSheet(themedStyle);
 
   const onFollowButtonPress = (): void => {
@@ -166,30 +166,32 @@ function ProfileScreen( { route, navigation }) {
             {profile.city}
           </Text>
         </View>
-        <Button
-          style={styles.editButton}
-          icon={EditIcon}
-          status='control'
-          onPress={onEditButtonPress}
-          >
-          EDIT
-        </Button>
-        {false &&
-        <View style={styles.profileButtonsContainer}>
+        {true &&
           <Button
-            style={styles.profileButton}
-            icon={PersonAddIcon}
-            onPress={onFollowButtonPress}>
-            FOLLOW
-          </Button>
-          <Button
-            style={styles.profileButton}
+            style={styles.editButton}
+            icon={EditIcon}
             status='control'
-            icon={MessageCircleIcon}
-            onPress={onMessageButtonPress}>
-            MESSAGE
+            onPress={onEditButtonPress}>
+            EDIT
           </Button>
-        </View>}
+        }
+        { true &&
+          <View style={styles.profileButtonsContainer}>
+            <Button
+              style={styles.profileButton}
+              icon={PersonAddIcon}
+              onPress={onFollowButtonPress}>
+              FOLLOW
+            </Button>
+            <Button
+              style={styles.profileButton}
+              status='control'
+              icon={MessageCircleIcon}
+              onPress={onMessageButtonPress}>
+              MESSAGE
+            </Button>
+          </View>
+        }
         <View style={styles.socialsContainer}>
           <ProfileSocial
             style={styles.profileSocial}
