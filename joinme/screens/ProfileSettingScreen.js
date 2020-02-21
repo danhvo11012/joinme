@@ -14,7 +14,7 @@ export default function ProfileSettingScreen( {route, navigation} ) {
         <Button onPress={() => navigation.goBack()} title="Cancel" />
       ),
   });
-
+  console.log(profile);
   const onDoneButtonPress = (): void => {
     navigation && navigation.goBack();
   };
@@ -62,14 +62,14 @@ export default function ProfileSettingScreen( {route, navigation} ) {
         </View>
       </Layout>
       <TextInput
-            style={styles.description}
-            underlineColorAndroid="transparent"
-            placeholder={"Type Something in Text Area."}
-            placeholderTextColor={"#9E9E9E"}
-            numberOfLines={10}
-            multiline={true}
-            value={profile.summary}
-          />
+        style={styles.description}
+        underlineColorAndroid="transparent"
+        placeholder={"Type Something in Text Area."}
+        placeholderTextColor={"#9E9E9E"}
+        numberOfLines={10}
+        multiline={true}
+        value={profile.summary}
+      />
       <ProfileSetting
         style={[styles.setting, styles.emailSetting]}
         hint='Email'
@@ -85,7 +85,11 @@ export default function ProfileSettingScreen( {route, navigation} ) {
         hint='Work'
         value={profile.work}
       />
-      
+      <ProfileSetting
+        style={styles.setting}
+        hint='City'
+        value={profile.city}
+      />
       <ElementButton
         style={styles.doneButton}
         onPress={onDoneButtonPress}
