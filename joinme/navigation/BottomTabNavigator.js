@@ -5,7 +5,6 @@ import BoardScreen from '../screens/BoardScreen';
 import RecruitScreen from '../screens/RecruitScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import MyDeskScreen from '../screens/MyDeskScreen';
-import ProfileScreenDemo from '../screens/profile-7/ProfileScreenDemo'
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs'
 import {Button} from 'react-native'
 
@@ -53,7 +52,7 @@ export default function BottomTabNavigator({ navigation, route }) {
         />
         <BottomTab.Screen
           name="Profile"
-          component={ProfileScreenDemo}
+          component={ProfileScreen}
           options={{
             title: 'Profile',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-person" />,

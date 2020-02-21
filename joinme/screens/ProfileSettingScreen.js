@@ -9,13 +9,12 @@ import {Button as ElementButton} from 'react-native-elements'
 export default function ProfileSettingScreen( {route, navigation} ) {
   const { currentUserId, profile } = route.params;
   const styles = useStyleSheet(themedStyles);
-  console.log(profile);
   navigation.setOptions({
       headerLeft: () => (
         <Button onPress={() => navigation.goBack()} title="Cancel" />
       ),
   });
-  console.log(profile);
+  //console.log(profile);
   const onDoneButtonPress = (): void => {
     navigation && navigation.goBack();
   };
@@ -24,7 +23,7 @@ export default function ProfileSettingScreen( {route, navigation} ) {
       <TabBarIcon 
         style={styles.icon} 
         name="ios-camera" 
-        type="AvatarIcon">
+        color="white">
       </TabBarIcon>)
     ;
   } 
@@ -36,7 +35,6 @@ export default function ProfileSettingScreen( {route, navigation} ) {
       icon={CameraIcon}
     />
   );
-  console.log(`$profile.avatar`);
   return (
     <ScrollView
       style={styles.container}
@@ -91,12 +89,12 @@ export default function ProfileSettingScreen( {route, navigation} ) {
         hint='City'
         value={profile.city}
       />
-      <ElementButton
+      <KittenButton
         style={styles.doneButton}
         onPress={onDoneButtonPress}
         title="Save">
-        
-      </ElementButton>
+        Save
+      </KittenButton>
     </ScrollView>
   );
 };
