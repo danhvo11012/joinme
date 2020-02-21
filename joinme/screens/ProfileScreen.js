@@ -3,7 +3,6 @@ import { Stitch, RemoteMongoClient } from 'mongodb-stitch-react-native-sdk';
 import {
   StyleSheet,
   View,
- 
   ImageBackground,
   Dimensions,
   LayoutAnimation,
@@ -19,7 +18,7 @@ import { ProfileSocial } from '../components/ProfileSocial';
 import { Post, Profile } from './profile-7/extra/data';
 import TabBarIcon from '../components/TabBarIcon'
 import { Avatar, Button, List, StyleService, Text, useStyleSheet } from '@ui-kitten/components';
-
+import AwesomeAlert from 'react-native-awesome-alerts';
 function ProfileScreen( { route, navigation }) {
   YellowBox.ignoreWarnings(['VirtualizedLists should never be nested inside plain ScrollViews']);
   
@@ -33,7 +32,7 @@ function ProfileScreen( { route, navigation }) {
   const { currentUserId, user } = route.params;
   const [ loadingComplete, setLoadingComplete] = useState(false);
   const [ profile, setProfile ] = useState(null);
-
+  const [ showAlert, setShowAlert] = useState(false);
   console.log(profile);
  
   const styles = useStyleSheet(themedStyle);
@@ -45,7 +44,7 @@ function ProfileScreen( { route, navigation }) {
   const onMessageButtonPress = (): void => {
     
   };
-  //user id: 5e475135639cc32a5bfdfefa
+  
   const renderFriendItem = (info: ListRenderItemInfo<Profile>): React.ReactElement => (
     <View style={styles.friendItem}>
       <Avatar source={info.item.photo}/>
@@ -76,7 +75,13 @@ function ProfileScreen( { route, navigation }) {
   };
   const EditIcon = () => {
     return(
-      <TabBarIcon size={20} color="black" name="ios-create"></TabBarIcon>
+      <TabBarIcon  color="black" name="ios-create"></TabBarIcon>
+    );
+  };
+
+  const LogOutIcon = () => {
+    return(
+      <TabBarIcon  color="white" name="ios-log-out"></TabBarIcon>
     );
   };
   
@@ -128,7 +133,7 @@ function ProfileScreen( { route, navigation }) {
     }); 
     
   }
-  
+  const isSameUser = true;
   const logOut = async () => {      
         client.auth.logout().then(user => {
           console.log(`User ${currentUserId} successfully logged out`);
@@ -166,16 +171,24 @@ function ProfileScreen( { route, navigation }) {
             {profile.city}
           </Text>
         </View>
-        {true &&
-          <Button
-            style={styles.editButton}
-            icon={EditIcon}
-            status='control'
-            onPress={onEditButtonPress}>
-            EDIT
-          </Button>
+        {isSameUser &&
+          <View style={styles.profileButtonsContainer}>
+            <Button
+              style={styles.editButton}
+              icon={EditIcon}
+              status='control'
+              onPress={onEditButtonPress}>
+              EDIT
+            </Button>
+            <Button
+              style={styles.logOutButton}
+              icon={LogOutIcon}
+              onPress={logOut}>
+              
+            </Button>
+          </View>
         }
-        { true &&
+        { !isSameUser &&
           <View style={styles.profileButtonsContainer}>
             <Button
               style={styles.profileButton}
@@ -248,7 +261,6 @@ function ProfileScreen( { route, navigation }) {
 
 export default ProfileScreen;
 
-
 const themedStyle = StyleService.create({
   container: {
     flex: 1,
@@ -285,7 +297,16 @@ const themedStyle = StyleService.create({
     marginHorizontal: 4,
   },
   editButton: {
-    marginVertical: 20
+    marginVertical: 10,
+    marginHorizontal: 10,
+    width: '32%',
+  },
+  logOutButton: {
+    marginVertical: 10,
+    marginHorizontal: 10,
+    width:'8%', borderRadius:10,
+    backgroundColor: '#cc0000',
+    borderColor: '#cc0000'
   },
   socialsContainer: {
     flexDirection: 'row',

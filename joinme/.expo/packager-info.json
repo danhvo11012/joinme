@@ -1,9 +1,9 @@
 {
   "devToolsPort": 19002,
   "expoServerPort": 19000,
-  "packagerPort": 19011,
-  "packagerPid": 56214,
-  "expoServerNgrokUrl": "https://hh-8hc.anonymous.joinme.exp.direct",
-  "packagerNgrokUrl": "https://packager.hh-8hc.anonymous.joinme.exp.direct",
-  "ngrokPid": 56227
+  "packagerPort": 19001,
+  "packagerPid": 18884,
+  "expoServerNgrokUrl": "https://e8-pvb.khiemhuynh952.joinme.exp.direct",
+  "packagerNgrokUrl": "https://packager.e8-pvb.khiemhuynh952.joinme.exp.direct",
+  "ngrokPid": 17448
 }
