@@ -25,7 +25,10 @@ function ProfileScreen( { route, navigation }) {
   const [ loadingComplete, setLoadingComplete] = useState(false);
   const [ profile, setProfile ] = useState(null);
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin
   useEffect(() => {
     profileDetails.findOne({})
       .then(results => {
@@ -33,14 +36,30 @@ function ProfileScreen( { route, navigation }) {
         setLoadingComplete(true);
       });
   }, []);
+<<<<<<< HEAD
 
   function openEditScreen() {
     navigation.navigate('Edit Profile', {
       currentUserId: currentUserId, user:user
+=======
+  console.log(profile);
+  function openEditScreen() {
+    navigation.navigate('Profile Settings', {
+      //pass profile data to edit screen
+      profile:{
+          firstName: profile.firstName,
+          lastName: profile.lastName,
+          email: profile.userEmail,
+          school: profile.school,
+          work: 'NASA',
+          summary: 'I am a big big girl in the big big world.',
+          avatar: profile.avatar
+       }
+>>>>>>> origin
     }); 
     
   }
-
+  
   const logOut = async () => {      
         client.auth.logout().then(user => {
           console.log(`User ${currentUserId} successfully logged out`);

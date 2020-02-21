@@ -7,7 +7,11 @@ import { Button as ElementButton} from "react-native-elements";
 
 
 
+<<<<<<< HEAD
 export default function EditProfileScreen ({navigation, user, ref}){
+=======
+export default function EditProfileScreen ({navigation, user}) {
+>>>>>>> origin
   navigation.setOptions({
     headerLeft: () => (
       <Button onPress={() => navigation.goBack()} title="Cancel" />
@@ -22,7 +26,11 @@ export default function EditProfileScreen ({navigation, user, ref}){
   return (
     <View style={[styles.container]}>
         <Animated.ScrollView
+<<<<<<< HEAD
           // ref={(c) => (this.list = c)}
+=======
+          
+>>>>>>> origin
           overScrollMode="never"
           
           scrollEventThrottle={1}

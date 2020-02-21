@@ -1,6 +1,7 @@
 {
   "devToolsPort": 19002,
   "expoServerPort": 19000,
+<<<<<<< HEAD
 <<<<<<< .merge_file_ZNtwqU
   "packagerPort": 19005,
   "packagerPid": 20633,
@@ -15,4 +16,11 @@
   "packagerNgrokUrl": "https://packager.vz-h67.anonymous.joinme.exp.direct",
   "ngrokPid": 6636
 >>>>>>> .merge_file_vi7GzQ
+=======
+  "packagerPort": 19007,
+  "packagerPid": 48380,
+  "expoServerNgrokUrl": "https://hh-8hc.anonymous.joinme.exp.direct",
+  "packagerNgrokUrl": "https://packager.hh-8hc.anonymous.joinme.exp.direct",
+  "ngrokPid": 48392
+>>>>>>> origin
 }

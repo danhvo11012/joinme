@@ -21,6 +21,7 @@ export default function BottomTabNavigator({ navigation, route }) {
   navigation.setOptions({ headerTitle: getHeaderTitle(route)});
     
   return (
+<<<<<<< HEAD
 <<<<<<< .merge_file_Lzcicx
       <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME} 
           
@@ -39,11 +40,16 @@ function createHomeScreen(currentUserId, user){
   return (
     <BottomTab.Screen
 =======
+=======
+>>>>>>> origin
       <BottomTab.Navigator 
         tabBarOptions ={{showIcon: true}}
         initialRouteName={INITIAL_ROUTE_NAME} tabBarPosition={'bottom'}>
         <BottomTab.Screen
+<<<<<<< HEAD
 >>>>>>> .merge_file_IYJ4GK
+=======
+>>>>>>> origin
           name="MyDesk"
 
           component={MyDeskScreen}

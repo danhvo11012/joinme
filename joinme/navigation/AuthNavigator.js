@@ -4,7 +4,13 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from '../screens/LoginScreen';
 import BottomTabNavigator from './BottomTabNavigator';
 import EditProfileScreen from '../screens/EditProfileScreen';
+<<<<<<< HEAD
 import { TransitionSpecs } from '@react-navigation/stack';
+=======
+
+import ProfileSettingScreen from '../screens/ProfileSettingScreen';
+
+>>>>>>> origin
 const Stack = createStackNavigator();
 
 function AuthNavigator() {

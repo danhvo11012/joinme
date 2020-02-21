@@ -8,9 +8,9 @@ import { Ionicons } from '@expo/vector-icons';
 import useLinking from './navigation/useLinking';
 import { cacheImages, cacheFonts } from './helpers/AssetsCaching';
 import vectorFonts from './helpers/vector-fonts';
-
+import {ApplicationProvider} from '@ui-kitten/components';
 import AppContainer from './navigation';
-
+import {mapping, light} from '@eva-design/eva'
 import { Stitch } from 'mongodb-stitch-react-native-sdk';
 import { Button } from 'react-native-elements';
 
@@ -70,7 +70,10 @@ export default function App(props) {
     return null;
   } else {
     return (
+      <ApplicationProvider mapping={mapping} theme={light}>
+
       <AppContainer />
+      </ApplicationProvider>
     );
   }
 };
