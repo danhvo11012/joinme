@@ -18,45 +18,16 @@ export default function BottomTabNavigator({ navigation, route }) {
   const { currentUserId } = route.params;
   const { user } = route.params;
 
-  navigation.setOptions({ headerTitle: getHeaderTitle(route)});
-    
-  return (
-<<<<<<< HEAD
-<<<<<<< .merge_file_Lzcicx
-      <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME} 
-          
-          
-          tabBarPosition={'bottom'}>
-        {createHomeScreen(currentUserId,user)}
-        {createBoardScreen(currentUserId,user)}
-        {createRecruitScreen(currentUserId,user)}
-        {createProfileScreen(currentUserId,user)}
-      </BottomTab.Navigator>
-    
-  );
-}
-const BottomTab = createBottomTabNavigator();
 function createHomeScreen(currentUserId, user){
   return (
-    <BottomTab.Screen
-=======
-=======
->>>>>>> origin
       <BottomTab.Navigator 
         tabBarOptions ={{showIcon: true}}
         initialRouteName={INITIAL_ROUTE_NAME} tabBarPosition={'bottom'}>
         <BottomTab.Screen
-<<<<<<< HEAD
->>>>>>> .merge_file_IYJ4GK
-=======
->>>>>>> origin
-          name="MyDesk"
-
           component={MyDeskScreen}
           options={{
             title: 'My Desk',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-desktop" />,
-            
           }}
           
           initialParams={{ currentUserId: currentUserId, user: user }}
@@ -86,9 +57,7 @@ function createHomeScreen(currentUserId, user){
           options={{
             title: 'Profile',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-person" />,
-            headerRight: () => (
-              <Button title="Log Out" />
-            )
+            
           }}
           initialParams={{ currentUserId: currentUserId, user: user }}
         />
@@ -111,4 +80,5 @@ function getHeaderTitle(route) {
     case 'Profile':
       return 'Profile';
   }
+}
 }

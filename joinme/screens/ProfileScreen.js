@@ -25,10 +25,6 @@ function ProfileScreen( { route, navigation }) {
   const [ loadingComplete, setLoadingComplete] = useState(false);
   const [ profile, setProfile ] = useState(null);
 
-<<<<<<< HEAD
-
-=======
->>>>>>> origin
   useEffect(() => {
     profileDetails.findOne({})
       .then(results => {
@@ -36,12 +32,6 @@ function ProfileScreen( { route, navigation }) {
         setLoadingComplete(true);
       });
   }, []);
-<<<<<<< HEAD
-
-  function openEditScreen() {
-    navigation.navigate('Edit Profile', {
-      currentUserId: currentUserId, user:user
-=======
   console.log(profile);
   function openEditScreen() {
     navigation.navigate('Profile Settings', {
@@ -55,7 +45,6 @@ function ProfileScreen( { route, navigation }) {
           summary: 'I am a big big girl in the big big world.',
           avatar: profile.avatar
        }
->>>>>>> origin
     }); 
     
   }
