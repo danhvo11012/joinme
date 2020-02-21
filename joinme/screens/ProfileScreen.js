@@ -27,13 +27,9 @@ function ProfileScreen( { route, navigation }) {
 
 
   useEffect(() => {
-    function handleSetProfile(results) {
-      setProfile(results);
-    }
-
     profileDetails.findOne({})
       .then(results => {
-        handleSetProfile(results);
+        setProfile(results);
         setLoadingComplete(true);
       });
   }, []);
@@ -68,18 +64,18 @@ function ProfileScreen( { route, navigation }) {
         <Text style={{fontSize: 20, marginVertical: 5}}>{profile.userEmail}</Text>
         <Text style={{fontSize: 20, marginVertical: 5}}>{profile.firstName} {profile.lastName}</Text>
         
-        <ElementsButton
-          title="Edit profile"
+        <ElementsButton 
+          title="Edit profile"         
           style={{ marginVertical: 5 }}
           onPress={openEditScreen}
         />
   
-        <ElementsButton
+        <ElementsButton 
           title="Log out"         
           style={{ marginVertical: 50 }}
           onPress={logOut}
         />
-
+        
       </View>
     );
   }
