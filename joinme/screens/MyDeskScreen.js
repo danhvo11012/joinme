@@ -10,6 +10,7 @@ import {
   LayoutAnimation,
   UIManager,
   KeyboardAvoidingView,
+  ScrollView,
 } from 'react-native';
 
 import { Input, Button, Icon } from 'react-native-elements';
@@ -44,20 +45,12 @@ function MyDeskScreen({ route, navigation }) {
   if (!loadingComplete) { return null } 
   else {
     return(
+      <ScrollView>
         <View style={{ alignItems: 'center', marginTop: 10}}>
+
           <Text>Welcome back, {user.email}!</Text>
-            {myPosts.map((post, i) => {
-              <>
-                console.log(post);
-                <Text>Post id: {post._id}</Text>
-                <Text>Post owner: {post.owner}</Text>
-                <Text>Post owner email: {post.ownerEmail}</Text>
-                <Text>Posted date: {post.postDate}</Text>
-                <Text>Post content:</Text>
-                <Text>{post.content}</Text>
-              </>
-            })
-          }
+
+          {myPosts.map((post, i) => <Post key={i} post={post} postKey={i}/>)}
 
           <Button 
             title="Create a new post"         
@@ -65,6 +58,7 @@ function MyDeskScreen({ route, navigation }) {
             onPress={createNewPost}
           />
         </View> 
+      </ScrollView>
     );
   }
 };
