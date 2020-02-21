@@ -23,6 +23,7 @@ export const ProfileAvatar = (props: ProfileAvatarProps): React.ReactElement<Vie
       <Avatar
         style={[style, styles.avatar]}
         {...restProps}
+        
       />
       {editButton && renderEditButtonElement()}
     </View>

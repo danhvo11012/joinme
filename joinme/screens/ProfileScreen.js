@@ -37,7 +37,7 @@ function ProfileScreen( { route, navigation }) {
         setLoadingComplete(true);
       });
   }, []);
-  console.log(profile);
+  
   function openEditScreen() {
     navigation.navigate('Profile Settings', {
       //pass profile data to edit screen
@@ -48,6 +48,7 @@ function ProfileScreen( { route, navigation }) {
           school: profile.school,
           work: 'NASA',
           summary: 'I am a big big girl in the big big world.',
+          city: 'Richardson',
           avatar: profile.avatar
        }
     }); 
