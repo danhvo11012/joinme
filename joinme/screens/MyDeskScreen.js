@@ -15,7 +15,6 @@ import {
 import Post from '../components/Post'
 import { Input, Button, Icon } from 'react-native-elements';
 
-import Post from '../components/Post';
 
 function MyDeskScreen({ route, navigation }) {
   const client =  Stitch.defaultAppClient;
