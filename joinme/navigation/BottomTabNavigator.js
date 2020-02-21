@@ -18,16 +18,19 @@ export default function BottomTabNavigator({ navigation, route }) {
   const { currentUserId } = route.params;
   const { user } = route.params;
 
-function createHomeScreen(currentUserId, user){
+  navigation.setOptions({ headerTitle: getHeaderTitle(route)});
+    
   return (
       <BottomTab.Navigator 
         tabBarOptions ={{showIcon: true}}
         initialRouteName={INITIAL_ROUTE_NAME} tabBarPosition={'bottom'}>
         <BottomTab.Screen
+          name="MyDesk"
           component={MyDeskScreen}
           options={{
             title: 'My Desk',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-desktop" />,
+            
           }}
           
           initialParams={{ currentUserId: currentUserId, user: user }}
@@ -57,7 +60,9 @@ function createHomeScreen(currentUserId, user){
           options={{
             title: 'Profile',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-person" />,
-            
+            headerRight: () => (
+              <Button title="Log Out" />
+            )
           }}
           initialParams={{ currentUserId: currentUserId, user: user }}
         />
@@ -80,5 +85,4 @@ function getHeaderTitle(route) {
     case 'Profile':
       return 'Profile';
   }
-}
 }

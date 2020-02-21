@@ -9,6 +9,7 @@ import {Button as ElementButton} from 'react-native-elements'
 export default function ProfileSettingScreen( {route, navigation} ) {
   const { currentUserId, profile } = route.params;
   const styles = useStyleSheet(themedStyles);
+  console.log(profile);
   navigation.setOptions({
       headerLeft: () => (
         <Button onPress={() => navigation.goBack()} title="Cancel" />
@@ -35,7 +36,7 @@ export default function ProfileSettingScreen( {route, navigation} ) {
       icon={CameraIcon}
     />
   );
-
+  console.log(`$profile.avatar`);
   return (
     <ScrollView
       style={styles.container}
