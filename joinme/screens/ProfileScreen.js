@@ -45,7 +45,7 @@ function ProfileScreen( { route, navigation }) {
   const onMessageButtonPress = (): void => {
     
   };
-
+  //user id: 5e475135639cc32a5bfdfefa
   const renderFriendItem = (info: ListRenderItemInfo<Profile>): React.ReactElement => (
     <View style={styles.friendItem}>
       <Avatar source={info.item.photo}/>
