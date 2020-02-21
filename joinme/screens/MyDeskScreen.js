@@ -14,8 +14,6 @@ import {
 
 import { Input, Button, Icon } from 'react-native-elements';
 
-import Post from '../components/Post';
-
 function MyDeskScreen({ route, navigation }) {
   const client =  Stitch.defaultAppClient;
   const mongoClient = client.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas')
@@ -28,16 +26,10 @@ function MyDeskScreen({ route, navigation }) {
   const [ myPosts, setMyPosts] = useState(null);
 
   useEffect(()=> {
-
-
-    function handleSetPosts(results) {
-      setMyPosts(results);
-    }
-
     posts.find({})
       .toArray()
       .then(results => {
-        handleSetPosts(results);
+        setMyPosts(results);
         setLoadingComplete(true);
       });
   }, []);
@@ -54,7 +46,19 @@ function MyDeskScreen({ route, navigation }) {
     return(
         <View style={{ alignItems: 'center', marginTop: 10}}>
           <Text>Welcome back, {user.email}!</Text>
-          {myPosts.map((post, i) => <Post key={i} post={post} postKey={i}/>)}
+            {myPosts.map((post, i) => {
+              <>
+                console.log(post);
+                <Text>Post id: {post._id}</Text>
+                <Text>Post owner: {post.owner}</Text>
+                <Text>Post owner email: {post.ownerEmail}</Text>
+                <Text>Posted date: {post.postDate}</Text>
+                <Text>Post content:</Text>
+                <Text>{post.content}</Text>
+              </>
+            })
+          }
+
           <Button 
             title="Create a new post"         
             style={{ marginVertical: 50 }}
@@ -64,5 +68,5 @@ function MyDeskScreen({ route, navigation }) {
     );
   }
 };
-// <Post post={post} key={i} />))
+
 export default MyDeskScreen;
