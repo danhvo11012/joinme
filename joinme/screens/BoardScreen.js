@@ -10,7 +10,8 @@ import {
   LayoutAnimation,
   UIManager,
   KeyboardAvoidingView,
-  ScrollView
+  ScrollView,
+  FlatList
 } from 'react-native';
 
 import { Input, Button, Icon } from 'react-native-elements';
@@ -32,8 +33,11 @@ function BoardScreen({ route, navigation }) {
           title="Do nothing"         
           style={{ marginVertical: 50 }}
         />
-      <Comment></Comment>
-      <Comment></Comment>
+       
+          <Comment></Comment>
+          <Comment></Comment>
+
+      
       </View>
       
     </ScrollView>
