@@ -26,13 +26,14 @@ function BoardScreen({ route, navigation }) {
  
   return(
     <ScrollView>
-      <View style={{ alignItems: 'center', marginTop: 10}}>
+      <View style={{ alignItems: 'center', paddingVertical: 10, backgroundColor: 'white'}}>
         <Text>Welcome back, {user.email}!</Text>
         <Button 
           title="Do nothing"         
           style={{ marginVertical: 50 }}
         />
-        <Comment></Comment>
+      <Comment></Comment>
+      <Comment></Comment>
       </View>
       
     </ScrollView>

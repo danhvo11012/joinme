@@ -20,6 +20,7 @@ export default function BottomTabNavigator({ navigation, route }) {
 
   return (
       <BottomTab.Navigator 
+        
         tabBarOptions ={{showIcon: true, showLabel: false}}
         initialRouteName={INITIAL_ROUTE_NAME} tabBarPosition={'bottom'}>
         <BottomTab.Screen
