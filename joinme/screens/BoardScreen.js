@@ -10,11 +10,11 @@ import {
   LayoutAnimation,
   UIManager,
   KeyboardAvoidingView,
-  ScrollView,
+  ScrollView
 } from 'react-native';
 
 import { Input, Button, Icon } from 'react-native-elements';
-
+import Comment from '../components/Comment';
 
 function BoardScreen({ route, navigation }) {
   const { currentUserId, user } = route.params;
@@ -32,7 +32,9 @@ function BoardScreen({ route, navigation }) {
           title="Do nothing"         
           style={{ marginVertical: 50 }}
         />
+        <Comment></Comment>
       </View>
+      
     </ScrollView>
   );
 };
