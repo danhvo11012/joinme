@@ -75,13 +75,13 @@ function ProfileScreen( { route, navigation }) {
   };
   const EditIcon = () => {
     return(
-      <TabBarIcon  color="black" name="ios-create"></TabBarIcon>
+      <TabBarIcon size={24} color="black" name="ios-create"></TabBarIcon>
     );
   };
 
   const LogOutIcon = () => {
     return(
-      <TabBarIcon  color="white" name="ios-log-out"></TabBarIcon>
+      <TabBarIcon  size={24} color="white" name="ios-log-out"></TabBarIcon>
     );
   };
   
