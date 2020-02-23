@@ -81,7 +81,7 @@ function ProfileScreen( { route, navigation }) {
 
   const LogOutIcon = () => {
     return(
-      <TabBarIcon  size={24} color="white" name="ios-log-out"></TabBarIcon>
+      <TabBarIcon  size={24} color="black" name="ios-log-out"></TabBarIcon>
     );
   };
   
@@ -153,6 +153,14 @@ function ProfileScreen( { route, navigation }) {
       <ImageOverlay
         style={styles.header}
         source={require('./profile-7/assets/image-background.jpg')}>
+        <Button
+            style={styles.logOutButton}
+            icon={LogOutIcon}
+            onPress={logOut}
+            //appearance='outline' 
+            //status='danger'
+            >
+        </Button>
         <Avatar
           style={styles.profileAvatar}
           source={{uri: profile.avatar}}
@@ -179,13 +187,7 @@ function ProfileScreen( { route, navigation }) {
               status='control'
               onPress={onEditButtonPress}>
               EDIT
-            </Button>
-            <Button
-              style={styles.logOutButton}
-              icon={LogOutIcon}
-              onPress={logOut}>
-              
-            </Button>
+            </Button> 
           </View>
         }
         { !isSameUser &&
@@ -274,7 +276,7 @@ const themedStyle = StyleService.create({
     width: 124,
     height: 124,
     borderRadius: 62,
-    marginVertical: 16,
+    top: '-5%'
   },
   profileName: {
     zIndex: 1,
@@ -297,16 +299,14 @@ const themedStyle = StyleService.create({
     marginHorizontal: 4,
   },
   editButton: {
-    marginVertical: 10,
-    marginHorizontal: 10,
     width: '40%',
   },
   logOutButton: {
-    marginVertical: 10,
-    marginHorizontal: 10,
-    width:'18%', 
-    backgroundColor: '#cc0000',
-    borderColor: '#cc0000'
+    width:'14%', 
+    left: '42%',
+    bottom: '4%',
+    backgroundColor:'white',
+    borderColor:'white'
   },
   socialsContainer: {
     flexDirection: 'row',

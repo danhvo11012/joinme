@@ -51,6 +51,7 @@ export default function App(props) {
         //load images
         const imageAssets = cacheImages([
           require('./assets/images/bg_screen4.jpg'),
+          require('./assets/images/liked_icon.png')
         ]);
     
         await Promise.all([...imageAssets, ...fontAssets]);
