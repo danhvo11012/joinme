@@ -153,14 +153,16 @@ function ProfileScreen( { route, navigation }) {
       <ImageOverlay
         style={styles.header}
         source={require('./profile-7/assets/image-background.jpg')}>
-        <Button
-            style={styles.logOutButton}
-            icon={LogOutIcon}
-            onPress={logOut}
-            //appearance='outline' 
-            //status='danger'
-            >
-        </Button>
+        <View style={{flex: 1, flexDirection:'row', alignSelf:'right'}}>
+          <Button
+              style={styles.logOutButton}
+              icon={LogOutIcon}
+              onPress={logOut}
+              //appearance='outline' 
+              //status='danger'
+              >
+          </Button>
+        </View>
         <Avatar
           style={styles.profileAvatar}
           source={{uri: profile.avatar}}
@@ -302,11 +304,18 @@ const themedStyle = StyleService.create({
     width: '40%',
   },
   logOutButton: {
-    width:'14%', 
-    left: '42%',
-    bottom: '4%',
+    width:'12%', 
+    borderRadius: 0,
+    bottom: '49%',
     backgroundColor:'white',
-    borderColor:'white'
+    borderColor:'white',
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 3
+    },
+    shadowRadius: 1.2,
+    shadowOpacity: 0.3
   },
   socialsContainer: {
     flexDirection: 'row',
