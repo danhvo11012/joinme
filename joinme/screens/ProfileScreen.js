@@ -306,8 +306,8 @@ const themedStyle = StyleService.create({
   logOutButton: {
     width:'12%', 
     borderRadius: 0,
-    bottom: '49%',
-    backgroundColor:'white',
+    bottom: '48%',
+     backgroundColor:'#f2f3f5',
     borderColor:'white',
     shadowColor: '#000000',
     shadowOffset: {
