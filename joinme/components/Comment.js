@@ -22,6 +22,13 @@ import {
   Button
 } from 'react-native-elements';
 
+const [pressedLike, setPressedLike] = useState(false);
+const [likeCount, setLikeCount] = useState(0);
+const badge_liked_icon = () => {
+  var name = pressedLike ? '../assets/images/liked_icon.png' : '../assets/images/not_liked_icon.png';
+  return require($name);
+}
+
 export default function Comment() {
   return(
    
@@ -38,7 +45,7 @@ export default function Comment() {
 
           <TouchableOpacity  style={{zIndex: 999}}>
               <View style={styles.reaction_container}>
-                <Image style={styles.img_icon} source={require('../assets/images/liked_icon.png')}></Image>
+                <Image style={styles.img_icon} source={badge_liked_icon}></Image>
                 <Text style={{color: '#606770',fontSize:13}}>999</Text>
               </View>
           </TouchableOpacity>
