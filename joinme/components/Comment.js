@@ -22,14 +22,20 @@ import {
   Button
 } from 'react-native-elements';
 
-const [pressedLike, setPressedLike] = useState(false);
-const [likeCount, setLikeCount] = useState(0);
-const badge_liked_icon = () => {
-  var name = pressedLike ? '../assets/images/liked_icon.png' : '../assets/images/not_liked_icon.png';
-  return require($name);
-}
+
 
 export default function Comment() {
+const [pressedLike, setPressedLike] = useState(false);
+
+const like_images={
+  liked: require('../assets/images/liked_icon.png'),
+  not_liked: require('../assets/images/not_liked_icon.png')
+}
+
+function onLikePressed () {
+  pressedLike ? setPressedLike(false) : setPressedLike(true);
+}
+
   return(
    
       <View style={styles.container}>
@@ -43,9 +49,9 @@ export default function Comment() {
             <Text>{comment.content}</Text>
           </View>
 
-          <TouchableOpacity  style={{zIndex: 999}}>
+          <TouchableOpacity  onPress={onLikePressed} style={{zIndex: 999}}>
               <View style={styles.reaction_container}>
-                <Image style={styles.img_icon} source={badge_liked_icon}></Image>
+                <Image style={styles.img_icon} source={pressedLike ? like_images.liked : like_images.not_liked}></Image>
                 <Text style={{color: '#606770',fontSize:13}}>999</Text>
               </View>
           </TouchableOpacity>
@@ -67,7 +73,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     marginHorizontal: "2.5%",
-    marginVertical: "2%"
+    marginTop: "2%",
     //backgroundColor: 'red'
   },
   photo: {

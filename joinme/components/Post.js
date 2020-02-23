@@ -53,6 +53,7 @@ export default function Post({post, postKey}) {
         <Button style={{width: 100}} title="Comment" type="clear" onPress={() => { handleSetToggle(); alert('Toggle view comment = ' + toggle)}} />
         <Divider style={{ backgroundColor: 'black' }} />
         <Comment post={post} postKey={postKey} comment={sampleComment} />
+        <Comment post={post} postKey={postKey} comment={sampleComment} />
     </Card>
     
   );
