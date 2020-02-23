@@ -39,7 +39,7 @@ export default function Comment() {
           <TouchableOpacity  style={{zIndex: 999}}>
               <View style={styles.reaction_container}>
                 <Image style={styles.img_icon} source={require('../assets/images/liked_icon.png')}></Image>
-                <Text style={{color: '#606770',fontSize:13}}>10000</Text>
+                <Text style={{color: '#606770',fontSize:13}}>999</Text>
               </View>
           </TouchableOpacity>
 
@@ -88,13 +88,11 @@ const styles = StyleSheet.create({
   },
   time:{
     fontSize: 14,
-    marginVertical:11,
-    marginHorizontal: 6,
+    marginHorizontal: 10,
+    marginTop: '3%',
     color: '#606770',
-    left: '84%',
-    marginTop: '5%',
-    bottom: 10
-    
+    left: '25%',
+    bottom: '5%'
   },
   reaction_container: {
     position: 'absolute',

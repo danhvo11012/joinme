@@ -34,10 +34,6 @@ function BoardScreen({ route, navigation }) {
           style={{ marginVertical: 50 }}
         />
        
-          <Comment></Comment>
-          <Comment></Comment>
-
-      
       </View>
       
     </ScrollView>
