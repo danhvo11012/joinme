@@ -18,7 +18,7 @@ import { ProfileSocial } from '../components/ProfileSocial';
 import { Post, Profile } from './profile-7/extra/data';
 import TabBarIcon from '../components/TabBarIcon'
 import { Avatar, Button, List, StyleService, Text, useStyleSheet } from '@ui-kitten/components';
-import AwesomeAlert from 'react-native-awesome-alerts';
+
 function ProfileScreen( { route, navigation }) {
   YellowBox.ignoreWarnings(['VirtualizedLists should never be nested inside plain ScrollViews']);
   
@@ -299,12 +299,12 @@ const themedStyle = StyleService.create({
   editButton: {
     marginVertical: 10,
     marginHorizontal: 10,
-    width: '32%',
+    width: '40%',
   },
   logOutButton: {
     marginVertical: 10,
     marginHorizontal: 10,
-    width:'8%', borderRadius:10,
+    width:'18%', 
     backgroundColor: '#cc0000',
     borderColor: '#cc0000'
   },

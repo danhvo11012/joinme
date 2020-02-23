@@ -7,7 +7,10 @@ import {
   Dimensions,
   LayoutAnimation,
   UIManager,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Image,
+  TouchableHighlight,
+  TouchableOpacity
 } from 'react-native';
 import ProfileAvatar from './ProfileAvatar';
 import ProfileSetting from './ProfileSetting';
@@ -32,11 +35,16 @@ export default function Comment() {
             <Text style={styles.name}>{comment.ownerfullName}</Text>
             <Text>{comment.content}</Text>
           </View>
-          <View style={{flexDirection:'row'}}>
-            <Button style={styles.actionButton} type="clear" title="Like" titleStyle={styles.buttonTitle}></Button>
-            <Button style={styles.actionButton} type="clear" title="Reply" titleStyle={styles.buttonTitle}></Button>
-            <Text style={styles.time}>29m</Text>
-          </View>
+
+          <TouchableOpacity  style={{zIndex: 999}}>
+              <View style={styles.reaction_container}>
+                <Image style={styles.img_icon} source={require('../assets/images/like_icon.png')}></Image>
+                <Text style={{color: '#606770',fontSize:13}}>10000</Text>
+              </View>
+          </TouchableOpacity>
+
+          <Text style={styles.time}>29m</Text>    
+          
         </View>
       </View>
   
@@ -46,21 +54,19 @@ const comment = {
   ownerId: 'someone@gmail.com',
   ownerfullName: 'Nameless Boyy',
   avatar: 'https://scontent-dfw5-2.xx.fbcdn.net/v/t1.0-9/s960x960/83009231_2625407500907338_7630964988617687040_o.jpg?_nc_cat=104&_nc_ohc=jm7RGaAHGokAX9o-_W1&_nc_ht=scontent-dfw5-2.xx&_nc_tp=7&oh=be5920e9cce38b1df8464eef98fd55a6&oe=5EFCE6EE',
-  content: 'Hi, my name is Some Namasdaasdasasdasdasdasdasdasddasdasdasdassadasdsadsasdasdasdasdasasdasdasdasdasdasddasdasdasdasdasdasdasdasdasdsadasdase.'
+  content: 'Hi, my name is Some Namas sa sd asd as dasdaas asd a d  da asdasasdasd asdasdasda sddasdasd sdassadasd sadsas dasdasdasd asasdasdasd asda sdasdda sdasdasda sdasdasdasda sdasdsadasdase.'
 };
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    flex: 1,
-    marginVertical:5,
-    width:'80%',
-    marginHorizontal:10,
-    // backgroundColor: 'red'
+    marginHorizontal: 20,
+    //backgroundColor: 'red'
   },
   photo: {
     aspectRatio: 1.0,
     height: 76,
-    marginHorizontal: 10,
+    marginLeft: 15,
+    marginRight: 10,
     marginTop: 5
   },
    contentSection: {
@@ -84,6 +90,34 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginVertical:11,
     marginHorizontal: 6,
-    color: '#606770'
-  } 
+    color: '#606770',
+    left: 300,
+    bottom: 10
+    
+  },
+  reaction_container: {
+    position: 'absolute',
+    alignSelf: 'flex-end',
+    flexDirection:'row',
+    backgroundColor: 'white',
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+    borderRadius: 8,
+    bottom: -18,
+    //right: -8,
+    left: 10,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 3
+    },
+    shadowRadius: 1.2,
+    shadowOpacity: 0.3
+
+  },
+  img_icon: {
+   height: 18,
+   width: 18,
+   marginRight: 4
+  }
 });
