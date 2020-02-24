@@ -1,8 +1,8 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": 19000,
-  "packagerPort": 19004,
-  "packagerPid": 77911,
+  "expoServerPort": null,
+  "packagerPort": null,
+  "packagerPid": null,
   "expoServerNgrokUrl": "https://d9-nbw.anonymous.joinme.exp.direct",
   "packagerNgrokUrl": "https://packager.d9-nbw.anonymous.joinme.exp.direct",
   "ngrokPid": 77945
