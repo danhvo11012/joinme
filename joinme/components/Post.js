@@ -77,8 +77,10 @@ function Post(props) {
         </View>
 
         <Divider style={{ backgroundColor: 'black' }} />
-        {/* <Comment post={props.post} postKey={props.postKey} comment={sampleComment} /> */}
-    </Card>   
+        <Comment />
+        <Comment />
+    </Card>
+    
   );
 }
 

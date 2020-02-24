@@ -3,7 +3,6 @@ import { Stitch, RemoteMongoClient } from 'mongodb-stitch-react-native-sdk';
 import {
   StyleSheet,
   View,
- 
   ImageBackground,
   Dimensions,
   LayoutAnimation,
@@ -33,7 +32,7 @@ function ProfileScreen( { route, navigation }) {
   const { currentUserId, user } = route.params;
   const [ loadingComplete, setLoadingComplete] = useState(false);
   const [ profile, setProfile ] = useState(null);
-
+  const [ showAlert, setShowAlert] = useState(false);
   console.log(profile);
  
   const styles = useStyleSheet(themedStyle);
@@ -45,7 +44,7 @@ function ProfileScreen( { route, navigation }) {
   const onMessageButtonPress = (): void => {
     
   };
-  //user id: 5e475135639cc32a5bfdfefa
+  
   const renderFriendItem = (info: ListRenderItemInfo<Profile>): React.ReactElement => (
     <View style={styles.friendItem}>
       <Avatar source={info.item.photo}/>
@@ -76,7 +75,13 @@ function ProfileScreen( { route, navigation }) {
   };
   const EditIcon = () => {
     return(
-      <TabBarIcon size={20} color="black" name="ios-create"></TabBarIcon>
+      <TabBarIcon size={24} color="black" name="ios-create"></TabBarIcon>
+    );
+  };
+
+  const LogOutIcon = () => {
+    return(
+      <TabBarIcon  size={24} color="black" name="ios-log-out"></TabBarIcon>
     );
   };
   
@@ -128,7 +133,7 @@ function ProfileScreen( { route, navigation }) {
     }); 
     
   }
-  
+  const isSameUser = true;
   const logOut = async () => {      
         client.auth.logout().then(user => {
           console.log(`User ${currentUserId} successfully logged out`);
@@ -148,6 +153,16 @@ function ProfileScreen( { route, navigation }) {
       <ImageOverlay
         style={styles.header}
         source={require('./profile-7/assets/image-background.jpg')}>
+        <View style={{flex: 1, flexDirection:'row', alignSelf:'right'}}>
+          <Button
+              style={styles.logOutButton}
+              icon={LogOutIcon}
+              onPress={logOut}
+              //appearance='outline' 
+              //status='danger'
+              >
+          </Button>
+        </View>
         <Avatar
           style={styles.profileAvatar}
           source={{uri: profile.avatar}}
@@ -166,16 +181,18 @@ function ProfileScreen( { route, navigation }) {
             {profile.city}
           </Text>
         </View>
-        {true &&
-          <Button
-            style={styles.editButton}
-            icon={EditIcon}
-            status='control'
-            onPress={onEditButtonPress}>
-            EDIT
-          </Button>
+        {isSameUser &&
+          <View style={styles.profileButtonsContainer}>
+            <Button
+              style={styles.editButton}
+              icon={EditIcon}
+              status='control'
+              onPress={onEditButtonPress}>
+              EDIT
+            </Button> 
+          </View>
         }
-        { true &&
+        { !isSameUser &&
           <View style={styles.profileButtonsContainer}>
             <Button
               style={styles.profileButton}
@@ -248,7 +265,6 @@ function ProfileScreen( { route, navigation }) {
 
 export default ProfileScreen;
 
-
 const themedStyle = StyleService.create({
   container: {
     flex: 1,
@@ -262,7 +278,7 @@ const themedStyle = StyleService.create({
     width: 124,
     height: 124,
     borderRadius: 62,
-    marginVertical: 16,
+    top: '-5%'
   },
   profileName: {
     zIndex: 1,
@@ -285,7 +301,21 @@ const themedStyle = StyleService.create({
     marginHorizontal: 4,
   },
   editButton: {
-    marginVertical: 20
+    width: '40%',
+  },
+  logOutButton: {
+    width:'12%', 
+    borderRadius: 0,
+    bottom: '48%',
+     backgroundColor:'#f2f3f5',
+    borderColor:'white',
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 3
+    },
+    shadowRadius: 1.2,
+    shadowOpacity: 0.3
   },
   socialsContainer: {
     flexDirection: 'row',
