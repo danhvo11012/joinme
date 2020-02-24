@@ -9,7 +9,8 @@ import {
   LayoutAnimation,
   UIManager,
   KeyboardAvoidingView,
-  TouchableOpacity
+  TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import { Input, Button, Icon } from 'react-native-elements';
 
@@ -264,7 +265,7 @@ export default class LoginScreen extends Component {
             >
               <View style={styles.titleContainer}>
                 <View style={{ flexDirection: 'row' }}>
-                  <Text style={styles.titleText}>CONNECT WITH US</Text>
+                  <Text style={styles.titleText}>JOIN ME</Text>
                 </View>
                 
               </View>

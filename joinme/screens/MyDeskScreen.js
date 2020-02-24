@@ -10,58 +10,158 @@ import {
   LayoutAnimation,
   UIManager,
   KeyboardAvoidingView,
+  ScrollView,
+  Modal,
 } from 'react-native';
 
+import Post from '../components/Post'
 import { Input, Button, Icon } from 'react-native-elements';
+import CreatePostModal from '../components/CreatePostModal';
+
 
 function MyDeskScreen({ route, navigation }) {
+  const client =  Stitch.defaultAppClient;
+  const mongoClient = client.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas')
+  const db = mongoClient.db('joinme');
+  const posts = db.collection('posts');
+
   const { currentUserId, user } = route.params;
 
+  const [ loadingComplete, setLoadingComplete] = useState(false);
+  const [ shouldReload, setShouldReload ] = useState(true );
+  const [ isPostReceived, setIsPostReceived ] = useState(false);
+  const [ isPostReady, setIsPostReady ] = useState(false);
+
+  const [ myPosts, setMyPosts] = useState(null);
+  const [ showCreateNewPostModal, setShowCreateNewPostModal ] = useState(false);
+  const [ postFromModal, setPostFromModal ] = useState(null);
+  const [ fullPost, setFullPost ] = useState(null);
+
+  
+  const createNewPost = () => {
+    setShowCreateNewPostModal(true);
+  }
+
+  const handlePost = (modalShow) => {
+    setShowCreateNewPostModal(modalShow);
+  }
+
+  const handleGetPost = (postFromModal) => {
+    console.log('isPostReceived ', isPostReceived);
+    setPostFromModal(postFromModal);
+    setIsPostReceived(true);
+  }
+
+  const handleDeletePost = (postId) => {
+    posts.findOneAndDelete({_id: postId})
+      .then(res => {
+        console.log('response from delete: ', res);
+        setShouldReload(true);
+      })
+  }
+
+  const getPostToDelete = (postIdFromPostJS) => {
+    console.log('Post id to delete: ', postIdFromPostJS);
+    handleDeletePost(postIdFromPostJS);
+  }
+
+  /**
+  * Post metrics
+  * 
+  * postId = default ObjId
+  * ownerId = currentUserId
+  * ownerEmail = user.email
+  * category : Side-project || p2p learning || others
+  * postDate = new Date();
+  * postContent: TextInput
+  * preferred: Preferred exp
+  */
+  const handleSetFullPost = () => {
+    if(isPostReceived) {
+      setFullPost({
+        ownerId: currentUserId,
+        ownerEmail: user.email,
+        postDate: new Date(),
+        category: postFromModal.category,
+        content: postFromModal.content,
+        preferred: postFromModal.preferred,
+      });
+    }
+  }
+
+  const resetLogicStates = () => {
+    setShouldReload(false);
+    setIsPostReady(false);
+    setIsPostReceived(false);
+  }
+
   useEffect(()=> {
-    onLoad();
-  });
+    if(shouldReload) {
+      function handleSetPosts(results) {
+        setMyPosts(results);
+      }
+  
+      posts.find({ ownerId: currentUserId })
+        .toArray()
+        .then(results => {
+          results.sort((a, b) => a._id < b._id);  // Sort results by document's id
+          handleSetPosts(results);
+          resetLogicStates();
+          setLoadingComplete(true);
+        });  
+    }
+  }, [shouldReload]);
 
-  // console.log('ID from my desk screen: ', currentUserId);
-  // console.log('User from my desk screen: ', user);
-  function onLoad() {
-    // Get the existing Stitch client.
-    const stitchClient = Stitch.getAppClient("joinme-ufpra");
+  useEffect(() => {
+    if (isPostReceived) {
+      console.log('received');
+      console.log(postFromModal);
+      handleSetFullPost();
+      setIsPostReady(true);
+    }
+  }, [isPostReceived])
 
-    // Get a client of the Remote Mongo Service for database access
-    const mongoClient = stitchClient.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas')
+  useEffect(() => {
+    if (isPostReady) {
+      console.log('Full post: ', fullPost);
+      posts.insertOne(fullPost).then(res => {
+        console.log('Response from stitch: ', res);
+        setLoadingComplete(false);
+        setShouldReload(true);
+      })
+    }
+  }, [isPostReady])
 
-    // Retrieve a database object
-    const db = mongoClient.db('joinme')
 
-    // Retrieve the collection in the database
-    const movieDetails = db.collection('posts')
+  if (!loadingComplete) { return null } 
+  else {
+    return(
+      <ScrollView>
+        <View style={{marginTop: 10}}>
 
-    // Find 10 documents and log them to console.
-    movieDetails.find({}, {limit: 10})
-      .toArray()
-      .then(results => console.log('Results:', results))
+          <Text>Welcome back, {user.email}!</Text>
+          
+          <Button 
+            title="Create a new post"         
+            style={{ marginVertical: 15 }}
+            onPress={createNewPost}
+          />
+
+          <View 
+            style={{ marginVertical: 20, justifyContent: 'center', alignItems: 'center'}}
+          >
+            <Modal 
+              visible={showCreateNewPostModal}
+              animationType="slide"
+            >
+              <CreatePostModal onPost={handlePost} postToInsert={handleGetPost} />
+            </Modal>
+
+          </View>
+          {myPosts.map((post, i) => <Post key={i} post={post} postKey={i} postToDelete={getPostToDelete} />)}
+        </View> 
+      </ScrollView>
+    );
   }
-
-  function createNewPost() {
-    alert('Creating new post alert!');
-    console.log()
-  }
-
-  // const [ currentUserId, setCurrentUserId ] = useState( null );
-  const [ email, setEmail ] = useState(null);
-  const [ UserAuth, setUserAuth ] = useState(null);
-
- 
-  return(
-    <View style={{ alignItems: 'center', marginTop: 10}}>
-      <Text>Welcome back, {user.email}!</Text>
-      <Button 
-        title="Create a new post"         
-        style={{ marginVertical: 50 }}
-        onPress={createNewPost}
-      />
-    </View>
-  );
 };
-
 export default MyDeskScreen;
