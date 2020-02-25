@@ -25,15 +25,23 @@ import {
 
 
 export default function Comment() {
-const [pressedLike, setPressedLike] = useState(false);
+const [ pressedLike, setPressedLike] = useState(false);
+const [ noOfLike, setNoOfLike ] = useState(0);
 
-const like_images={
+const like_images = {
   liked: require('../assets/images/liked_icon.png'),
   not_liked: require('../assets/images/not_liked_icon.png')
 }
 
 function onLikePressed () {
-  pressedLike ? setPressedLike(false) : setPressedLike(true);
+  if (pressedLike) {
+    setPressedLike(false);
+    setNoOfLike(noOfLike - 1);
+    
+  } else {
+    setPressedLike(true);
+    setNoOfLike(noOfLike + 1);
+  }
 }
 
   return(
@@ -52,7 +60,7 @@ function onLikePressed () {
           <TouchableOpacity  onPress={onLikePressed} style={{zIndex: 999}}>
               <View style={styles.reaction_container}>
                 <Image style={styles.img_icon} source={pressedLike ? like_images.liked : like_images.not_liked}></Image>
-                <Text style={{color: '#606770',fontSize:13}}>999</Text>
+                <Text style={{color: '#606770',fontSize:13}}>{noOfLike}</Text>
               </View>
           </TouchableOpacity>
 
@@ -66,8 +74,8 @@ function onLikePressed () {
 const comment = {
   ownerId: 'someone@gmail.com',
   ownerfullName: 'Nameless Boyy',
-  avatar: 'https://scontent-dfw5-2.xx.fbcdn.net/v/t1.0-9/s960x960/83009231_2625407500907338_7630964988617687040_o.jpg?_nc_cat=104&_nc_ohc=jm7RGaAHGokAX9o-_W1&_nc_ht=scontent-dfw5-2.xx&_nc_tp=7&oh=be5920e9cce38b1df8464eef98fd55a6&oe=5EFCE6EE',
-  content: 'Hi, my name is Some Namas sa sd asd as dasdaas asd a d  da asdasasdasd asdasdasda sddasdasd sdassadasd sadsas dasdasdasd asasdasdasd asda sdasdda sdasdasda sdasdasdasda sdasdsadasdase.'
+  avatar: 'https://lh3.googleusercontent.com/proxy/QEkBUv73UTIeaNyMGLqI0w-nVDL-jd6RD8n5cu-klG66Iz23pvNeqWjhM0Q9V_GY-TQetjZQmMRbIBAZqTL0EYLg5EJ5_WkA6yy4azcLCg',
+  content: 'Hi, my name is Seh and I\'m the cutest pug alive.'
 };
 const styles = StyleSheet.create({
   container: {

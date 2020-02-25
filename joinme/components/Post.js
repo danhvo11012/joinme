@@ -25,6 +25,8 @@ import Comment from './Comment';
 function Post(props) {
 
   const [ viewCommentOn, setViewCommentOn ] = useState(false);
+  const [ liked, setLiked ] = useState(false);
+  const [ noOfLike, setNoOfLike ] = useState(0);
   const [ toggle, setToggle ] = useState(false);
 
   const sampleComment = {
@@ -43,6 +45,18 @@ function Post(props) {
     props.postToDelete(props.post._id);
   }
 
+  const handleLikeToggle = () => {
+    setLiked(!liked);
+    if (!liked) {
+      setNoOfLike(noOfLike + 1);
+    } else {
+      setNoOfLike(noOfLike - 1);
+    }
+  }
+
+  const likeBtnType = liked ? 'solid' : 'outline';
+  const likeBtnTitle = noOfLike > 1 ? noOfLike + " Likes" : noOfLike + " Like";
+
   return(
     <Card title={props.post.ownerEmail} containerStyle={{ width: '100%', alignSelf: 'center' }}>
       <View>
@@ -56,6 +70,9 @@ function Post(props) {
       </View>
 
         <View style={{ flexDirection: 'row', marginVertical: 10 }}>
+          <View style={{ alignItems: 'flex-start'}} >
+            <Button style={{ width: 80}} title={likeBtnTitle} type={likeBtnType} onPress={handleLikeToggle} />
+          </View>
 
           <View style={{ flexGrow: 1, alignItems: 'flex-start'}} >
             <Button style={{ width: 100}} title="Comment" type="outline" onPress={() => { handleSetToggle(); alert('Toggle view comment = ' + toggle)}} />
@@ -69,7 +86,6 @@ function Post(props) {
                   size={20}
                 />
               }
-
               onPress={handleDeletePost}
             />
               
