@@ -33,7 +33,7 @@ function ProfileScreen( { route, navigation }) {
   const [ loadingComplete, setLoadingComplete] = useState(false);
   const [ profile, setProfile ] = useState(null);
   const [ showAlert, setShowAlert] = useState(false);
-  console.log(profile);
+  console.log('Dummy profile from Stitch server: \n', profile);
  
   const styles = useStyleSheet(themedStyle);
 
@@ -81,7 +81,7 @@ function ProfileScreen( { route, navigation }) {
 
   const LogOutIcon = () => {
     return(
-      <TabBarIcon  size={24} color="black" name="ios-log-out"></TabBarIcon>
+      <TabBarIcon  size={35} color="#bababa" name="ios-log-out"></TabBarIcon>
     );
   };
   
@@ -153,16 +153,7 @@ function ProfileScreen( { route, navigation }) {
       <ImageOverlay
         style={styles.header}
         source={require('./profile-7/assets/image-background.jpg')}>
-        <View style={{flex: 1, flexDirection:'row', alignSelf:'right'}}>
-          <Button
-              style={styles.logOutButton}
-              icon={LogOutIcon}
-              onPress={logOut}
-              //appearance='outline' 
-              //status='danger'
-              >
-          </Button>
-        </View>
+       
         <Avatar
           style={styles.profileAvatar}
           source={{uri: profile.avatar}}
@@ -192,7 +183,7 @@ function ProfileScreen( { route, navigation }) {
             </Button> 
           </View>
         }
-        { !isSameUser &&
+        {!isSameUser &&
           <View style={styles.profileButtonsContainer}>
             <Button
               style={styles.profileButton}
@@ -209,22 +200,35 @@ function ProfileScreen( { route, navigation }) {
             </Button>
           </View>
         }
-        <View style={styles.socialsContainer}>
-          <ProfileSocial
-            style={styles.profileSocial}
-            hint='Projects'
-            value={`${profile.project_count}`}
-          />
-          <ProfileSocial
-            style={styles.profileSocial}
-            hint='Friends'
-            value={`${profile.friend_count}`}
-          />
-          <ProfileSocial
-            style={styles.profileSocial}
-            hint='Posts'
-            value={`${profile.post_count}`}
-          />
+        <View style={{flexDirection: 'row', width: '100%'}} >
+          <View style={{flex:1}}></View>
+          <View style={styles.socialsContainer}>
+            <ProfileSocial
+              style={styles.profileSocial}
+              hint='Projects'
+              value={`${profile.project_count}`}
+            />
+            <ProfileSocial
+              style={styles.profileSocial}
+              hint='Friends'
+              value={`${profile.friend_count}`}
+            />
+            <ProfileSocial
+              style={styles.profileSocial}
+              hint='Posts'
+              value={`${profile.post_count}`}
+            />
+          </View>
+          <View style={{ flex: 1}}>
+            <ElementsButton
+                style={styles.logOutButton}
+                icon={LogOutIcon}
+                onPress={logOut}
+                type="clear"
+                // status='danger'
+                >
+            </ElementsButton>
+          </View>
         </View>
       </ImageOverlay>
       <Text
@@ -304,23 +308,32 @@ const themedStyle = StyleService.create({
     width: '40%',
   },
   logOutButton: {
-    width:'12%', 
-    borderRadius: 0,
-    bottom: '48%',
-     backgroundColor:'#f2f3f5',
-    borderColor:'white',
-    shadowColor: '#000000',
-    shadowOffset: {
-      width: 0,
-      height: 3
-    },
-    shadowRadius: 1.2,
-    shadowOpacity: 0.3
+    //Danh modified:
+    width: 70,
+    left: -25,
+    bottom: -20
+
+    // Khiem's
+    // width:'12%', 
+    // borderRadius: 0,
+    // bottom: '48%',
+    // backgroundColor:'#f2f3f5',
+    // borderColor:'white',
+    // shadowColor: '#000000',
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 3
+    // },
+    // shadowRadius: 1.2,
+    // shadowOpacity: 0.3
   },
   socialsContainer: {
+    flex: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
     flexDirection: 'row',
-    width: '75%',
-    marginVertical: 8,
+    width: '80%',
+    marginVertical: 5,
   },
   profileSocial: {
     flex: 1,
