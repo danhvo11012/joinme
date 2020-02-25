@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { ScrollView, View, TextInput,Button } from 'react-native';
 import { Button as KittenButton, Layout, StyleService, Text, useStyleSheet } from '@ui-kitten/components';
 import { ProfileSetting } from '../components/ProfileSetting';
@@ -9,6 +9,12 @@ import {Button as ElementButton} from 'react-native-elements'
 export default function ProfileSettingScreen( {route, navigation} ) {
   const { currentUserId, profile } = route.params;
   const styles = useStyleSheet(themedStyles);
+
+  //summary text handling
+  const [summaryText, setSummary] = useState(profile.summary);
+  function handleSummaryText(summaryText) {
+    setSummary(summaryText);
+  }
   navigation.setOptions({
       headerLeft: () => (
         <Button onPress={() => navigation.goBack()} title="Cancel" />
@@ -67,7 +73,8 @@ export default function ProfileSettingScreen( {route, navigation} ) {
         placeholderTextColor={"#9E9E9E"}
         numberOfLines={10}
         multiline={true}
-        value={profile.summary}
+        value={summaryText}
+        onChangeText={handleSummaryText}
       />
       <ProfileSetting
         style={[styles.setting, styles.emailSetting]}
