@@ -75,8 +75,7 @@ export default function App(props) {
   } else {
     return (
       <ApplicationProvider mapping={mapping} theme={light}>
-
-      <AppContainer />
+        <AppContainer />
       </ApplicationProvider>
     );
   }
