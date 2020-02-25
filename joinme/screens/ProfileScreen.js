@@ -33,7 +33,6 @@ function ProfileScreen( { route, navigation }) {
   const [ loadingComplete, setLoadingComplete] = useState(false);
   const [ profile, setProfile ] = useState(null);
   const [ showAlert, setShowAlert] = useState(false);
-  console.log('Dummy profile from Stitch server: \n', profile);
  
   const styles = useStyleSheet(themedStyle);
 
@@ -200,8 +199,8 @@ function ProfileScreen( { route, navigation }) {
             </Button>
           </View>
         }
-        <View style={{flexDirection: 'row', width: '100%'}} >
-          <View style={{flex:1}}></View>
+        <View style={{ flexDirection: 'row', width: '100%' }} >
+          <View style={{flex:1}}><Text>fd</Text></View>
           <View style={styles.socialsContainer}>
             <ProfileSocial
               style={styles.profileSocial}
@@ -241,27 +240,7 @@ function ProfileScreen( { route, navigation }) {
         appearance='hint'>
         {profile.summary}
       </Text>
-      {/* <Text
-        style={styles.sectionLabel}
-        category='s1'>
-        Friends
-      </Text>
-      <List
-        contentContainerStyle={styles.friendsList}
-        horizontal={true}
-        data={friends}
-        renderItem={renderFriendItem}
-      />
-      <Text
-        style={styles.sectionLabel}
-        category='s1'>
-        Projects
-      </Text>
-      <List
-        data={posts}
-        numColumns={3}
-        renderItem={renderPostItem}
-      /> */}
+      
     </ScrollView>
     );
   }

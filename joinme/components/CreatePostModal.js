@@ -79,7 +79,11 @@ function CreatePostModal (props) {
 
   return(
     <ScrollView>
+<<<<<<< HEAD
       <View style={{ flexDirection: 'column', marginTop: 50 }}>
+=======
+      <View style={{ flexDirection: 'column', marginTop: 35}}>
+>>>>>>> 6cd668c5a8c7177b80b81f543205905e7ef10890
         <Card
           containerStyle={{ height: '97%' }}
           title="Create new Post"
