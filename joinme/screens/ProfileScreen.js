@@ -237,7 +237,7 @@ function ProfileScreen( { route, navigation }) {
         appearance='hint'>
         {profile.summary}
       </Text>
-      <Text
+      {/* <Text
         style={styles.sectionLabel}
         category='s1'>
         Friends
@@ -257,7 +257,7 @@ function ProfileScreen( { route, navigation }) {
         data={posts}
         numColumns={3}
         renderItem={renderPostItem}
-      />
+      /> */}
     </ScrollView>
     );
   }
