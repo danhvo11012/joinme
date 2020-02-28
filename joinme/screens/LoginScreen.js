@@ -13,7 +13,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { Input, Button, Icon } from 'react-native-elements';
-
+import TabBarIcon from '../components/TabBarIcon';
 // Import Stitch features
 import { Stitch, UserPasswordCredential, UserPasswordAuthProviderClient } from 'mongodb-stitch-react-native-sdk';
 
@@ -301,15 +301,7 @@ export default class LoginScreen extends Component {
               </View>
               <View style={styles.formContainer}>
                 <Input
-                  leftIcon={
-                    <Icon
-                      name="envelope-o"
-                      type="font-awesome"
-                      color="rgba(0, 0, 0, 0.38)"
-                      size={25}
-                      style={{ backgroundColor: 'transparent' }}
-                    />
-                  }
+                  leftIcon={<TabBarIcon name="ios-mail"/>}
                   value={email}
                   keyboardAppearance="light"
                   autoFocus={false}
@@ -330,23 +322,11 @@ export default class LoginScreen extends Component {
                   }
                 />
                 <Input
-                  leftIcon={
-                    <Icon
-                      name="key"
-                      type="simple-line-icon"
-                      color="rgba(0, 0, 0, 0.38)"
-                      size={25}
-                      style={{ backgroundColor: 'transparent' }}
-                    />
-                  }
+                  leftIcon={<TabBarIcon name="ios-lock"/>}
                   rightIcon={
                     <TouchableOpacity onPress={this.showOrHidePass.bind(this)}>
-                      <Icon
-                        name={this.state.showPass ? "lock-open" :"lock"}
-                        type="simple-line-icon"
-                        color="rgba(0, 0, 0, 0.38)"
-                        size={25}
-                        style={{ backgroundColor: 'transparent' }}
+                      <TabBarIcon
+                        name={this.state.showPass ? "ios-eye" :"ios-eye-off"}
                       />
                     </TouchableOpacity>
                   }
@@ -375,15 +355,7 @@ export default class LoginScreen extends Component {
                 />
                 {isSignUpPage && (
                   <Input
-                   leftIcon={
-                      <Icon
-                        name="key"
-                        type="simple-line-icon"
-                        color="rgba(0, 0, 0, 0.38)"
-                        size={25}
-                        style={{ backgroundColor: 'transparent' }}
-                      />
-                    }
+                   leftIcon={<TabBarIcon name="ios-mail"/>}
                     
                     value={passwordConfirmation}
                     secureTextEntry={!this.state.showPass}

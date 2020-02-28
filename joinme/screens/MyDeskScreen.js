@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Stitch, AnonymousCredential, UserPasswordCredential, RemoteMongoClient } from 'mongodb-stitch-react-native-sdk';
 
 import {
@@ -12,12 +12,13 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Modal,
+  Alert,
+  ActivityIndicator,
 } from 'react-native';
 
 import Post from '../components/Post'
-import { Input, Button, Icon } from 'react-native-elements';
+import { Input, Button, Icon, colors } from 'react-native-elements';
 import CreatePostModal from '../components/CreatePostModal';
-
 
 function MyDeskScreen({ route, navigation }) {
   const client =  Stitch.defaultAppClient;
@@ -37,6 +38,7 @@ function MyDeskScreen({ route, navigation }) {
   const [ postFromModal, setPostFromModal ] = useState(null);
   const [ fullPost, setFullPost ] = useState(null);
 
+  const [ showSpinner, setShowSpinner ] = useState(false);
   
   const createNewPost = () => {
     setShowCreateNewPostModal(true);
@@ -47,22 +49,35 @@ function MyDeskScreen({ route, navigation }) {
   }
 
   const handleGetPost = (postFromModal) => {
-    console.log('isPostReceived ', isPostReceived);
     setPostFromModal(postFromModal);
     setIsPostReceived(true);
   }
 
   const handleDeletePost = (postId) => {
+    setShowSpinner(true);
     posts.findOneAndDelete({_id: postId})
       .then(res => {
         console.log('response from delete: ', res);
         setShouldReload(true);
+        setLoadingComplete(false);
       })
   }
 
   const getPostToDelete = (postIdFromPostJS) => {
     console.log('Post id to delete: ', postIdFromPostJS);
     handleDeletePost(postIdFromPostJS);
+  }
+
+  const getLikeSignal = (likeSignalFromPost) => {
+    handleLikeSignal(likeSignalFromPost);
+  }
+
+  const handleLikeSignal = (signal) => {
+    console.log('likes from post: ' + signal.likes + '; is liked by: ' + signal.likers);
+    posts.findOneAndUpdate({_id: signal.postId}, {$set: {likes: signal.likes, likers: Array.from(signal.likers) }})
+      .then(res => {
+        // Do nothing after handling likes.
+      })
   }
 
   /**
@@ -85,6 +100,8 @@ function MyDeskScreen({ route, navigation }) {
         category: postFromModal.category,
         content: postFromModal.content,
         preferred: postFromModal.preferred,
+        likers: [],
+        likes: 0,
       });
     }
   }
@@ -95,26 +112,34 @@ function MyDeskScreen({ route, navigation }) {
     setIsPostReceived(false);
   }
 
+  const handlePageReload = () => {
+    setShowSpinner(true);
+    setLoadingComplete(false);
+    setShouldReload(true);
+  }
+
   useEffect(()=> {
     if(shouldReload) {
       function handleSetPosts(results) {
         setMyPosts(results);
       }
-  
       posts.find({ ownerId: currentUserId })
         .toArray()
         .then(results => {
           results.sort((a, b) => a._id < b._id);  // Sort results by document's id
           handleSetPosts(results);
-          resetLogicStates();
           setLoadingComplete(true);
-        });  
+          resetLogicStates();
+        });
     }
-  }, [shouldReload]);
+    return () => {
+      setTimeout(() => {setShowSpinner(false)}, 500);
+    }
+  }, [shouldReload, loadingComplete, showSpinner]);
 
   useEffect(() => {
     if (isPostReceived) {
-      console.log('received');
+      setShowSpinner(true);
       console.log(postFromModal);
       handleSetFullPost();
       setIsPostReady(true);
@@ -132,23 +157,43 @@ function MyDeskScreen({ route, navigation }) {
     }
   }, [isPostReady])
 
+  const Indicator = 
+  <View 
+    style={{
+      justifyContent: 'center', 
+      flexDirection: 'row', 
+      padding: 20, 
+      display: (showSpinner ? 'block' : 'none')
+    }}
+  >
+    <ActivityIndicator
+      animating={showSpinner}
+      size="large"
+      color="grey"
+    />
+  </View>;
 
-  if (!loadingComplete) { return null } 
+  if (!loadingComplete) { return (Indicator) } 
   else {
     return(
       <ScrollView>
-        <View style={{marginTop: 10}}>
-
-          <Text>Welcome back, {user.email}!</Text>
+        <View style={{marginTop: 10, justifyContent: 'center', alignItems: 'center'}}>
+          <Text style={{fontSize: 20, marginVertical: 10}}>Welcome back, {user.email}!</Text>
           
-          <Button 
+          <Button
             title="Create a new post"         
-            style={{ marginVertical: 15 }}
+            style={{ width: 200, marginVertical: 5 }}
             onPress={createNewPost}
           />
 
+          <Button 
+            title="Refresh"         
+            style={{ width: 200, marginVertical: 5 }}
+            onPress={handlePageReload}
+          />
+          {Indicator}
           <View 
-            style={{ marginVertical: 20, justifyContent: 'center', alignItems: 'center'}}
+            style={{ marginVertical: 5 }}
           >
             <Modal 
               visible={showCreateNewPostModal}
@@ -158,7 +203,7 @@ function MyDeskScreen({ route, navigation }) {
             </Modal>
 
           </View>
-          {myPosts.map((post, i) => <Post key={i} post={post} postKey={i} postToDelete={getPostToDelete} />)}
+          {myPosts.map((post, i) => <Post key={i} currentUserId={currentUserId} post={post} postKey={i} postToDelete={getPostToDelete} likeSignal={getLikeSignal} />)}
         </View> 
       </ScrollView>
     );

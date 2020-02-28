@@ -1,7 +1,7 @@
 // @ts-nocheck
 import * as React from 'react';
 import { useState, useEffect, useRef } from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { Platform, StatusBar, View } from 'react-native';
 import { SplashScreen } from 'expo';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
@@ -50,7 +50,11 @@ export default function App(props) {
 
         //load images
         const imageAssets = cacheImages([
+          require('./assets/images/icon.png'),
+          require('./assets/images/splash.jpg'),
           require('./assets/images/bg_screen4.jpg'),
+          require('./assets/images/liked_icon.png'),
+          require('./assets/images/not_liked_icon.png')
         ]);
     
         await Promise.all([...imageAssets, ...fontAssets]);
@@ -71,16 +75,8 @@ export default function App(props) {
   } else {
     return (
       <ApplicationProvider mapping={mapping} theme={light}>
-
-      <AppContainer />
+        <AppContainer />
       </ApplicationProvider>
     );
   }
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-});

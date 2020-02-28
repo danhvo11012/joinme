@@ -3,7 +3,6 @@ import { Stitch, RemoteMongoClient } from 'mongodb-stitch-react-native-sdk';
 import {
   StyleSheet,
   View,
- 
   ImageBackground,
   Dimensions,
   LayoutAnimation,
@@ -33,8 +32,7 @@ function ProfileScreen( { route, navigation }) {
   const { currentUserId, user } = route.params;
   const [ loadingComplete, setLoadingComplete] = useState(false);
   const [ profile, setProfile ] = useState(null);
-
-  console.log(profile);
+  const [ showAlert, setShowAlert] = useState(false);
  
   const styles = useStyleSheet(themedStyle);
 
@@ -45,7 +43,7 @@ function ProfileScreen( { route, navigation }) {
   const onMessageButtonPress = (): void => {
     
   };
-  //user id: 5e475135639cc32a5bfdfefa
+  
   const renderFriendItem = (info: ListRenderItemInfo<Profile>): React.ReactElement => (
     <View style={styles.friendItem}>
       <Avatar source={info.item.photo}/>
@@ -76,7 +74,13 @@ function ProfileScreen( { route, navigation }) {
   };
   const EditIcon = () => {
     return(
-      <TabBarIcon size={20} color="black" name="ios-create"></TabBarIcon>
+      <TabBarIcon size={24} color="black" name="ios-create"></TabBarIcon>
+    );
+  };
+
+  const LogOutIcon = () => {
+    return(
+      <TabBarIcon  size={35} color="#bababa" name="ios-log-out"></TabBarIcon>
     );
   };
   
@@ -128,7 +132,7 @@ function ProfileScreen( { route, navigation }) {
     }); 
     
   }
-  
+  const isSameUser = true;
   const logOut = async () => {      
         client.auth.logout().then(user => {
           console.log(`User ${currentUserId} successfully logged out`);
@@ -148,6 +152,7 @@ function ProfileScreen( { route, navigation }) {
       <ImageOverlay
         style={styles.header}
         source={require('./profile-7/assets/image-background.jpg')}>
+       
         <Avatar
           style={styles.profileAvatar}
           source={{uri: profile.avatar}}
@@ -166,16 +171,18 @@ function ProfileScreen( { route, navigation }) {
             {profile.city}
           </Text>
         </View>
-        {true &&
-          <Button
-            style={styles.editButton}
-            icon={EditIcon}
-            status='control'
-            onPress={onEditButtonPress}>
-            EDIT
-          </Button>
+        {isSameUser &&
+          <View style={styles.profileButtonsContainer}>
+            <Button
+              style={styles.editButton}
+              icon={EditIcon}
+              status='control'
+              onPress={onEditButtonPress}>
+              EDIT
+            </Button> 
+          </View>
         }
-        { true &&
+        {!isSameUser &&
           <View style={styles.profileButtonsContainer}>
             <Button
               style={styles.profileButton}
@@ -192,22 +199,35 @@ function ProfileScreen( { route, navigation }) {
             </Button>
           </View>
         }
-        <View style={styles.socialsContainer}>
-          <ProfileSocial
-            style={styles.profileSocial}
-            hint='Projects'
-            value={`${profile.project_count}`}
-          />
-          <ProfileSocial
-            style={styles.profileSocial}
-            hint='Friends'
-            value={`${profile.friend_count}`}
-          />
-          <ProfileSocial
-            style={styles.profileSocial}
-            hint='Posts'
-            value={`${profile.post_count}`}
-          />
+        <View style={{ flexDirection: 'row', width: '100%' }} >
+          <View style={{flex:1}}><Text>fd</Text></View>
+          <View style={styles.socialsContainer}>
+            <ProfileSocial
+              style={styles.profileSocial}
+              hint='Projects'
+              value={`${profile.project_count}`}
+            />
+            <ProfileSocial
+              style={styles.profileSocial}
+              hint='Friends'
+              value={`${profile.friend_count}`}
+            />
+            <ProfileSocial
+              style={styles.profileSocial}
+              hint='Posts'
+              value={`${profile.post_count}`}
+            />
+          </View>
+          <View style={{ flex: 1}}>
+            <ElementsButton
+                style={styles.logOutButton}
+                icon={LogOutIcon}
+                onPress={logOut}
+                type="clear"
+                // status='danger'
+                >
+            </ElementsButton>
+          </View>
         </View>
       </ImageOverlay>
       <Text
@@ -220,34 +240,13 @@ function ProfileScreen( { route, navigation }) {
         appearance='hint'>
         {profile.summary}
       </Text>
-      <Text
-        style={styles.sectionLabel}
-        category='s1'>
-        Friends
-      </Text>
-      <List
-        contentContainerStyle={styles.friendsList}
-        horizontal={true}
-        data={friends}
-        renderItem={renderFriendItem}
-      />
-      <Text
-        style={styles.sectionLabel}
-        category='s1'>
-        Projects
-      </Text>
-      <List
-        data={posts}
-        numColumns={3}
-        renderItem={renderPostItem}
-      />
+      
     </ScrollView>
     );
   }
 };
 
 export default ProfileScreen;
-
 
 const themedStyle = StyleService.create({
   container: {
@@ -262,7 +261,7 @@ const themedStyle = StyleService.create({
     width: 124,
     height: 124,
     borderRadius: 62,
-    marginVertical: 16,
+    top: '-5%'
   },
   profileName: {
     zIndex: 1,
@@ -285,12 +284,35 @@ const themedStyle = StyleService.create({
     marginHorizontal: 4,
   },
   editButton: {
-    marginVertical: 20
+    width: '40%',
+  },
+  logOutButton: {
+    //Danh modified:
+    width: 70,
+    left: -25,
+    bottom: -20
+
+    // Khiem's
+    // width:'12%', 
+    // borderRadius: 0,
+    // bottom: '48%',
+    // backgroundColor:'#f2f3f5',
+    // borderColor:'white',
+    // shadowColor: '#000000',
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 3
+    // },
+    // shadowRadius: 1.2,
+    // shadowOpacity: 0.3
   },
   socialsContainer: {
+    flex: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
     flexDirection: 'row',
-    width: '75%',
-    marginVertical: 8,
+    width: '80%',
+    marginVertical: 5,
   },
   profileSocial: {
     flex: 1,
