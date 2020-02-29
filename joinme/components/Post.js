@@ -1,3 +1,9 @@
+/**
+ * Post Component
+ * 
+ * @author Danh Vo
+ * @version 1.0
+ */
 import React, { useState, useEffect } from 'react';
 
 import {
@@ -21,6 +27,7 @@ import {
 } from 'react-native-elements';
 
 import Comment from './Comment';
+import CommentTextBox from '../components/CommentTextBox';
 
 function Post(props) {
 
@@ -28,18 +35,11 @@ function Post(props) {
   const [ liked, setLiked ] = useState(false);
   const [ noOfLike, setNoOfLike ] = useState(props.post.likes);
   const [ toggle, setToggle ] = useState(false);
+  const [ comments, setComments ] = useState(null);
+  const [ noOfCmt, setNoOfCmt ] = useState(0);
+  const [ shouldRenderComments, setShouldRenderComments ] = useState(false);
 
-  const sampleComment = {
-    _id: "1111111",
-    ownerId: "123",
-    ownerEmail: "someOne@gmail.com",
-    date: new Date(),
-    content: "This is the new comment from someOne."
-  }
-
-  const handleSetToggle = () => {
-    setToggle(!toggle);
-  }
+  UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
 
   const handleDeletePost = () => {
     props.postToDelete(props.post._id);
@@ -65,6 +65,46 @@ function Post(props) {
     return (userFound ? true : false);
   }
 
+  const getCommentFromCommentTBox = (commentFromCallback) => {
+    props.commentToSend(commentFromCallback);
+  }
+
+  const handleViewComments = () => {
+    setViewCommentOn(!viewCommentOn);
+  }
+
+  // Hooks handle view comment toggler logic
+  useEffect(() => {
+    if (viewCommentOn) {
+      props.viewCommentsOf({
+        postId: props.post._id,
+      });
+      setComments(props.comments);
+    } else {       
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      setShouldRenderComments(false)
+    }
+  }, [viewCommentOn])
+
+  useEffect(() => {
+    if (props.comments = []) {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      setShouldRenderComments(true);
+    }
+    if (viewCommentOn && props.comments[0].postId.toString() == props.post._id) {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      setShouldRenderComments(true);
+    } else {        
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      setShouldRenderComments(false) 
+    }
+  }, [props.comments])
+
+  useEffect(() => {
+    if (!shouldRenderComments) setViewCommentOn(false);
+  }, [shouldRenderComments])
+
+  // Hooks handle like button
   useEffect(() => {
     if (isUserFound()) {
       setLiked(true);
@@ -75,11 +115,19 @@ function Post(props) {
     handleLikes();
   }, [liked, noOfLike])
 
+  // const noCommentFound = <View><Text>No comment found</Text></View>;
+  const Comments = shouldRenderComments ? props.comments.map((comment, key) => <Comment key={key} comment={comment}/>) : null;
+  
   const likeBtnType = liked ? 'solid' : 'outline';
   const likeBtnTitle = noOfLike > 1 ? noOfLike + " Likes" : noOfLike + " Like";
 
+  const cmtBtnType = viewCommentOn ? 'solid' : 'outline';
+  const cmtBtnTitle =  viewCommentOn ? "Hide Comments" : "View Comments"; 
+
   return(
-    <Card title={props.post.ownerEmail} containerStyle={{ width: '100%', alignSelf: 'center' }}>
+    <Card 
+      title={props.post.ownerEmail} 
+      containerStyle={{ width: '100%', alignSelf: 'center', borderRadius: 6, borderWidth: 0, borderBottomWidth: 1.2, borderColor: 'grey' }}>
       <View>
         <Text>Post id: {props.post._id.toString()}</Text>
         <Text>Post#: {props.postKey}</Text>
@@ -91,20 +139,32 @@ function Post(props) {
       </View>
 
         <View style={{ flexDirection: 'row', marginVertical: 10 }}>
-          <View style={{ alignItems: 'flex-start'}} >
-            <Button style={{ width: 100}} title={likeBtnTitle} type={likeBtnType} onPress={handleLikeToggle} />
+          <View style={{ alignItems: 'flex-start'}}>
+            <Button 
+              style={{ width: 100}} 
+              title={likeBtnTitle} 
+              type={likeBtnType} 
+              onPress={handleLikeToggle} 
+            />
           </View>
 
-          <View style={{ flexGrow: 1, alignItems: 'flex-start'}} >
-            <Button style={{ width: 100}} title="Comment" type="outline" onPress={() => { handleSetToggle(); alert('Toggle view comment = ' + toggle)}} />
+          <View style={{ flexGrow: 1, alignItems: 'flex-start', marginLeft: 5}} >
+            <Button 
+              style={{ width: 150}} 
+              title={cmtBtnTitle} 
+              type={cmtBtnType} 
+              onPress={handleViewComments}
+            />
           </View>
 
           <View style={{ flexGrow: 1, alignItems: 'flex-end'}} >
-            <Button style={{ width: 50}} type="outline" 
+            <Button 
+              style={{ width: 50}} 
+              type="clear" 
               icon={
                 <Icon
                   name="delete"
-                  size={20}
+                  size={25}
                 />
               }
               onPress={handleDeletePost}
@@ -113,9 +173,12 @@ function Post(props) {
           </View>
         </View>
 
-        <Divider style={{ backgroundColor: 'black' }} />
-        <Comment />
-        <Comment />
+        <Divider />
+        <View>
+          {Comments}
+        </View>
+        <Divider />
+        <CommentTextBox post={props.post} currentUserId={props.currentUserId} getCommentCallback={getCommentFromCommentTBox}/>
     </Card>
     
   );
