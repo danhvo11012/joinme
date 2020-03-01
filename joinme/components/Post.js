@@ -82,22 +82,21 @@ function Post(props) {
       setComments(props.comments);
     } else {       
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-      setShouldRenderComments(false)
+      setShouldRenderComments(false);
     }
   }, [viewCommentOn])
 
   useEffect(() => {
-    if (props.comments = []) {
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-      setShouldRenderComments(true);
-    }
-    if (viewCommentOn && props.comments[0].postId.toString() == props.post._id) {
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-      setShouldRenderComments(true);
-    } else {        
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-      setShouldRenderComments(false) 
-    }
+    if (props.comments != null) {
+      console.log(props.comments);
+      if (viewCommentOn && props.comments[0].postId.toString() == props.post._id) {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        setShouldRenderComments(true);
+      } else {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        setShouldRenderComments(false);
+      }
+    } 
   }, [props.comments])
 
   useEffect(() => {
@@ -115,14 +114,14 @@ function Post(props) {
     handleLikes();
   }, [liked, noOfLike])
 
-  // const noCommentFound = <View><Text>No comment found</Text></View>;
+  
   const Comments = shouldRenderComments ? props.comments.map((comment, key) => <Comment key={key} comment={comment}/>) : null;
   
   const likeBtnType = liked ? 'solid' : 'outline';
   const likeBtnTitle = noOfLike > 1 ? noOfLike + " Likes" : noOfLike + " Like";
 
   const cmtBtnType = viewCommentOn ? 'solid' : 'outline';
-  const cmtBtnTitle =  viewCommentOn ? "Hide Comments" : "View Comments"; 
+  const cmtBtnTitle = viewCommentOn ? "Hide Comments" : "View Comments"; 
 
   return(
     <Card 

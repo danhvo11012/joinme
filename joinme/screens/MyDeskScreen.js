@@ -137,7 +137,7 @@ function MyDeskScreen({ route, navigation }) {
       .asArray()
       .then(res => {
         res.sort((a, b) => a._id < b._id);
-        setPostsComments(res);
+        if (res.length) { setPostsComments(res) } else { setPostsComments(null)}
         setPostsCommentsLoaded(true);
       })
   }
