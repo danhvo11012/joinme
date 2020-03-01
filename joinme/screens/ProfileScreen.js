@@ -130,8 +130,8 @@ function ProfileScreen( { route, navigation }) {
         summary: profile.summary
       }
     }); 
-    
   }
+
   const isSameUser = true;
   const logOut = async () => {      
         client.auth.logout().then(user => {
@@ -200,7 +200,7 @@ function ProfileScreen( { route, navigation }) {
           </View>
         }
         <View style={{ flexDirection: 'row', width: '100%' }} >
-          <View style={{flex:1}}><Text>fd</Text></View>
+          <View style={{flex:1}}></View>
           <View style={styles.socialsContainer}>
             <ProfileSocial
               style={styles.profileSocial}

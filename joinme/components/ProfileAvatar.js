@@ -22,6 +22,7 @@ export const ProfileAvatar = (props: ProfileAvatarProps): React.ReactElement<Vie
     <View style={style}>
       <Avatar
         style={[style, styles.avatar]}
+        
         {...restProps}
         
       />

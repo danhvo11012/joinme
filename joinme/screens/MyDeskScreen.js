@@ -28,6 +28,10 @@ function MyDeskScreen({ route, navigation }) {
 
   const { currentUserId, user } = route.params;
 
+  //profile, if not existed navigate => ProfileSettingScreen 
+  const profiles = db.collection('profiles');
+  
+  //posts
   const [ loadingComplete, setLoadingComplete] = useState(false);
   const [ shouldReload, setShouldReload ] = useState(true );
   const [ isPostReceived, setIsPostReceived ] = useState(false);
@@ -117,6 +121,31 @@ function MyDeskScreen({ route, navigation }) {
     setLoadingComplete(false);
     setShouldReload(true);
   }
+
+  useEffect(()=>{
+    profiles.findOne({ userId: currentUserId })
+            .then((result) => {
+              if (result) {
+                console.log(`found a profile: ${result}.`);
+                //do nothing
+              } else {
+                console.log('No profile, navigate to ProfileSettingScreen.');
+                navigation.navigate('Profile Settings', {
+                    profile: {
+                      id: currentUserId,
+                      firstName: '',
+                      lastName: '',
+                      email: user.email,
+                      school: '',
+                      avatar: '',
+                      city: '',
+                      work: '',
+                      summary: ''
+                  }
+                });
+              }
+            });
+  });
 
   useEffect(()=> {
     if(shouldReload) {

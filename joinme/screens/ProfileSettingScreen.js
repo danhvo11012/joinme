@@ -1,29 +1,63 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import { ScrollView, View, TextInput,Button } from 'react-native';
 import { Button as KittenButton, Layout, StyleService, Text, useStyleSheet } from '@ui-kitten/components';
 import { ProfileSetting } from '../components/ProfileSetting';
 import { ProfileAvatar } from '../components/ProfileAvatar';
 import TabBarIcon from '../components/TabBarIcon'  
 import {Button as ElementButton} from 'react-native-elements' 
+import { Stitch, RemoteMongoClient } from 'mongodb-stitch-react-native-sdk';
 
 export default function ProfileSettingScreen( {route, navigation} ) {
   const { currentUserId, profile } = route.params;
   const styles = useStyleSheet(themedStyles);
 
-  //summary text handling
-  const [summaryText, setSummary] = useState(profile.summary);
-  function handleSummaryText(summaryText) {
-    setSummary(summaryText);
-  }
+  //prepare data to call API
+  const client =  Stitch.defaultAppClient;
+  const mongoClient = client.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas')
+  const db = mongoClient.db('joinme');
+  const profileDetails = db.collection('profiles');
+
+  //profile metrics
+  const [fname, setFname] = useState('');
+  const [lname, setLname] = useState('');
+  const [summary, setSummary] = useState('');
+  const [avatar, setAvatar] = useState('');
+  const [school, setSchool] = useState('');
+  const [work, setWork] = useState('');
+  const [city, setCity] = useState('');
+  
+  //full profile
+  const [fullProfile, setFullProfile] = useState(profile);
+  
   navigation.setOptions({
       headerLeft: () => (
         <Button onPress={() => navigation.goBack()} title="Cancel" />
       ),
   });
-  //console.log(profile);
-  const onDoneButtonPress = (): void => {
-    navigation && navigation.goBack();
-  };
+
+  useEffect(()=>{
+    if(fname!=''||lname!=''||city!=''||work!=''|| avatar!=''|| summary != ''||school!='')
+      handleFulllProfileChange();
+  },[fname,lname,city,work,avatar,summary,school]);
+
+  function onSaveButtonPress() {
+    
+    console.log(fullProfile);
+    profileDetails.findOneAndUpdate({userId: currentUserId}, 
+          {$set: {firstName: fullProfile.firstName,
+                  lastName: fullProfile.lastName,
+                  school: fullProfile.school,
+                  avatar: fullProfile.avatar,
+                  city: fullProfile.city,
+                  work: fullProfile.work,
+                  summary: fullProfile.summary 
+                }
+          }).then(res => {
+        // Do nothing after handling likes.
+        navigation && navigation.goBack();
+      })
+  }
+
   const CameraIcon =()=>{
     return (
       <TabBarIcon 
@@ -32,15 +66,21 @@ export default function ProfileSettingScreen( {route, navigation} ) {
         color="white">
       </TabBarIcon>)
     ;
-  } 
-  const renderPhotoButton = (): React.ReactElement => (
-    <KittenButton
-      style={styles.photoButton}
-      size='small'
-      status='basic'
-      icon={CameraIcon}
-    />
-  );
+  }
+  function handleFulllProfileChange(){   
+    setFullProfile({
+      id: fullProfile.id,
+      firstName: fname,
+      lastName: lname,
+      email: fullProfile.email,
+      school: school,
+      avatar: avatar,
+      city: city,
+      work: work,
+      summary: summary
+    });   
+  }
+ 
   return (
     <ScrollView
       style={styles.container}
@@ -50,55 +90,67 @@ export default function ProfileSettingScreen( {route, navigation} ) {
         level='1'>
         <ProfileAvatar
           style={styles.photo}
-          source={{uri: profile.avatar}}
-          editButton={renderPhotoButton}
+          source={fullProfile.avatar != '' ? {uri: fullProfile.avatar} : require('../assets/images/icon.png')}
+          
         />
         <View style={styles.nameSection}>
           <ProfileSetting
-            type='name'
+            type='fname'
             style={styles.setting}
-            value={profile.firstName}
+            value={fullProfile.firstName}
+            sendTextValue={setFname}
           />
           <ProfileSetting
-            type='name'
+            type='lname'
             style={styles.setting}
-            value={profile.lastName}
+            value={fullProfile.lastName}
+            sendTextValue={setLname}
           />
         </View>
       </Layout>
       <TextInput
         style={styles.description}
         underlineColorAndroid="transparent"
-        placeholder={"Type Something in Text Area."}
+        placeholder={"About me..."}
         placeholderTextColor={"#9E9E9E"}
         numberOfLines={10}
         multiline={true}
-        value={summaryText}
-        onChangeText={handleSummaryText}
+        sendTextValue={setSummary}
+      >
+        {fullProfile.summary}
+      </TextInput>
+      <ProfileSetting
+        style={styles.setting}
+        hint='Avatar Url'
+        value={fullProfile.avatar}
+        sendTextValue={setAvatar}
       />
       <ProfileSetting
         style={[styles.setting, styles.emailSetting]}
         hint='Email'
-        value={profile.email}
+        value={fullProfile.email}
       />
       <ProfileSetting
         style={styles.setting}
         hint='College'
-        value={profile.school}
+        value={fullProfile.school}
+        sendTextValue={setSchool}
       />
       <ProfileSetting
         style={styles.setting}
         hint='Work'
-        value={profile.work}
+        value={fullProfile.work}
+        sendTextValue={setWork}
       />
       <ProfileSetting
         style={styles.setting}
         hint='City'
-        value={profile.city}
+        value={fullProfile.city}
+        sendTextValue={setCity}
       />
       <KittenButton
         style={styles.doneButton}
-        onPress={onDoneButtonPress}
+        onPress={onSaveButtonPress}
         title="Save">
         Save
       </KittenButton>
