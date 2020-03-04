@@ -8,7 +8,8 @@ import {Button as ElementButton} from 'react-native-elements'
 import { Stitch, RemoteMongoClient } from 'mongodb-stitch-react-native-sdk';
 
 export default function ProfileSettingScreen( {route, navigation} ) {
-  const { currentUserId, profile } = route.params;
+  const { profile } = route.params;
+  console.log('From psetting: ' + profile);
   const styles = useStyleSheet(themedStyles);
 
   //prepare data to call API
@@ -28,6 +29,8 @@ export default function ProfileSettingScreen( {route, navigation} ) {
   
   //full profile
   const [fullProfile, setFullProfile] = useState(profile);
+
+  const [ profileReady, setProfileReady ] = useState(false);
   
   navigation.setOptions({
       headerLeft: () => (
@@ -35,27 +38,23 @@ export default function ProfileSettingScreen( {route, navigation} ) {
       ),
   });
 
-  useEffect(()=>{
-    if(fname!=''||lname!=''||city!=''||work!=''|| avatar!=''|| summary != ''||school!='')
-      handleFulllProfileChange();
-  },[fname,lname,city,work,avatar,summary,school]);
+  useEffect(() => {
+    if (profileReady) {
+      console.log(fullProfile);
+      profileDetails.insertOne(fullProfile)
+        .then(res => {
+          console.log('profiles responded: ');
+          console.log(res);
+          navigation && navigation.goBack();
+        });
+
+      setProfileReady(false);
+    }
+  }, [profileReady]);
 
   function onSaveButtonPress() {
-    
-    console.log(fullProfile);
-    profileDetails.findOneAndUpdate({userId: currentUserId}, 
-          {$set: {firstName: fullProfile.firstName,
-                  lastName: fullProfile.lastName,
-                  school: fullProfile.school,
-                  avatar: fullProfile.avatar,
-                  city: fullProfile.city,
-                  work: fullProfile.work,
-                  summary: fullProfile.summary 
-                }
-          }).then(res => {
-        // Do nothing after handling likes.
-        navigation && navigation.goBack();
-      })
+    handleFulllProfileChange();
+    setProfileReady(true);
   }
 
   const CameraIcon =()=>{
@@ -67,9 +66,10 @@ export default function ProfileSettingScreen( {route, navigation} ) {
       </TabBarIcon>)
     ;
   }
+
   function handleFulllProfileChange(){   
     setFullProfile({
-      id: fullProfile.id,
+      userId: profile.userId,
       firstName: fname,
       lastName: lname,
       email: fullProfile.email,

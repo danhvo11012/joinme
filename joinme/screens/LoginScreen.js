@@ -77,7 +77,6 @@ export default class LoginScreen extends Component {
         this.setState({ currentUserId: client.auth.user.id });
         console.log('Currently loggedIn user: ' + this.state.currentUserId);
         
-
         this.props.navigation.navigate('App', {  
           currentUserId: this.state.currentUserId,
           user: {

@@ -3,8 +3,8 @@
   "expoServerPort": null,
   "packagerPort": null,
   "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "expoServerNgrokUrl": "https://9r-h39.anonymous.joinme.exp.direct",
+  "packagerNgrokUrl": "https://packager.9r-h39.anonymous.joinme.exp.direct",
+  "ngrokPid": 20048,
   "webpackServerPort": 19006
 }
