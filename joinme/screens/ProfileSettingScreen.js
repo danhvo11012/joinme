@@ -43,8 +43,8 @@ export default function ProfileSettingScreen( {route, navigation} ) {
   function onSaveButtonPress() {
     
     console.log(fullProfile);
-    profileDetails.findOneAndUpdate({userId: currentUserId}, 
-          {$set: {firstName: fullProfile.firstName,
+    profileDetails.insertOne( 
+          {firstName: fullProfile.firstName,
                   lastName: fullProfile.lastName,
                   school: fullProfile.school,
                   avatar: fullProfile.avatar,
@@ -52,8 +52,8 @@ export default function ProfileSettingScreen( {route, navigation} ) {
                   work: fullProfile.work,
                   summary: fullProfile.summary 
                 }
-          }).then(res => {
-        // Do nothing after handling likes.
+          ).then(res => {
+        //after submitting changes, go back
         navigation && navigation.goBack();
       })
   }
@@ -149,7 +149,7 @@ export default function ProfileSettingScreen( {route, navigation} ) {
         sendTextValue={setCity}
       />
       <KittenButton
-        style={styles.doneButton}
+        style={styles.saveButton}
         onPress={onSaveButtonPress}
         title="Save">
         Save
@@ -196,7 +196,7 @@ const themedStyles = StyleService.create({
     paddingTop:15,
     
   },
-  doneButton: {
+  saveButton: {
     marginHorizontal: 24,
     marginTop: 24,
   },
