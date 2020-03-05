@@ -15,7 +15,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Input, Button as ElementsButton, Icon, Image } from 'react-native-elements';
 import { ImageOverlay } from '../components/ImageOverlay';
 import { ProfileSocial } from '../components/ProfileSocial';
-import { Post, Profile } from './profile-7/extra/data';
+
 import TabBarIcon from '../components/TabBarIcon'
 import { Avatar, Button, List, StyleService, Text, useStyleSheet } from '@ui-kitten/components';
 import ProfileSchema from '../constants/ProfileSchema';
@@ -150,7 +150,7 @@ function ProfileScreen( { route, navigation }) {
       <ScrollView style={styles.container}>
       <ImageOverlay
         style={styles.header}
-        source={require('./profile-7/assets/image-background.jpg')}>
+        source={require('../assets/images/profile_bg.jpg')}>
        
         <Avatar
           style={styles.profileAvatar}
