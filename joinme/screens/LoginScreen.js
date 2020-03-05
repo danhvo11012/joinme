@@ -15,8 +15,8 @@ import {
 import { Input, Button, Icon } from 'react-native-elements';
 import TabBarIcon from '../components/TabBarIcon';
 // Import Stitch features
-import { Stitch, UserPasswordCredential, UserPasswordAuthProviderClient } from 'mongodb-stitch-react-native-sdk';
-
+import { Stitch, UserPasswordCredential, UserPasswordAuthProviderClient,RemoteMongoClient } from 'mongodb-stitch-react-native-sdk';
+import ProfileSchema from '../constants/ProfileSchema';
 const BG_IMAGE = require('../assets/images/bg_screen4.jpg');
 
 // Enable LayoutAnimation on Android
@@ -126,6 +126,10 @@ export default class LoginScreen extends Component {
     return re.test(email);
   }
   
+  createEmptyProfile(){
+
+  }
+
   /** 
    * login()
    *  Set states: email, password and perform login operation after validating them.
@@ -167,7 +171,6 @@ export default class LoginScreen extends Component {
             //clear password
             this.clear_password();
             // Navigate to App route. See navigation/AuthNavigator.js
-  
             this.props.navigation.navigate('App', {
               currentUserId: this.state.currentUserId,
               user: {

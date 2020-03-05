@@ -18,7 +18,7 @@ import { ProfileSocial } from '../components/ProfileSocial';
 import { Post, Profile } from './profile-7/extra/data';
 import TabBarIcon from '../components/TabBarIcon'
 import { Avatar, Button, List, StyleService, Text, useStyleSheet } from '@ui-kitten/components';
-
+import ProfileSchema from '../constants/ProfileSchema';
 function ProfileScreen( { route, navigation }) {
   YellowBox.ignoreWarnings(['VirtualizedLists should never be nested inside plain ScrollViews']);
   
@@ -26,13 +26,12 @@ function ProfileScreen( { route, navigation }) {
   const client =  Stitch.defaultAppClient;
   const mongoClient = client.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas')
   const db = mongoClient.db('joinme');
-  const profileDetails = db.collection('profiles');
+  const profiles = db.collection('profiles');
 
   //state
   const { currentUserId, user } = route.params;
   const [ loadingComplete, setLoadingComplete] = useState(false);
   const [ profile, setProfile ] = useState(null);
-  const [ showAlert, setShowAlert] = useState(false);
  
   const styles = useStyleSheet(themedStyle);
 
@@ -44,23 +43,6 @@ function ProfileScreen( { route, navigation }) {
     
   };
   
-  const renderFriendItem = (info: ListRenderItemInfo<Profile>): React.ReactElement => (
-    <View style={styles.friendItem}>
-      <Avatar source={info.item.photo}/>
-      <Text
-        style={styles.friendName}
-        category='c2'>
-        {info.item.firstName}
-      </Text>
-    </View>
-  );
-
-  const renderPostItem = (info: ListRenderItemInfo<Post>): React.ReactElement => (
-    <ImageBackground
-      style={styles.postItem}
-      source={info.item.photo}
-    />
-  );
   //icons
   const MessageCircleIcon = () => {
     return(
@@ -83,39 +65,49 @@ function ProfileScreen( { route, navigation }) {
       <TabBarIcon  size={35} color="#bababa" name="ios-log-out"></TabBarIcon>
     );
   };
-  
-  const friends: Profile[] = [
-  Profile.jenAustin(),
-  Profile.jenniferGreen(),
-  Profile.helenKuper(),
-  Profile.jenAustin(),
-  Profile.jenniferGreen(),
-  Profile.helenKuper(),
-];  
-  const posts: Post[] = [
-    Post.plant1(),
-    Post.travel1(),
-    Post.style1(),
-    Post.style1(),
-    Post.plant1(),
-    Post.travel1(),
-    Post.travel1(),
-    Post.style1(),
-    Post.plant1(),
-  ];
 
   useEffect(() => {
-    function handleSetProfile(results) {
-      setProfile(results);
-    }
-    profileDetails.findOne({})
-      .then(results => {
-        handleSetProfile(results);
+    if(!loadingComplete)
+    {
+      profiles.findOne({ userId: currentUserId })
+      .then((result) => {
+        if (result) {
+          console.log(`found the profile!`);
+          setProfile(result);
+        } else {
+          console.log('No profile');
+          //create a new profile
+          const profile = ProfileSchema(currentUserId, user.email);
+          profiles.insertOne(profile)
+          .then(res => {
+            console.log('profiles responded: ');
+            console.log(res);
+          });
+          setProfile(profile);
+        }
         setLoadingComplete(true);
-      });
-  }, []);
+      }, [loadingComplete]);
+    }
+  });
+
+  // useEffect(() => {
+  //   if(!loadingComplete)
+  //   {
+  //     profiles.findOne({userId: currentUserId})
+  //       .then(results => {
+  //         console.log(results);
+  //         setProfile(results);
+  //         setLoadingComplete(true);
+  //     });
+  //   }
+  // }, [loadingComplete]);
   
+  function reload() {
+    setLoadingComplete(false);
+  }
+
   function onEditButtonPress() {
+    
     navigation.navigate('Profile Settings', {
       //pass profile data to edit screen
       profile: {
@@ -128,7 +120,8 @@ function ProfileScreen( { route, navigation }) {
         city: profile.city,
         work: profile.work,
         summary: profile.summary
-      }
+      },
+      onGoBack: () => reload()
     }); 
   }
 
@@ -156,7 +149,7 @@ function ProfileScreen( { route, navigation }) {
        
         <Avatar
           style={styles.profileAvatar}
-          source={{uri: profile.avatar}}
+          source={profile.avatar != '' ? {uri: profile.avatar}}
         />
         <Text
           style={styles.profileName}
@@ -225,7 +218,6 @@ function ProfileScreen( { route, navigation }) {
                 icon={LogOutIcon}
                 onPress={logOut}
                 type="clear"
-                // status='danger'
                 >
             </ElementsButton>
           </View>

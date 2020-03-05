@@ -7,9 +7,10 @@ import TabBarIcon from '../components/TabBarIcon'
 import {Button as ElementButton} from 'react-native-elements' 
 import { Stitch, RemoteMongoClient } from 'mongodb-stitch-react-native-sdk';
 
-export default function ProfileSettingScreen( {route, navigation} ) {
+export default function ProfileSettingScreen(props) {
+  const {route, navigation} = props;
   const { profile } = route.params;
-  console.log('From psetting: ' + profile);
+  //console.log('From psetting: ' + profile);
   const styles = useStyleSheet(themedStyles);
 
   //prepare data to call API
@@ -19,13 +20,13 @@ export default function ProfileSettingScreen( {route, navigation} ) {
   const profileDetails = db.collection('profiles');
 
   //profile metrics
-  const [fname, setFname] = useState('');
-  const [lname, setLname] = useState('');
-  const [summary, setSummary] = useState('');
-  const [avatar, setAvatar] = useState('');
-  const [school, setSchool] = useState('');
-  const [work, setWork] = useState('');
-  const [city, setCity] = useState('');
+  const [fname, setFname] = useState(profile.firstName);
+  const [lname, setLname] = useState(profile.lastName);
+  const [summary, setSummary] = useState(profile.summary);
+  const [avatar, setAvatar] = useState(profile.avatar);
+  const [school, setSchool] = useState(profile.school);
+  const [work, setWork] = useState(profile.work);
+  const [city, setCity] = useState(profile.city);
   
   //full profile
   const [fullProfile, setFullProfile] = useState(profile);
@@ -41,13 +42,16 @@ export default function ProfileSettingScreen( {route, navigation} ) {
   useEffect(() => {
     if (profileReady) {
       console.log(fullProfile);
-      profileDetails.insertOne(fullProfile)
-        .then(res => {
+      profileDetails.findOneAndUpdate(
+        { userId: fullProfile.userId },
+        { $set: fullProfile }
+      ).then(res => {
           console.log('profiles responded: ');
           console.log(res);
+          route.params.onGoBack();
+
           navigation && navigation.goBack();
         });
-
       setProfileReady(false);
     }
   }, [profileReady]);
@@ -69,7 +73,7 @@ export default function ProfileSettingScreen( {route, navigation} ) {
 
   function handleFulllProfileChange(){   
     setFullProfile({
-      userId: profile.userId,
+      userId: fullProfile.userId,
       firstName: fname,
       lastName: lname,
       email: fullProfile.email,
@@ -91,7 +95,6 @@ export default function ProfileSettingScreen( {route, navigation} ) {
         <ProfileAvatar
           style={styles.photo}
           source={fullProfile.avatar != '' ? {uri: fullProfile.avatar} : require('../assets/images/icon.png')}
-          
         />
         <View style={styles.nameSection}>
           <ProfileSetting
@@ -115,7 +118,7 @@ export default function ProfileSettingScreen( {route, navigation} ) {
         placeholderTextColor={"#9E9E9E"}
         numberOfLines={10}
         multiline={true}
-        sendTextValue={setSummary}
+        onChangeText={setSummary}
       >
         {fullProfile.summary}
       </TextInput>

@@ -1,20 +1,9 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": null,
-  "packagerPort": null,
-  "packagerPid": null,
-<<<<<<< HEAD
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-<<<<<<< HEAD
-  "ngrokPid": null
-=======
-  "ngrokPid": null,
-=======
-  "expoServerNgrokUrl": "https://9r-h39.anonymous.joinme.exp.direct",
-  "packagerNgrokUrl": "https://packager.9r-h39.anonymous.joinme.exp.direct",
-  "ngrokPid": 20048,
->>>>>>> dvo
-  "webpackServerPort": 19006
->>>>>>> origin
+  "expoServerPort": 19000,
+  "packagerPort": 19015,
+  "packagerPid": 94760,
+  "expoServerNgrokUrl": "https://dg-qmt.anonymous.joinme.exp.direct",
+  "packagerNgrokUrl": "https://packager.dg-qmt.anonymous.joinme.exp.direct",
+  "ngrokPid": 94770
 }
