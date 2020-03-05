@@ -3,12 +3,18 @@
   "expoServerPort": null,
   "packagerPort": null,
   "packagerPid": null,
+<<<<<<< HEAD
   "expoServerNgrokUrl": null,
   "packagerNgrokUrl": null,
 <<<<<<< HEAD
   "ngrokPid": null
 =======
   "ngrokPid": null,
+=======
+  "expoServerNgrokUrl": "https://9r-h39.anonymous.joinme.exp.direct",
+  "packagerNgrokUrl": "https://packager.9r-h39.anonymous.joinme.exp.direct",
+  "ngrokPid": 20048,
+>>>>>>> dvo
   "webpackServerPort": 19006
 >>>>>>> origin
 }

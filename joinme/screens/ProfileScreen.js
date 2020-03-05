@@ -119,7 +119,7 @@ function ProfileScreen( { route, navigation }) {
     navigation.navigate('Profile Settings', {
       //pass profile data to edit screen
       profile: {
-        id: profile.userId,
+        userId: currentUserId,
         firstName: profile.firstName,
         lastName: profile.lastName,
         email: profile.email,
@@ -144,6 +144,7 @@ function ProfileScreen( { route, navigation }) {
           console.log(`User ${user} failed to log out: ${err}`);
         });
   }
+
   if (!loadingComplete) {
     return null;
   } else {

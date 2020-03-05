@@ -25,6 +25,7 @@ import {
 import Post from '../components/Post'
 import { Input, Button, Icon, colors } from 'react-native-elements';
 import CreatePostModal from '../components/CreatePostModal';
+import ProfileSchema from '../constants/ProfileSchema';
 
 function MyDeskScreen({ route, navigation }) {
   const client =  Stitch.defaultAppClient;
@@ -55,6 +56,8 @@ function MyDeskScreen({ route, navigation }) {
   const [ postsAndComments, setPostsAndComments ] = useState(null);
 
   const [ showSpinner, setShowSpinner ] = useState(false);
+
+  const [ profileChecked, setProfileChecked ] = useState(false);
   
   UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
 
@@ -180,29 +183,23 @@ function MyDeskScreen({ route, navigation }) {
   }
 
   useEffect(()=>{
-    profiles.findOne({ userId: currentUserId })
-            .then((result) => {
-              if (result) {
-                console.log(`found a profile: ${result}.`);
-                //do nothing
-              } else {
-                console.log('No profile, navigate to ProfileSettingScreen.');
-                navigation.navigate('Profile Settings', {
-                    profile: {
-                      id: currentUserId,
-                      firstName: '',
-                      lastName: '',
-                      email: user.email,
-                      school: '',
-                      avatar: '',
-                      city: '',
-                      work: '',
-                      summary: ''
-                  }
-                });
-              }
-            });
-  });
+    if (!profileChecked) {
+      profiles.findOne({ userId: currentUserId })
+      .then((result) => {
+        if (result) {
+          console.log(`found the profile!`);
+          //do nothing
+        } else {
+          console.log('No profile, navigate to ProfileSettingScreen.');
+          // ProfileSchema is defined in '../constants/ProfileSchema.js', it takes userId and userEmail as params
+          // and returns a profile object for reusing purposes.
+          const profile = ProfileSchema(currentUserId, user.email);
+          navigation.navigate('Profile Settings', {profile});
+        }
+        setProfileChecked(true);
+      });
+    }
+  }, [profileChecked]);
 
   useEffect(()=> {
     if(shouldReload) {
@@ -302,7 +299,6 @@ function MyDeskScreen({ route, navigation }) {
             style={{ width: 200, marginVertical: 5 }}
             onPress={handlePageReload}
           />
-          {Indicator}
           <View 
             style={{ marginVertical: 5 }}
           >
