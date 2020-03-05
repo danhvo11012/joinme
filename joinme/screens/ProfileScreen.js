@@ -29,10 +29,14 @@ function ProfileScreen( { route, navigation }) {
   const profiles = db.collection('profiles');
 
   //state
-  const { currentUserId, user } = route.params;
+  const { currentUserId, user, shouldReload } = route.params;
+  console.log(isShouldReload);
+  
   const [ loadingComplete, setLoadingComplete] = useState(false);
   const [ profile, setProfile ] = useState(null);
  
+  
+
   const styles = useStyleSheet(themedStyle);
 
   const onFollowButtonPress = (): void => {
@@ -65,6 +69,12 @@ function ProfileScreen( { route, navigation }) {
       <TabBarIcon  size={35} color="#bababa" name="ios-log-out"></TabBarIcon>
     );
   };
+
+  useEffect(()=>{
+    if(shouldReload){
+      setLoadingComplete(false);
+    }
+  },[shouldReload]);
 
   useEffect(() => {
     if(!loadingComplete)
@@ -101,10 +111,6 @@ function ProfileScreen( { route, navigation }) {
   //     });
   //   }
   // }, [loadingComplete]);
-  
-  function reload() {
-    setLoadingComplete(false);
-  }
 
   function onEditButtonPress() {
     
@@ -120,8 +126,7 @@ function ProfileScreen( { route, navigation }) {
         city: profile.city,
         work: profile.work,
         summary: profile.summary
-      },
-      onGoBack: () => reload()
+      }
     }); 
   }
 
@@ -149,7 +154,7 @@ function ProfileScreen( { route, navigation }) {
        
         <Avatar
           style={styles.profileAvatar}
-          source={profile.avatar != '' ? {uri: profile.avatar}}
+          source={profile.avatar != '' ? {uri: profile.avatar} : require('../assets/images/default_avatar.jpg')}
         />
         <Text
           style={styles.profileName}
@@ -254,7 +259,8 @@ const themedStyle = StyleService.create({
     width: 124,
     height: 124,
     borderRadius: 62,
-    top: '-5%'
+    top: '-5%',
+    marginTop: 10
   },
   profileName: {
     zIndex: 1,

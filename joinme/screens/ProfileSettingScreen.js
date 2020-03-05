@@ -48,9 +48,9 @@ export default function ProfileSettingScreen(props) {
       ).then(res => {
           console.log('profiles responded: ');
           console.log(res);
-          route.params.onGoBack();
+          // route.params.onGoBack();
 
-          navigation && navigation.goBack();
+          navigation && navigation.navigate('Profile',{shouldReload: true});
         });
       setProfileReady(false);
     }
@@ -94,7 +94,7 @@ export default function ProfileSettingScreen(props) {
         level='1'>
         <ProfileAvatar
           style={styles.photo}
-          source={fullProfile.avatar != '' ? {uri: fullProfile.avatar} : require('../assets/images/icon.png')}
+          source={fullProfile.avatar != '' ? {uri: fullProfile.avatar} : require('../assets/images/default_avatar.jpg')}
         />
         <View style={styles.nameSection}>
           <ProfileSetting
