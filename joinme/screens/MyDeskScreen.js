@@ -1,3 +1,9 @@
+/**
+ * MyDeskScreen
+ * 
+ * @author Danh Vo
+ * @version 1.0
+ */
 import React, { useState, useEffect, useCallback } from 'react'
 import { Stitch, AnonymousCredential, UserPasswordCredential, RemoteMongoClient } from 'mongodb-stitch-react-native-sdk';
 
@@ -25,6 +31,7 @@ function MyDeskScreen({ route, navigation }) {
   const mongoClient = client.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas')
   const db = mongoClient.db('joinme');
   const posts = db.collection('posts');
+  const comments = db.collection('comments');
 
   const { currentUserId, user } = route.params;
 
@@ -36,19 +43,28 @@ function MyDeskScreen({ route, navigation }) {
   const [ shouldReload, setShouldReload ] = useState(true );
   const [ isPostReceived, setIsPostReceived ] = useState(false);
   const [ isPostReady, setIsPostReady ] = useState(false);
+  const [ isCommentReceived, setIsCommentReceived ] = useState(false);
+  const [ postsCommentsLoaded, setPostsCommentsLoaded ] = useState(false);
 
   const [ myPosts, setMyPosts] = useState(null);
   const [ showCreateNewPostModal, setShowCreateNewPostModal ] = useState(false);
   const [ postFromModal, setPostFromModal ] = useState(null);
   const [ fullPost, setFullPost ] = useState(null);
 
+  const [ postsComments, setPostsComments ] = useState(null);
+  const [ postsAndComments, setPostsAndComments ] = useState(null);
+
   const [ showSpinner, setShowSpinner ] = useState(false);
   
+  UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+
   const createNewPost = () => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setShowCreateNewPostModal(true);
   }
 
   const handlePost = (modalShow) => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setShowCreateNewPostModal(modalShow);
   }
 
@@ -62,6 +78,7 @@ function MyDeskScreen({ route, navigation }) {
     posts.findOneAndDelete({_id: postId})
       .then(res => {
         console.log('response from delete: ', res);
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         setShouldReload(true);
         setLoadingComplete(false);
       })
@@ -77,10 +94,9 @@ function MyDeskScreen({ route, navigation }) {
   }
 
   const handleLikeSignal = (signal) => {
-    console.log('likes from post: ' + signal.likes + '; is liked by: ' + signal.likers);
     posts.findOneAndUpdate({_id: signal.postId}, {$set: {likes: signal.likes, likers: Array.from(signal.likers) }})
-      .then(res => {
-        // Do nothing after handling likes.
+      .then((res) => {
+        // console.log('Update likes of post ' + signal.postId );
       })
   }
 
@@ -94,6 +110,8 @@ function MyDeskScreen({ route, navigation }) {
   * postDate = new Date();
   * postContent: TextInput
   * preferred: Preferred exp
+  * likes: number of likes
+  * likers: userId of those who liked this post
   */
   const handleSetFullPost = () => {
     if(isPostReceived) {
@@ -107,6 +125,45 @@ function MyDeskScreen({ route, navigation }) {
         likers: [],
         likes: 0,
       });
+    }
+  }
+
+  const handleViewComment = (viewCommentSignal) => {
+    if (viewCommentSignal != null) {
+      // console.log(viewCommentSignal);
+      getComments(viewCommentSignal);
+    }
+  }
+
+  const getComments = (signal) => {
+    // console.log(signal.postId);
+    comments.find({ postId: signal.postId })
+      .asArray()
+      .then(res => {
+        res.sort((a, b) => a._id < b._id);
+        if (res.length) { setPostsComments(res) } else { setPostsComments(null)}
+        setPostsCommentsLoaded(true);
+      })
+  }
+
+  useEffect(() => {
+    if (postsCommentsLoaded) {
+      // console.log(postsComments);
+      setPostsCommentsLoaded(false);
+    } 
+  }, [postsCommentsLoaded])
+
+  const handleSendComment = (commentFromCommentTBox) => {
+    // console.log(commentFromCommentTBox);
+    if (commentFromCommentTBox) {
+      setShowSpinner(true);
+      setIsCommentReceived(true);
+      comments.insertOne(commentFromCommentTBox)
+        .then((res) => {
+          LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+          setLoadingComplete(false);
+          setShouldReload(true);
+        });
     }
   }
 
@@ -154,9 +211,9 @@ function MyDeskScreen({ route, navigation }) {
       }
       posts.find({ ownerId: currentUserId })
         .toArray()
-        .then(results => {
-          results.sort((a, b) => a._id < b._id);  // Sort results by document's id
-          handleSetPosts(results);
+        .then(res => {
+          res.sort((a, b) => a._id < b._id);  // Sort results by document's id
+          handleSetPosts(res);
           setLoadingComplete(true);
           resetLogicStates();
         });
@@ -165,6 +222,12 @@ function MyDeskScreen({ route, navigation }) {
       setTimeout(() => {setShowSpinner(false)}, 500);
     }
   }, [shouldReload, loadingComplete, showSpinner]);
+
+  useEffect(() => {
+    if (myPosts && postsComments) {
+      // working...
+    }
+  }, [myPosts, postsComments])
 
   useEffect(() => {
     if (isPostReceived) {
@@ -180,6 +243,7 @@ function MyDeskScreen({ route, navigation }) {
       console.log('Full post: ', fullPost);
       posts.insertOne(fullPost).then(res => {
         console.log('Response from stitch: ', res);
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         setLoadingComplete(false);
         setShouldReload(true);
       })
@@ -201,6 +265,24 @@ function MyDeskScreen({ route, navigation }) {
       color="grey"
     />
   </View>;
+
+  const Posts = myPosts ? myPosts.map((post, i) => {
+    return (
+      <Post 
+        key={i} 
+        currentUserId={currentUserId} 
+        post={post} 
+        postKey={i} 
+        postToDelete={getPostToDelete} 
+        likeSignal={getLikeSignal} 
+        comments={postsComments}
+        viewCommentsOf={handleViewComment}
+        commentToSend={handleSendComment}
+      />
+    )
+  }
+    
+  ) : null;
 
   if (!loadingComplete) { return (Indicator) } 
   else {
@@ -232,7 +314,9 @@ function MyDeskScreen({ route, navigation }) {
             </Modal>
 
           </View>
-          {myPosts.map((post, i) => <Post key={i} currentUserId={currentUserId} post={post} postKey={i} postToDelete={getPostToDelete} likeSignal={getLikeSignal} />)}
+
+          {Posts}
+
         </View> 
       </ScrollView>
     );

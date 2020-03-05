@@ -24,7 +24,7 @@ import {
 
 
 
-export default function Comment() {
+function Comment(props) {
 const [ pressedLike, setPressedLike] = useState(false);
 const [ noOfLike, setNoOfLike ] = useState(0);
 
@@ -32,6 +32,17 @@ const like_images = {
   liked: require('../assets/images/liked_icon.png'),
   not_liked: require('../assets/images/not_liked_icon.png')
 }
+
+const comment = {
+  ownerId: props.comment.ownerId,
+  ownerfullName: 'Waiting for profile Fullname',
+  avatar: 'https://lh3.googleusercontent.com/proxy/QEkBUv73UTIeaNyMGLqI0w-nVDL-jd6RD8n5cu-klG66Iz23pvNeqWjhM0Q9V_GY-TQetjZQmMRbIBAZqTL0EYLg5EJ5_WkA6yy4azcLCg',
+  content: props.comment.content,
+};
+
+useEffect(() => {
+  // console.log(comment);d
+})
 
 function onLikePressed () {
   if (pressedLike) {
@@ -45,11 +56,10 @@ function onLikePressed () {
 }
 
   return(
-   
       <View style={styles.container}>
         <Avatar
           style={styles.photo}
-          source={{uri: comment.avatar}}
+          source={{uri: 'https://lh3.googleusercontent.com/proxy/QEkBUv73UTIeaNyMGLqI0w-nVDL-jd6RD8n5cu-klG66Iz23pvNeqWjhM0Q9V_GY-TQetjZQmMRbIBAZqTL0EYLg5EJ5_WkA6yy4azcLCg'}}
         />
         <View style={{}}>
           <View style={styles.contentSection}>
@@ -71,18 +81,14 @@ function onLikePressed () {
   
   );
 }
-const comment = {
-  ownerId: 'someone@gmail.com',
-  ownerfullName: 'Nameless Boyy',
-  avatar: 'https://lh3.googleusercontent.com/proxy/QEkBUv73UTIeaNyMGLqI0w-nVDL-jd6RD8n5cu-klG66Iz23pvNeqWjhM0Q9V_GY-TQetjZQmMRbIBAZqTL0EYLg5EJ5_WkA6yy4azcLCg',
-  content: 'Hi, my name is Seh and I\'m the cutest pug alive.'
-};
+
+export default Comment;
+
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     marginHorizontal: "2.5%",
     marginTop: "2%",
-    //backgroundColor: 'red'
   },
   photo: {
     aspectRatio: 1.0,
@@ -94,9 +100,9 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 10,
     marginTop: 5,
-    borderRadius: 18,
+    borderRadius: 3,
     backgroundColor:'#f2f3f5',
-    width: '95%'
+    width: '100%'
   },
   name: {
     fontWeight: 'bold'
@@ -112,7 +118,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginTop: '3%',
     color: '#606770',
-    left: '25%',
+    left: '50%',
     bottom: '5%'
   },
   reaction_container: {
@@ -122,7 +128,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingHorizontal: 5,
     paddingVertical: 2,
-    borderRadius: 8,
+    borderRadius: 3,
     bottom: -18,
     //right: -8,
     left: 10,
