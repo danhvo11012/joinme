@@ -30,7 +30,7 @@ function ProfileScreen( { route, navigation }) {
 
   //state
   const { currentUserId, user, shouldReload } = route.params;
-  console.log(isShouldReload);
+  console.log(shouldReload);
   
   const [ loadingComplete, setLoadingComplete] = useState(false);
   const [ profile, setProfile ] = useState(null);
