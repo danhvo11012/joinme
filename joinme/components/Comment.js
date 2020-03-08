@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+
+import { Stitch, RemoteMongoClient } from 'mongodb-stitch-react-native-sdk';
+
 import {Layout, Avatar} from '@ui-kitten/components';
 import {
   StyleSheet,
@@ -25,41 +28,57 @@ import {
 
 
 function Comment(props) {
-const [ pressedLike, setPressedLike] = useState(false);
-const [ noOfLike, setNoOfLike ] = useState(0);
 
-const like_images = {
-  liked: require('../assets/images/liked_icon.png'),
-  not_liked: require('../assets/images/not_liked_icon.png')
-}
+  const client =  props.client;
+  const mongoClient = client.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas')
+  const db = mongoClient.db('joinme');
 
-const comment = {
-  ownerId: props.comment.ownerId,
-  ownerfullName: 'Waiting for profile Fullname',
-  avatar: 'https://lh3.googleusercontent.com/proxy/QEkBUv73UTIeaNyMGLqI0w-nVDL-jd6RD8n5cu-klG66Iz23pvNeqWjhM0Q9V_GY-TQetjZQmMRbIBAZqTL0EYLg5EJ5_WkA6yy4azcLCg',
-  content: props.comment.content,
-};
+  //profile, if not existed navigate => ProfileSettingScreen 
+  const profiles = db.collection('profiles');
 
-useEffect(() => {
-  // console.log(comment);d
-})
+  const [ profile, setProfile ] = useState(null);
 
-function onLikePressed () {
-  if (pressedLike) {
-    setPressedLike(false);
-    setNoOfLike(noOfLike - 1);
-    
-  } else {
-    setPressedLike(true);
-    setNoOfLike(noOfLike + 1);
+  const [ pressedLike, setPressedLike] = useState(false);
+  const [ noOfLike, setNoOfLike ] = useState(0);
+
+  const like_images = {
+    liked: require('../assets/images/liked_icon.png'),
+    not_liked: require('../assets/images/not_liked_icon.png')
   }
-}
 
-  return(
+  useEffect(() => {
+    if (!profile) {
+      profiles.findOne({ userId: props.comment.ownerId })
+        .then(res => {
+          setProfile(res);
+        })
+    }
+  }, [profile])
+
+  function onLikePressed () {
+    if (pressedLike) {
+      setPressedLike(false);
+      setNoOfLike(noOfLike - 1);
+      
+    } else {
+      setPressedLike(true);
+      setNoOfLike(noOfLike + 1);
+    }
+  }
+
+  const comment = profile ? {
+    ownerId: props.comment.ownerId,
+    ownerfullName: profile.firstName + ' ' + profile.lastName,
+    content: props.comment.content,
+  } : null ;
+
+  if (!profile) { return null }
+  else {
+    return(
       <View style={styles.container}>
         <Avatar
           style={styles.photo}
-          source={{uri: 'https://lh3.googleusercontent.com/proxy/QEkBUv73UTIeaNyMGLqI0w-nVDL-jd6RD8n5cu-klG66Iz23pvNeqWjhM0Q9V_GY-TQetjZQmMRbIBAZqTL0EYLg5EJ5_WkA6yy4azcLCg'}}
+          source={{uri: profile.avatar}}
         />
         <View style={{}}>
           <View style={styles.contentSection}>
@@ -78,9 +97,9 @@ function onLikePressed () {
           
         </View>
       </View>
-  
-  );
-}
+    );
+  }
+};
 
 export default Comment;
 

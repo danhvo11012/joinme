@@ -64,7 +64,7 @@ function CommentTextBox(props) {
             height: 90,
           }}
           size="large"
-          source={{uri: 'https://media.istockphoto.com/photos/cute-dog-pug-breed-have-a-question-and-making-funny-face-feeling-so-picture-id1042296844?k=6&m=1042296844&s=170667a&w=0&h=VJSqB56KQC_n7utLi4lJ2hZI7Yli_CqtcS4ZqvF034c='}}
+          source={{uri: props.userAvatar}}
       />
 
       <TextInput 

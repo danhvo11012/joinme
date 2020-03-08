@@ -37,11 +37,14 @@ function MyDeskScreen({ route, navigation }) {
   const { currentUserId, user } = route.params;
 
   //profile, if not existed navigate => ProfileSettingScreen 
-  // const profiles = db.collection('profiles');
+  const profiles = db.collection('profiles');
   
   //posts
   const [ loadingComplete, setLoadingComplete] = useState(false);
   const [ shouldReload, setShouldReload ] = useState(true );
+  const [ profile, setProfile ] = useState(null);
+  const [ avatarHandler, setAvatarHandler ] = useState('../assets/images/no-avatar.jpeg');
+
   const [ isPostReceived, setIsPostReceived ] = useState(false);
   const [ isPostReady, setIsPostReady ] = useState(false);
   const [ isCommentReceived, setIsCommentReceived ] = useState(false);
@@ -56,8 +59,6 @@ function MyDeskScreen({ route, navigation }) {
   const [ postsAndComments, setPostsAndComments ] = useState(null);
 
   const [ showSpinner, setShowSpinner ] = useState(false);
-
-  // const [ profileChecked, setProfileChecked ] = useState(false);
   
   UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
 
@@ -131,12 +132,12 @@ function MyDeskScreen({ route, navigation }) {
     }
   }
 
-  const handleViewComment = (viewCommentSignal) => {
-    if (viewCommentSignal != null) {
-      // console.log(viewCommentSignal);
-      getComments(viewCommentSignal);
-    }
-  }
+  // const handleViewComment = (viewCommentSignal) => {
+  //   if (viewCommentSignal != null) {
+  //     // console.log(viewCommentSignal);
+  //     getComments(viewCommentSignal);
+  //   }
+  // }
 
   const getComments = (signal) => {
     // console.log(signal.postId);
@@ -148,6 +149,17 @@ function MyDeskScreen({ route, navigation }) {
         setPostsCommentsLoaded(true);
       })
   }
+
+  useEffect(() => {
+    if (!profile) {
+      profiles.findOne({userId: currentUserId})
+        .then(res => {
+          setProfile(res);
+        });
+    } else {
+      setAvatarHandler(profile.avatar);
+    }
+  },[profile]);
 
   useEffect(() => {
     if (postsCommentsLoaded) {
@@ -204,12 +216,6 @@ function MyDeskScreen({ route, navigation }) {
   }, [shouldReload, loadingComplete, showSpinner]);
 
   useEffect(() => {
-    if (myPosts && postsComments) {
-      // working...
-    }
-  }, [myPosts, postsComments])
-
-  useEffect(() => {
     if (isPostReceived) {
       setShowSpinner(true);
       console.log(postFromModal);
@@ -250,19 +256,17 @@ function MyDeskScreen({ route, navigation }) {
     return (
       <Post 
         key={i} 
+        client={client}
         currentUserId={currentUserId} 
+        userAvatar={avatarHandler}
         post={post} 
         postKey={i} 
         postToDelete={getPostToDelete} 
         likeSignal={getLikeSignal} 
-        comments={postsComments}
-        viewCommentsOf={handleViewComment}
         commentToSend={handleSendComment}
       />
     )
-  }
-    
-  ) : null;
+  }) : null;
 
   if (!loadingComplete) { return (Indicator) } 
   else {
