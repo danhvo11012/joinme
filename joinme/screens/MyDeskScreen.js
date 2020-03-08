@@ -37,7 +37,7 @@ function MyDeskScreen({ route, navigation }) {
   const { currentUserId, user } = route.params;
 
   //profile, if not existed navigate => ProfileSettingScreen 
-  const profiles = db.collection('profiles');
+  // const profiles = db.collection('profiles');
   
   //posts
   const [ loadingComplete, setLoadingComplete] = useState(false);
@@ -57,7 +57,7 @@ function MyDeskScreen({ route, navigation }) {
 
   const [ showSpinner, setShowSpinner ] = useState(false);
 
-  const [ profileChecked, setProfileChecked ] = useState(false);
+  // const [ profileChecked, setProfileChecked ] = useState(false);
   
   UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
 

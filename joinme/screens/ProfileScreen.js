@@ -12,6 +12,8 @@ import {
   YellowBox
 } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationEvents } from 'react-navigation';
+
 import { Input, Button as ElementsButton, Icon, Image } from 'react-native-elements';
 import { ImageOverlay } from '../components/ImageOverlay';
 import { ProfileSocial } from '../components/ProfileSocial';
@@ -19,8 +21,16 @@ import { ProfileSocial } from '../components/ProfileSocial';
 import TabBarIcon from '../components/TabBarIcon'
 import { Avatar, Button, List, StyleService, Text, useStyleSheet } from '@ui-kitten/components';
 import ProfileSchema from '../constants/ProfileSchema';
+
 function ProfileScreen( { route, navigation }) {
-  
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      setLoadingComplete(false);
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   //prepare data to call API
   const client =  Stitch.defaultAppClient;
   const mongoClient = client.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas')
@@ -28,23 +38,12 @@ function ProfileScreen( { route, navigation }) {
   const profiles = db.collection('profiles');
 
   //state
-  const { currentUserId, user, shouldReload } = route.params;
-  console.log(shouldReload);
+  const { currentUserId, user } = route.params;
   
   const [ loadingComplete, setLoadingComplete] = useState(false);
   const [ profile, setProfile ] = useState(null);
- 
-  
 
   const styles = useStyleSheet(themedStyle);
-
-  const onFollowButtonPress = (): void => {
-    
-  };
-
-  const onMessageButtonPress = (): void => {
-    
-  };
   
   //icons
   const MessageCircleIcon = () => {
@@ -52,11 +51,13 @@ function ProfileScreen( { route, navigation }) {
       <TabBarIcon color="black" name="ios-mail"></TabBarIcon>
     );
   };
+
   const PersonAddIcon = () => {
     return(
       <TabBarIcon color="white" name="ios-add"></TabBarIcon>
     );
   };
+
   const EditIcon = () => {
     return(
       <TabBarIcon size={24} color="black" name="ios-create"></TabBarIcon>
@@ -69,28 +70,20 @@ function ProfileScreen( { route, navigation }) {
     );
   };
 
-  useEffect(()=>{
-    if(shouldReload){
-      setLoadingComplete(false);
-    }
-  },[shouldReload]);
-
   useEffect(() => {
     if(!loadingComplete)
     {
       profiles.findOne({ userId: currentUserId })
       .then((result) => {
         if (result) {
-          console.log(`found the profile!`);
+          console.log('Profile found.');
           setProfile(result);
         } else {
-          console.log('No profile');
-          //create a new profile
+          console.log('No profile found.');
           const profile = ProfileSchema(currentUserId, user.email);
           profiles.insertOne(profile)
           .then(res => {
-            console.log('profiles responded: ');
-            console.log(res);
+            console.log('New profile added.');
           });
           setProfile(profile);
         }
@@ -98,18 +91,6 @@ function ProfileScreen( { route, navigation }) {
       }, [loadingComplete]);
     }
   });
-
-  // useEffect(() => {
-  //   if(!loadingComplete)
-  //   {
-  //     profiles.findOne({userId: currentUserId})
-  //       .then(results => {
-  //         console.log(results);
-  //         setProfile(results);
-  //         setLoadingComplete(true);
-  //     });
-  //   }
-  // }, [loadingComplete]);
 
   function onEditButtonPress() {
     
@@ -237,7 +218,7 @@ function ProfileScreen( { route, navigation }) {
         appearance='hint'>
         {profile.summary}
       </Text>
-      
+
     </ScrollView>
     );
   }

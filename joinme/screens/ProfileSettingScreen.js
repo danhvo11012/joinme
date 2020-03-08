@@ -41,16 +41,12 @@ export default function ProfileSettingScreen(props) {
 
   useEffect(() => {
     if (profileReady) {
-      console.log(fullProfile);
+      // console.log(fullProfile);
       profileDetails.findOneAndUpdate(
         { userId: fullProfile.userId },
         { $set: fullProfile }
       ).then(res => {
-          console.log('profiles responded: ');
-          console.log(res);
-          // route.params.onGoBack();
-
-          navigation && navigation.navigate('Profile',{shouldReload: true});
+          navigation && navigation.navigate('Profile');
         });
       setProfileReady(false);
     }
