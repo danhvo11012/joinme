@@ -20,7 +20,6 @@ import TabBarIcon from '../components/TabBarIcon'
 import { Avatar, Button, List, StyleService, Text, useStyleSheet } from '@ui-kitten/components';
 import ProfileSchema from '../constants/ProfileSchema';
 function ProfileScreen( { route, navigation }) {
-  YellowBox.ignoreWarnings(['VirtualizedLists should never be nested inside plain ScrollViews']);
   
   //prepare data to call API
   const client =  Stitch.defaultAppClient;
