@@ -142,7 +142,7 @@ function Post(props) {
   const cmtBtnType = viewCommentOn ? 'solid' : 'outline';
   const cmtBtnTitle = viewCommentOn ? "Hide Comments" : "View Comments"; 
 
-  const postTitle = profile ? (profile.firstName + ' ' + profile.lastName + ' posted:') : 'post title undefined.'
+  const postTitle = profile ? (profile.firstName + ' ' + profile.lastName + ' - ' + props.post.category.toUpperCase() + ' crews needed') : 'post title undefined.'
 
   if (!profile) { return null }
   else {
@@ -153,35 +153,38 @@ function Post(props) {
         containerStyle={{ width: '100%', alignSelf: 'center', borderRadius: 6, borderWidth: 0, borderBottomWidth: 1.2, borderColor: 'grey' }}>
         <View>
           <View style={{flexDirection: 'row'}}>
-            <View style={{flex: 1}}>
+            <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
               <Avatar
                 style={{    
-                  // aspectRatio: 1.0,
-                  height: 150,
-                  width: 120,
+                  aspectRatio: 1.0,
+                  height: 70,
                   alignSelf: 'flex-start',
-                  // marginVertical: 10,
-                  borderRadius: 5,
-                  borderWidth: 0,
+                  borderWidth: 0.5,
                   borderColor: 'grey',
-                  shadowOffset: {20 20 20 20},
                 }}
-                shape="square"
-                size="large"
                 source={{uri: profile.avatar}}
               />
+
+              <Button 
+                style={{ width: 50}} 
+                type='clear' 
+                icon={
+                  <Icon
+                    name="message-square"
+                    type='feather'
+                    size={30}
+                  />
+                }
+                // onPress={handleContact}
+              />
+              
             </View>
-            <View style={{flex: 2}}>
-              <Text>Post id: {props.post._id.toString()}</Text>
-              <Text>Post#: {props.postKey}</Text>
-              <Text>Post owner Id: {props.post.ownerId}</Text>
-              <Text>Post date: {props.post.postDate.toString()}</Text>
-              <Text>Category: {props.post.category}</Text>   
+            <View style={{flex: 4, flexDirection: 'column', borderLeftWidth: 0.2, borderColor: 'grey', paddingLeft: 10}}>
+              <Text style={{ flex: 1, fontStyle: 'italic', fontSize: 12, color: '#8d8d8d'}}>Posted: {props.post.postDate.toLocaleString()}</Text>
+              <Text style={{ flex: 1, marginTop: 10, fontSize: 16 }}>{props.post.content} </Text>
+              <Text style={{ flex: 1, marginTop: 10, fontStyle: 'italic', fontSize: 16}}>Pref: {props.post.preferred}</Text>
             </View>
           </View>
-
-          <Text>Post content:     {props.post.content}</Text>
-          <Text>Preferred experience:     {props.post.preferred}</Text>
         </View>
 
           <View style={{ flexDirection: 'row', marginVertical: 10 }}>
