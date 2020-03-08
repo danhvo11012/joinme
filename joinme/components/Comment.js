@@ -28,13 +28,8 @@ import {
 
 
 function Comment(props) {
-
-  const client =  props.client;
-  const mongoClient = client.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas')
-  const db = mongoClient.db('joinme');
-
   //profile, if not existed navigate => ProfileSettingScreen 
-  const profiles = db.collection('profiles');
+  const profiles = props.profiles;
 
   const [ profile, setProfile ] = useState(null);
 

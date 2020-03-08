@@ -55,11 +55,8 @@ function MyDeskScreen({ route, navigation }) {
   const [ postFromModal, setPostFromModal ] = useState(null);
   const [ fullPost, setFullPost ] = useState(null);
 
-  const [ postsComments, setPostsComments ] = useState(null);
-  const [ postsAndComments, setPostsAndComments ] = useState(null);
-
   const [ showSpinner, setShowSpinner ] = useState(false);
-  
+
   UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
 
   const createNewPost = () => {
@@ -132,24 +129,6 @@ function MyDeskScreen({ route, navigation }) {
     }
   }
 
-  // const handleViewComment = (viewCommentSignal) => {
-  //   if (viewCommentSignal != null) {
-  //     // console.log(viewCommentSignal);
-  //     getComments(viewCommentSignal);
-  //   }
-  // }
-
-  const getComments = (signal) => {
-    // console.log(signal.postId);
-    comments.find({ postId: signal.postId })
-      .asArray()
-      .then(res => {
-        res.sort((a, b) => a._id < b._id);
-        if (res.length) { setPostsComments(res) } else { setPostsComments(null)}
-        setPostsCommentsLoaded(true);
-      })
-  }
-
   useEffect(() => {
     if (!profile) {
       profiles.findOne({userId: currentUserId})
@@ -163,13 +142,11 @@ function MyDeskScreen({ route, navigation }) {
 
   useEffect(() => {
     if (postsCommentsLoaded) {
-      // console.log(postsComments);
       setPostsCommentsLoaded(false);
     } 
   }, [postsCommentsLoaded])
 
   const handleSendComment = (commentFromCommentTBox) => {
-    // console.log(commentFromCommentTBox);
     if (commentFromCommentTBox) {
       setShowSpinner(true);
       setIsCommentReceived(true);
@@ -218,7 +195,7 @@ function MyDeskScreen({ route, navigation }) {
   useEffect(() => {
     if (isPostReceived) {
       setShowSpinner(true);
-      console.log(postFromModal);
+      // console.log(postFromModal);
       handleSetFullPost();
       setIsPostReady(true);
     }
@@ -252,11 +229,12 @@ function MyDeskScreen({ route, navigation }) {
     />
   </View>;
 
-  const Posts = myPosts ? myPosts.map((post, i) => {
+  const Posts = myPosts ? myPosts.map((post, i, posts) => {
     return (
       <Post 
         key={i} 
-        client={client}
+        profiles={profiles}
+        comments={comments}
         currentUserId={currentUserId} 
         userAvatar={avatarHandler}
         post={post} 
@@ -286,6 +264,7 @@ function MyDeskScreen({ route, navigation }) {
             style={{ width: 200, marginVertical: 5 }}
             onPress={handlePageReload}
           />
+
           <View 
             style={{ marginVertical: 5 }}
           >
