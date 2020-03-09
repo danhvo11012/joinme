@@ -39,11 +39,11 @@ function convertMS(ms) {
   d = Math.floor(h / 24);
   h = h % 24;
   // return { d: d, h: h, m: m, s: s };
-
-  return getNonZero(d, ' days ') + 
-    getNonZero(h, ' hours ') + 
-     getNonZero(m, ' mins ') +
-    getNonZero(s, ' seconds ') + 'ago';
+  if (d > 0) return d + (d > 1 ? ' days ' : ' day ') + 'ago';
+  if (h > 0) return h + (h > 1 ? ' hours ' : ' hour ') + 'ago';
+  if (m > 0) return m + (m > 1 ? ' minutes ' : ' minute ') + 'ago';
+  if (s > 0) return s + (s > 1 ? ' seconds ' : ' second ') + 'ago';
+  return null;
 };
 
 function Comment(props) {

@@ -48,18 +48,20 @@ function CommentTextBox(props) {
   */
 
   const handleSendComment = () => {
-    props.getCommentCallback({
-      ownerId: props.currentUserId,
-      postId: props.post._id,
-      date: new Date(),
-      content: content,
-      likes: 0,
-      // likers: [],
-    });
-    textInput.current.clear();
+    if (content == null) { alert('Please enter your comment.')}
+    else {
+      props.getCommentCallback({
+        ownerId: props.currentUserId,
+        postId: props.post._id,
+        date: new Date(),
+        content: content,
+        likes: 0,
+        // likers: [],
+      });
+      setContent(null);
+      textInput.current.clear();
+    }
   }
-
-  
 
   return(
     <View style={{marginTop: 10, flexDirection: 'row', justifyContent: 'space-between'}}>

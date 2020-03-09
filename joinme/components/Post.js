@@ -67,7 +67,15 @@ function Post(props) {
     </View>;
 
   const handleDeletePost = () => {
+    handleDeleteThisPostsComments(props.post._id);
     props.postToDelete(props.post._id);
+  }
+
+  const handleDeleteThisPostsComments = (postId) => {
+    comments.deleteMany({ postId: postId })
+      .then(res => {
+        console.log('Deleted all comments for this post.');
+      })
   }
 
   const handleLikeToggle = () => {
