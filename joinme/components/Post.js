@@ -16,6 +16,7 @@ import {
   UIManager,
   KeyboardAvoidingView,
   ShadowPropTypesIOS,
+  ActivityIndicator,
 } from 'react-native';
 
 import {
@@ -25,7 +26,6 @@ import {
   ListItem,
   Button,
   Icon,
-  // ActivityIndicator,
 } from 'react-native-elements';
 
 import {Layout, Avatar} from '@ui-kitten/components';
@@ -46,8 +46,25 @@ function Post(props) {
   const default_avatar = '../assets/images/default_avatar.jpg';
 
   const [ shouldRenderComments, setShouldRenderComments ] = useState(false);
+  const [ showSpinner, setShowSpinner ] = useState(false);
 
   UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+ 
+  const Indicator = 
+    <View 
+      style={{
+        justifyContent: 'center', 
+        flexDirection: 'row', 
+        padding: 20, 
+        display: (showSpinner ? 'block' : 'none')
+      }}
+    >
+      <ActivityIndicator
+        animating={showSpinner}
+        size="large"
+        color="grey"
+      />
+    </View>;
 
   const handleDeletePost = () => {
     props.postToDelete(props.post._id);
@@ -74,11 +91,23 @@ function Post(props) {
   }
 
   const getCommentFromCommentTBox = (commentFromCallback) => {
-    props.commentToSend(commentFromCallback);
+    handleSendComment(commentFromCallback);
   }
 
   const handleViewComments = () => {
     setViewCommentOn(!viewCommentOn);
+  }
+
+  const handleSendComment = (commentFromCommentTBox) => {
+    if (commentFromCommentTBox) {
+
+      comments.insertOne(commentFromCommentTBox)
+        .then((res) => {
+          LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+          // setShouldRenderComments(false);
+          setCmts(null);
+        });
+    }
   }
 
   useEffect(() => {
@@ -98,6 +127,7 @@ function Post(props) {
       setCmtsViewHeight('auto');
     } else {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      setCmts(null);
       setCmtsViewHeight(0);
       setShouldRenderComments(false);
     }
@@ -108,7 +138,7 @@ function Post(props) {
       comments.find({ postId: props.post._id })
         .asArray()
         .then(res => {
-          res.sort((a, b) => a._id < b._id);
+          res.sort((a, b) => a._id > b._id);
           setCmts(res);
         })
     } 
@@ -130,12 +160,14 @@ function Post(props) {
   }, [liked, noOfLike])
 
   
-  const Comments = shouldRenderComments ? 
-    cmts.map((comment, key) => <Comment 
-                                  key={key} 
-                                  profiles={props.profiles}
-                                  comment={comment}
-                                />) : null;
+  const Comments = shouldRenderComments && cmts ? 
+    cmts.map((comment, key) => 
+      <Comment 
+      key={key} 
+      profiles={props.profiles}
+      comments={props.comments}
+      comment={comment}
+    />) : Indicator;
   
   const likeBtnType = liked ? 'solid' : 'outline';
   const likeBtnTitle = noOfLike > 1 ? noOfLike + " Likes" : noOfLike + " Like";
@@ -241,3 +273,6 @@ function Post(props) {
 };
 
 export default Post;
+
+
+// assert(

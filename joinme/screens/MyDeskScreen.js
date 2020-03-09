@@ -195,7 +195,6 @@ function MyDeskScreen({ route, navigation }) {
   useEffect(() => {
     if (isPostReceived) {
       setShowSpinner(true);
-      // console.log(postFromModal);
       handleSetFullPost();
       setIsPostReady(true);
     }
@@ -203,9 +202,9 @@ function MyDeskScreen({ route, navigation }) {
 
   useEffect(() => {
     if (isPostReady) {
-      console.log('Full post: ', fullPost);
+      // console.log('Full post: ', fullPost);
       posts.insertOne(fullPost).then(res => {
-        console.log('Response from stitch: ', res);
+        // console.log('Response from stitch: ', res);
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         setLoadingComplete(false);
         setShouldReload(true);

@@ -28,18 +28,18 @@ import {
 
 
 function Comment(props) {
-  //profile, if not existed navigate => ProfileSettingScreen 
+  const comments = props.comments;
   const profiles = props.profiles;
 
   const [ profile, setProfile ] = useState(null);
-
-  const [ pressedLike, setPressedLike] = useState(false);
-  const [ noOfLike, setNoOfLike ] = useState(0);
+  const [ liked, setLiked ] = useState(false);
+  const [ noOfLike, setNoOfLike ] = useState(props.comment.likes);
 
   const like_images = {
     liked: require('../assets/images/liked_icon.png'),
     not_liked: require('../assets/images/not_liked_icon.png')
   }
+
   const default_avatar = '../assets/images/default_avatar.jpg';
 
   useEffect(() => {
@@ -51,15 +51,20 @@ function Comment(props) {
     }
   }, [profile])
 
-  function onLikePressed () {
-    if (pressedLike) {
-      setPressedLike(false);
-      setNoOfLike(noOfLike - 1);
-      
-    } else {
-      setPressedLike(true);
-      setNoOfLike(noOfLike + 1);
-    }
+  const handleLikePressed = () => {
+    // console.log('like pressed likes ' + noOfLike);
+    setNoOfLike(noOfLike + 1);
+    handleUpdateLikes(noOfLike + 1);
+  }
+
+  const handleUpdateLikes = (nOL) => {
+    // console.log('handle update likes ' + nOL);
+    comments.findOneAndUpdate({ _id: props.comment._id }, 
+      {$set: {
+          likes: nOL,
+        }
+      }
+    );
   }
 
   const comment = profile ? {
@@ -82,9 +87,9 @@ function Comment(props) {
             <Text>{comment.content}</Text>
           </View>
 
-          <TouchableOpacity  onPress={onLikePressed} style={{zIndex: 999}}>
+          <TouchableOpacity  onPress={handleLikePressed} style={{zIndex: 1099}}>
               <View style={styles.reaction_container}>
-                <Image style={styles.img_icon} source={pressedLike ? like_images.liked : like_images.not_liked}></Image>
+                <Image style={styles.img_icon} source={like_images.liked}></Image>
                 <Text style={{color: '#606770',fontSize:13}}>{noOfLike}</Text>
               </View>
           </TouchableOpacity>

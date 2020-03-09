@@ -53,7 +53,7 @@ function CommentTextBox(props) {
       date: new Date(),
       content: content,
       likes: 0,
-      likers: [],
+      // likers: [],
     });
   }
 
@@ -70,17 +70,19 @@ function CommentTextBox(props) {
 
       <TextInput 
         style={{ 
-            fontSize: 16, 
-            borderRadius: 5, 
-            borderWidth: 2, 
-            borderColor: '#d0dffe',
-            width: '70%',
-            height: Math.max(48, contentBoxHeight),
-            paddingLeft: 5,
-            }}
+          fontSize: 16, 
+          borderRadius: 5, 
+          borderWidth: 2, 
+          borderColor: '#d0dffe',
+          width: '70%',
+          height: Math.max(48, contentBoxHeight),
+          paddingLeft: 5,
+        }}
         autoFocus={false}
         multiline={true}
         numberOfLines={10}
+        autoCompleteType="off"
+        autoCorrect="off"
         placeholder="Type your comment here..."
         onContentSizeChange={(event) => {
             setContentBoxHeight(Math.min(event.nativeEvent.contentSize.height, 120))
