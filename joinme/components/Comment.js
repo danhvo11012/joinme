@@ -15,8 +15,8 @@ import {
   TouchableHighlight,
   TouchableOpacity
 } from 'react-native';
-import ProfileAvatar from './ProfileAvatar';
-import ProfileSetting from './ProfileSetting';
+// import ProfileAvatar from './ProfileAvatar';
+// import ProfileSetting from './ProfileSetting';
 import {
   Text,
   Card,
@@ -25,13 +25,34 @@ import {
   Button
 } from 'react-native-elements';
 
+const getNonZero = (num, unit) => {
+  return num > 0 ? num + unit : '';
+}
 
+function convertMS(ms) {
+  var d, h, m, s;
+  s = Math.floor(ms / 1000);
+  m = Math.floor(s / 60);
+  s = s % 60;
+  h = Math.floor(m / 60);
+  m = m % 60;
+  d = Math.floor(h / 24);
+  h = h % 24;
+  // return { d: d, h: h, m: m, s: s };
+
+  return getNonZero(d, ' days ') + 
+    getNonZero(h, ' hours ') + 
+     getNonZero(m, ' mins ') +
+    getNonZero(s, ' seconds ') + 'ago';
+};
 
 function Comment(props) {
+  const now = new Date();
+
   const comments = props.comments;
   const profiles = props.profiles;
-
   const [ profile, setProfile ] = useState(null);
+  const [ commentedTime, setCommentedTime ] = useState(convertMS(now.getTime() - props.comment.date.getTime()));
   const [ liked, setLiked ] = useState(false);
   const [ noOfLike, setNoOfLike ] = useState(props.comment.likes);
 
@@ -52,19 +73,12 @@ function Comment(props) {
   }, [profile])
 
   const handleLikePressed = () => {
-    // console.log('like pressed likes ' + noOfLike);
     setNoOfLike(noOfLike + 1);
     handleUpdateLikes(noOfLike + 1);
   }
 
   const handleUpdateLikes = (nOL) => {
-    // console.log('handle update likes ' + nOL);
-    comments.findOneAndUpdate({ _id: props.comment._id }, 
-      {$set: {
-          likes: nOL,
-        }
-      }
-    );
+    comments.findOneAndUpdate({ _id: props.comment._id }, {$set: { likes: nOL }});
   }
 
   const comment = profile ? {
@@ -81,20 +95,21 @@ function Comment(props) {
           style={styles.photo}
           source={profile.avatar != '' ? {uri: profile.avatar} : require(default_avatar)}
         />
-        <View style={{}}>
+
+        <View>
           <View style={styles.contentSection}>
             <Text style={styles.name}>{comment.ownerfullName}</Text>
             <Text>{comment.content}</Text>
           </View>
-
-          <TouchableOpacity  onPress={handleLikePressed} style={{zIndex: 1099}}>
-              <View style={styles.reaction_container}>
-                <Image style={styles.img_icon} source={like_images.liked}></Image>
-                <Text style={{color: '#606770',fontSize:13}}>{noOfLike}</Text>
-              </View>
+          <TouchableOpacity  onPress={handleLikePressed} style={{zIndex: 9999}}>
+            <View style={styles.reaction_container}>
+              <Image style={styles.img_icon} source={like_images.liked}></Image>
+              <Text style={{color: '#606770',fontSize:13}}>{noOfLike}</Text>
+            </View>
           </TouchableOpacity>
 
-          <Text style={styles.time}>29m</Text>    
+
+          <Text style={styles.time}>{commentedTime}</Text>    
           
         </View>
       </View>
@@ -143,22 +158,21 @@ const styles = StyleSheet.create({
   },
   reaction_container: {
     position: 'absolute',
-    alignSelf: 'flex-end',
+    alignSelf: 'flex-start',
     flexDirection:'row',
     backgroundColor: 'white',
     paddingHorizontal: 5,
-    paddingVertical: 2,
+    paddingVertical: 3,
     borderRadius: 3,
     bottom: -18,
-    //right: -8,
-    left: 10,
+    left: -5,
     shadowColor: '#000000',
     shadowOffset: {
       width: 0,
       height: 3
     },
     shadowRadius: 1.2,
-    shadowOpacity: 0.3
+    shadowOpacity: 0.4
 
   },
   img_icon: {

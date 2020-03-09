@@ -256,7 +256,7 @@ function Post(props) {
           </View>
 
           <Divider />
-          <View style={{ height: cmtsViewHeight }}>
+          <View style={{ height: cmtsViewHeight}}>
             {Comments}
           </View>
           <Divider />

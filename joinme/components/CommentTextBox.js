@@ -4,7 +4,7 @@
  * @author Danh Vo
  * @version 1.0
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import {
   StyleSheet,
@@ -33,7 +33,8 @@ function CommentTextBox(props) {
   const [ contentBoxHeight, setContentBoxHeight ] = useState(0);
   const [ content, setContent ] = useState(null);
   const default_avatar = '../assets/images/default_avatar.jpg';
-
+  const textInput = useRef();
+  
   /**
   * Comment metrics
   * 
@@ -55,7 +56,10 @@ function CommentTextBox(props) {
       likes: 0,
       // likers: [],
     });
+    textInput.current.clear();
   }
+
+  
 
   return(
     <View style={{marginTop: 10, flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -68,7 +72,8 @@ function CommentTextBox(props) {
           source={props.userAvatar != '' ? {uri: props.userAvatar} : require(default_avatar)}
       />
 
-      <TextInput 
+      <TextInput
+        ref={textInput}
         style={{ 
           fontSize: 16, 
           borderRadius: 5, 
@@ -82,7 +87,7 @@ function CommentTextBox(props) {
         multiline={true}
         numberOfLines={10}
         autoCompleteType="off"
-        autoCorrect="off"
+        autoCorrect={false}
         placeholder="Type your comment here..."
         onContentSizeChange={(event) => {
             setContentBoxHeight(Math.min(event.nativeEvent.contentSize.height, 120))
