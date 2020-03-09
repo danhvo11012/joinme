@@ -8,7 +8,7 @@ import {Button as ElementButton} from 'react-native-elements'
 import { Stitch, RemoteMongoClient } from 'mongodb-stitch-react-native-sdk';
 
 export default function ProfileSettingScreen(props) {
-  DeviceEventEmitter.emit('listener',  {});
+  
   const {route, navigation} = props;
   const { profile } = route.params;
   //console.log('From psetting: ' + profile);
@@ -54,6 +54,7 @@ export default function ProfileSettingScreen(props) {
   }, [profileReady]);
 
   function onSaveButtonPress() {
+    DeviceEventEmitter.emit('listener',  {});
     handleFulllProfileChange();
     setProfileReady(true);
   }
