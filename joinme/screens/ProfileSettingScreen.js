@@ -1,5 +1,5 @@
 import React, {useState,useEffect} from 'react';
-import { ScrollView, View, TextInput,Button } from 'react-native';
+import { ScrollView, View, TextInput,Button, DeviceEventEmitter } from 'react-native';
 import { Button as KittenButton, Layout, StyleService, Text, useStyleSheet } from '@ui-kitten/components';
 import { ProfileSetting } from '../components/ProfileSetting';
 import { ProfileAvatar } from '../components/ProfileAvatar';
@@ -8,6 +8,7 @@ import {Button as ElementButton} from 'react-native-elements'
 import { Stitch, RemoteMongoClient } from 'mongodb-stitch-react-native-sdk';
 
 export default function ProfileSettingScreen(props) {
+  DeviceEventEmitter.emit('listener',  {});
   const {route, navigation} = props;
   const { profile } = route.params;
   //console.log('From psetting: ' + profile);

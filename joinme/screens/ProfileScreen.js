@@ -9,7 +9,8 @@ import {
   UIManager,
   KeyboardAvoidingView,
   ScrollView,
-  YellowBox
+  YellowBox,
+  DeviceEventEmitter
 } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationEvents } from 'react-navigation';
@@ -23,13 +24,20 @@ import { Avatar, Button, List, StyleService, Text, useStyleSheet } from '@ui-kit
 import ProfileSchema from '../constants/ProfileSchema';
 
 function ProfileScreen( { route, navigation }) {
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      setLoadingComplete(false);
-    });
+  //dvo
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener('focus', () => {
+  //     setLoadingComplete(false);
+  //   });
 
-    return unsubscribe;
-  }, [navigation]);
+  //   return unsubscribe;
+  // }, [navigation]);
+
+  useEffect (()=>{
+    DeviceEventEmitter.addListener('listener', (e)=>{
+        setLoadingComplete(false);
+    });
+  });
 
   //prepare data to call API
   const client =  Stitch.defaultAppClient;
