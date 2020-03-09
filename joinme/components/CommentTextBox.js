@@ -32,6 +32,7 @@ import {Layout, Avatar} from '@ui-kitten/components';
 function CommentTextBox(props) {
   const [ contentBoxHeight, setContentBoxHeight ] = useState(0);
   const [ content, setContent ] = useState(null);
+  const default_avatar = '../assets/images/default_avatar.jpg';
 
   /**
   * Comment metrics
@@ -64,7 +65,7 @@ function CommentTextBox(props) {
             height: 90,
           }}
           size="large"
-          source={{uri: props.userAvatar}}
+          source={props.userAvatar != '' ? {uri: props.userAvatar} : require(default_avatar)}
       />
 
       <TextInput 

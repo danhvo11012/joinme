@@ -43,7 +43,8 @@ function Post(props) {
   const [ noOfLike, setNoOfLike ] = useState(props.post.likes);
   const [ cmtsViewHeight, setCmtsViewHeight ] = useState('auto');
   const [ cmts, setCmts ] = useState(null);
-  // const [ noOfCmt, setNoOfCmt ] = useState(0);
+  const default_avatar = '../assets/images/default_avatar.jpg';
+
   const [ shouldRenderComments, setShouldRenderComments ] = useState(false);
 
   UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -132,7 +133,6 @@ function Post(props) {
   const Comments = shouldRenderComments ? 
     cmts.map((comment, key) => <Comment 
                                   key={key} 
-                                  // client={props.client} 
                                   profiles={props.profiles}
                                   comment={comment}
                                 />) : null;
@@ -163,7 +163,7 @@ function Post(props) {
                   borderWidth: 0.5,
                   borderColor: 'grey',
                 }}
-                source={{uri: profile.avatar}}
+                source={profile.avatar != '' ? {uri: profile.avatar} : require(default_avatar)}
               />
 
               <Button 
@@ -228,7 +228,12 @@ function Post(props) {
             {Comments}
           </View>
           <Divider />
-          <CommentTextBox post={props.post} currentUserId={props.currentUserId} userAvatar={props.userAvatar} getCommentCallback={getCommentFromCommentTBox}/>
+          <CommentTextBox 
+            post={props.post} 
+            currentUserId={props.currentUserId} 
+            userAvatar={profile.avatar} 
+            getCommentCallback={getCommentFromCommentTBox}
+          />
       </Card>
       
     );

@@ -40,6 +40,7 @@ function Comment(props) {
     liked: require('../assets/images/liked_icon.png'),
     not_liked: require('../assets/images/not_liked_icon.png')
   }
+  const default_avatar = '../assets/images/default_avatar.jpg';
 
   useEffect(() => {
     if (!profile) {
@@ -73,7 +74,7 @@ function Comment(props) {
       <View style={styles.container}>
         <Avatar
           style={styles.photo}
-          source={{uri: profile.avatar}}
+          source={profile.avatar != '' ? {uri: profile.avatar} : require(default_avatar)}
         />
         <View style={{}}>
           <View style={styles.contentSection}>

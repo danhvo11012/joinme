@@ -43,7 +43,7 @@ function MyDeskScreen({ route, navigation }) {
   const [ loadingComplete, setLoadingComplete] = useState(false);
   const [ shouldReload, setShouldReload ] = useState(true );
   const [ profile, setProfile ] = useState(null);
-  const [ avatarHandler, setAvatarHandler ] = useState('../assets/images/no-avatar.jpeg');
+  const [ avatarHandler, setAvatarHandler ] = useState('../assets/images/default_avatar.jpg');
 
   const [ isPostReceived, setIsPostReceived ] = useState(false);
   const [ isPostReady, setIsPostReady ] = useState(false);
@@ -136,7 +136,7 @@ function MyDeskScreen({ route, navigation }) {
           setProfile(res);
         });
     } else {
-      setAvatarHandler(profile.avatar);
+      if (profile.avatar.length > 1) setAvatarHandler(profile.avatar);
     }
   },[profile]);
 
