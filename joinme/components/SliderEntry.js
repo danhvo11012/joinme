@@ -13,61 +13,61 @@ export default class SliderEntry extends Component {
     };
 
     get image () {
-        const { data: { illustration }, parallax, parallaxProps, even } = this.props;
+      const { data: { avatar }, parallax, parallaxProps, even } = this.props;
 
-        return parallax ? (
-            <ParallaxImage
-              source={{ uri: illustration }}
-              containerStyle={[styles.imageContainer, even ? styles.imageContainerEven : {}]}
-              style={styles.image}
-              parallaxFactor={0.35}
-              showSpinner={true}
-              spinnerColor={even ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.25)'}
-              {...parallaxProps}
-            />
-        ) : (
-            <Image
-              source={{ uri: illustration }}
-              style={styles.image}
-            />
-        );
-    }
+      return parallax ? (
+        <ParallaxImage
+          source={avatar != '' ? {uri: avatar} : require('../assets/images/default_avatar.jpg')}
+          containerStyle={[ styles.imageContainer, even ? styles.imageContainerEven : {} ]}
+          style={styles.image}
+          parallaxFactor={0.35}
+          showSpinner={true}
+          spinnerColor={even ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.25)'}
+          {...parallaxProps}
+        />
+      ) : (
+      <Image
+        source={{ uri: avatar }}
+        style={styles.image}
+      />
+    );
+  }
 
-    render () {
-        const { data: { title, subtitle }, even } = this.props;
+  render () {
+    const { data: { firstName, lastName, email }, even } = this.props;
+    const title = firstName + ' ' + lastName;
+    const subtitle = email;
+    const uppercaseTitle = title ? (
+      <Text
+        style={[styles.title, even ? styles.titleEven : {}]}
+        numberOfLines={2}
+      >
+          { title.toUpperCase() }
+      </Text>
+    ) : false;
 
-        const uppercaseTitle = title ? (
-            <Text
-              style={[styles.title, even ? styles.titleEven : {}]}
-              numberOfLines={2}
-            >
-                { title.toUpperCase() }
-            </Text>
-        ) : false;
-
-        return (
-            <TouchableOpacity
-              activeOpacity={1}
-              style={styles.slideInnerContainer}
-              onPress={() => { alert(`You've clicked '${title}'`); }}
+    return (
+      <TouchableOpacity
+        activeOpacity={1}
+        style={styles.slideInnerContainer, styles.shadow}
+        onPress={() => { alert(`You've clicked '${title}'`); }}
+        >
+          <View style={[styles.imageContainer, even ? styles.imageContainerEven : {}]}>
+              { this.image }
+              <View style={[styles.radiusMask, even ? styles.radiusMaskEven : {}]} />
+          </View>
+          <View style={[styles.textContainer, even ? styles.textContainerEven : {}]}>
+              { uppercaseTitle }
+              <Text
+                style={[styles.subtitle, even ? styles.subtitleEven : {}]}
+                numberOfLines={2}
               >
-                <View style={styles.shadow} />
-                <View style={[styles.imageContainer, even ? styles.imageContainerEven : {}]}>
-                    { this.image }
-                    <View style={[styles.radiusMask, even ? styles.radiusMaskEven : {}]} />
-                </View>
-                <View style={[styles.textContainer, even ? styles.textContainerEven : {}]}>
-                    { uppercaseTitle }
-                    <Text
-                      style={[styles.subtitle, even ? styles.subtitleEven : {}]}
-                      numberOfLines={2}
-                    >
-                        { subtitle }
-                    </Text>
-                </View>
-            </TouchableOpacity>
-        );
-    }
+                { subtitle }
+              </Text>
+          </View>
+      </TouchableOpacity>
+    );
+  }
 }
 
 const IS_IOS = Platform.OS === 'ios';
@@ -78,40 +78,40 @@ function wp (percentage) {
     return Math.round(value);
 }
 
-const slideHeight = viewportHeight * 0.52;
+const slideHeight = viewportHeight * 0.65;
 const slideWidth = wp(75);
 const itemHorizontalMargin = wp(2);
 
 export const sliderWidth = viewportWidth;
 export const itemWidth = slideWidth + itemHorizontalMargin * 2;
 
-const entryBorderRadius = 8;
+const entryBorderRadius = 5;
 
 const styles = StyleSheet.create({
     slideInnerContainer: {
         width: itemWidth,
         height: slideHeight,
         paddingHorizontal: itemHorizontalMargin,
-        paddingBottom: 18 // needed for shadow
+        paddingBottom: 15, // needed for shadow
     },
     shadow: {
-        position: 'absolute',
-        top: 0,
-        left: itemHorizontalMargin,
-        right: itemHorizontalMargin,
-        bottom: 18,
-        shadowColor: 'black',
-        shadowOpacity: 0.25,
-        shadowOffset: { width: 0, height: 10 },
-        shadowRadius: 10,
-        borderRadius: entryBorderRadius
+      position: 'absolute',
+      top: 0,
+      left: itemHorizontalMargin,
+      right: itemHorizontalMargin,
+      bottom: 15,
+      shadowColor: '#1a1917',
+      shadowOpacity: 0.55,
+      shadowOffset: { width: 0, height: 10 },
+      shadowRadius: 10,
+      borderRadius: entryBorderRadius,
     },
     imageContainer: {
         flex: 1,
         marginBottom: IS_IOS ? 0 : -1, // Prevent a random Android rendering issue
         backgroundColor: 'white',
         borderTopLeftRadius: entryBorderRadius,
-        borderTopRightRadius: entryBorderRadius
+        borderTopRightRadius: entryBorderRadius,
     },
     imageContainerEven: {
         backgroundColor: 'black'
@@ -136,13 +136,15 @@ const styles = StyleSheet.create({
         backgroundColor: 'black'
     },
     textContainer: {
+        height: 150,
         justifyContent: 'center',
+        alignItems: 'center',
         paddingTop: 20 - entryBorderRadius,
         paddingBottom: 20,
         paddingHorizontal: 16,
         backgroundColor: 'white',
         borderBottomLeftRadius: entryBorderRadius,
-        borderBottomRightRadius: entryBorderRadius
+        borderBottomRightRadius: entryBorderRadius,
     },
     textContainerEven: {
         backgroundColor: 'black'
