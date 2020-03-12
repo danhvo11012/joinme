@@ -14,7 +14,6 @@ import {
 } from 'react-native';
 
 import { Input, Button, Icon } from 'react-native-elements';
-import {ENTRIES2} from '../constants/entries';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import SliderEntry from '../components/SliderEntry';
 
@@ -51,7 +50,6 @@ function RecruitScreen({ route, navigation }) {
       profiles.find({})
         .asArray()
         .then(res => {
-          // console.log(res);
           setFilteredProfiles(res);
           setProfilesReady(true);
         });
@@ -127,7 +125,7 @@ const styles = StyleSheet.create({
     color: 'rgba(255, 255, 255, 0.75)',
     fontSize: 13,
     fontStyle: 'italic',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   slider: {
     marginTop: 15,

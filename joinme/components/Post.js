@@ -216,7 +216,6 @@ function Post(props) {
                     size={30}
                   />
                 }
-                // onPress={handleContact}
               />
               
             </View>

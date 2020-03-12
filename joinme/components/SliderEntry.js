@@ -49,7 +49,7 @@ export default class SliderEntry extends Component {
     return (
       <TouchableOpacity
         activeOpacity={1}
-        style={styles.slideInnerContainer}
+        style={styles.slideInnerContainer, styles.shadow}
         onPress={() => { alert(`You've clicked '${title}'`); }}
         >
           <View style={[styles.imageContainer, even ? styles.imageContainerEven : {}]}>
@@ -65,7 +65,6 @@ export default class SliderEntry extends Component {
                 { subtitle }
               </Text>
           </View>
-          <View style={styles.shadow} />
       </TouchableOpacity>
     );
   }
@@ -93,26 +92,26 @@ const styles = StyleSheet.create({
         width: itemWidth,
         height: slideHeight,
         paddingHorizontal: itemHorizontalMargin,
-        paddingBottom: 18 // needed for shadow
+        paddingBottom: 15, // needed for shadow
     },
     shadow: {
-        position: 'absolute',
-        top: 0,
-        left: itemHorizontalMargin,
-        right: itemHorizontalMargin,
-        bottom: 18,
-        shadowColor: 'black',
-        shadowOpacity: 0.25,
-        shadowOffset: { width: 0, height: 10 },
-        shadowRadius: 10,
-        borderRadius: entryBorderRadius
+      position: 'absolute',
+      top: 0,
+      left: itemHorizontalMargin,
+      right: itemHorizontalMargin,
+      bottom: 15,
+      shadowColor: '#1a1917',
+      shadowOpacity: 0.55,
+      shadowOffset: { width: 0, height: 10 },
+      shadowRadius: 10,
+      borderRadius: entryBorderRadius,
     },
     imageContainer: {
         flex: 1,
         marginBottom: IS_IOS ? 0 : -1, // Prevent a random Android rendering issue
         backgroundColor: 'white',
         borderTopLeftRadius: entryBorderRadius,
-        borderTopRightRadius: entryBorderRadius
+        borderTopRightRadius: entryBorderRadius,
     },
     imageContainerEven: {
         backgroundColor: 'black'
@@ -145,7 +144,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         backgroundColor: 'white',
         borderBottomLeftRadius: entryBorderRadius,
-        borderBottomRightRadius: entryBorderRadius
+        borderBottomRightRadius: entryBorderRadius,
     },
     textContainerEven: {
         backgroundColor: 'black'

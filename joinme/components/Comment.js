@@ -29,23 +29,6 @@ const getNonZero = (num, unit) => {
   return num > 0 ? num + unit : '';
 }
 
-function convertMS(ms) {
-  var d, h, m, s;
-  s = Math.floor(ms / 1000);
-  m = Math.floor(s / 60);
-  s = s % 60;
-  h = Math.floor(m / 60);
-  m = m % 60;
-  d = Math.floor(h / 24);
-  h = h % 24;
-  // return { d: d, h: h, m: m, s: s };
-  if (d > 0) return d + (d > 1 ? ' days ' : ' day ') + 'ago';
-  if (h > 0) return h + (h > 1 ? ' hours ' : ' hour ') + 'ago';
-  if (m > 0) return m + (m > 1 ? ' minutes ' : ' minute ') + 'ago';
-  if (s > 0) return s + (s > 1 ? ' seconds ' : ' second ') + 'ago';
-  return null;
-};
-
 function Comment(props) {
   const now = new Date();
 
@@ -118,6 +101,23 @@ function Comment(props) {
 };
 
 export default Comment;
+
+function convertMS(ms) {
+  var d, h, m, s;
+  s = Math.floor(ms / 1000);
+  m = Math.floor(s / 60);
+  s = s % 60;
+  h = Math.floor(m / 60);
+  m = m % 60;
+  d = Math.floor(h / 24);
+  h = h % 24;
+  // return { d: d, h: h, m: m, s: s };
+  if (d > 0) return d + (d > 1 ? ' days ' : ' day ') + 'ago';
+  if (h > 0) return h + (h > 1 ? ' hours ' : ' hour ') + 'ago';
+  if (m > 0) return m + (m > 1 ? ' minutes ' : ' minute ') + 'ago';
+  if (s > 0) return s + (s > 1 ? ' seconds ' : ' second ') + 'ago';
+  return null;
+};
 
 const styles = StyleSheet.create({
   container: {

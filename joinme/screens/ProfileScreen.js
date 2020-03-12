@@ -10,29 +10,21 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   YellowBox,
-  DeviceEventEmitter
+  DeviceEventEmitter,
 } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationEvents } from 'react-navigation';
 
-import { Input, Button as ElementsButton, Icon, Image } from 'react-native-elements';
+import { Input, Button as ElementsButton, Icon, Image, Overlay } from 'react-native-elements';
 import { ImageOverlay } from '../components/ImageOverlay';
 import { ProfileSocial } from '../components/ProfileSocial';
 
 import TabBarIcon from '../components/TabBarIcon'
 import { Avatar, Button, List, StyleService, Text, useStyleSheet } from '@ui-kitten/components';
 import ProfileSchema from '../constants/ProfileSchema';
+import FollowingList from '../components/FollowingList';
 
 function ProfileScreen( { route, navigation }) {
-  //dvo
-  // useEffect(() => {
-  //   const unsubscribe = navigation.addListener('focus', () => {
-  //     setLoadingComplete(false);
-  //   });
-
-  //   return unsubscribe;
-  // }, [navigation]);
-
   useEffect (()=>{
     DeviceEventEmitter.addListener('listener', (e)=>{
         setLoadingComplete(false);
@@ -44,12 +36,16 @@ function ProfileScreen( { route, navigation }) {
   const mongoClient = client.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas')
   const db = mongoClient.db('joinme');
   const profiles = db.collection('profiles');
+  const followingListsCollection = db.collection('followingLists');
 
   //state
   const { currentUserId, user } = route.params;
-  
   const [ loadingComplete, setLoadingComplete] = useState(false);
   const [ profile, setProfile ] = useState(null);
+  const [ isListVisible, setIsListVisble ] = useState(false);
+
+  // Following List Profiles
+  const [ followingProfiles, setFollowingProfiles ] = useState(null);
 
   const styles = useStyleSheet(themedStyle);
   
@@ -79,26 +75,49 @@ function ProfileScreen( { route, navigation }) {
   };
 
   useEffect(() => {
-    if(!loadingComplete)
-    {
+    if(!loadingComplete) {
       profiles.findOne({ userId: currentUserId })
       .then((result) => {
         if (result) {
           console.log('Profile found.');
           setProfile(result);
+
+          followingListsCollection.findOne({
+            userId: currentUserId,
+          })
+            .then(res => {
+              if (res) {
+                followingListsCollection.insertOne({
+                  userId: currentUserId,
+                  followingList: []
+                })
+                  .then(res => {
+                    console.log("New following list created.");
+                    console.log(res);
+                  })
+                }
+            })
         } else {
           console.log('No profile found.');
           const profile = ProfileSchema(currentUserId, user.email);
           profiles.insertOne(profile)
-          .then(res => {
-            console.log('New profile added.');
-          });
+            .then(res => {
+              console.log('New profile added.');
+              followingListsCollection.insertOne({
+                userId: currentUserId,
+                followingList: []
+              })
+                .then(res => {
+                  console.log("New following list created.");
+                  console.log(res);
+                })
+            });
           setProfile(profile);
         }
+      });
         setLoadingComplete(true);
-      }, [loadingComplete]);
     }
-  });
+  }, [loadingComplete]);
 
   function onEditButtonPress() {
     
@@ -116,6 +135,10 @@ function ProfileScreen( { route, navigation }) {
         summary: profile.summary
       }
     }); 
+  }
+
+  const handleIsListVisible = () => {
+    setIsListVisble(!isListVisible);
   }
 
   const isSameUser = true;
@@ -226,12 +249,35 @@ function ProfileScreen( { route, navigation }) {
         appearance='hint'>
         {profile.summary}
       </Text>
-
+      <View>
+        <Text
+          style={styles.sectionLabel}
+          category='s1'>
+          Following
+        </Text>
+        <ElementsButton
+          style={{width: 300, heigh: 100, alignSelf: 'center'}}
+          type="outline"
+          titleStyle={{ fontSize: 15}}
+          title="View Full Following List"
+          onPress={handleIsListVisible}>
+        </ElementsButton>
+      </View>
+      <View>
+        <Overlay 
+          isVisible={isListVisible}
+          height='100%'
+          overlayStyle={{ marginTop: 80}}
+          animated={true}
+          children={<FollowingList currentUserId={currentUserId} followingListsCollection={followingListsCollection}/>}
+          onBackdropPress={handleIsListVisible}
+        >
+        </Overlay>
+      </View>
     </ScrollView>
     );
   }
 };
-
 export default ProfileScreen;
 
 const themedStyle = StyleService.create({
@@ -274,24 +320,9 @@ const themedStyle = StyleService.create({
     width: '40%',
   },
   logOutButton: {
-    //Danh modified:
     width: 70,
     left: -25,
     bottom: -20
-
-    // Khiem's
-    // width:'12%', 
-    // borderRadius: 0,
-    // bottom: '48%',
-    // backgroundColor:'#f2f3f5',
-    // borderColor:'white',
-    // shadowColor: '#000000',
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 3
-    // },
-    // shadowRadius: 1.2,
-    // shadowOpacity: 0.3
   },
   socialsContainer: {
     flex: 10,
