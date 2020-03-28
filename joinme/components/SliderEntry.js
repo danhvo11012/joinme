@@ -17,7 +17,7 @@ export default class SliderEntry extends Component {
 
       return parallax ? (
         <ParallaxImage
-          source={{ uri: avatar }}
+          source={avatar != '' ? {uri: avatar} : require('../assets/images/default_avatar.jpg')}
           containerStyle={[ styles.imageContainer, even ? styles.imageContainerEven : {} ]}
           style={styles.image}
           parallaxFactor={0.35}
@@ -49,8 +49,8 @@ export default class SliderEntry extends Component {
     return (
       <TouchableOpacity
         activeOpacity={1}
-        style={[styles.slideInnerContainer, styles.shadow]}
-        onPress={() => onEntryClick(userId)}
+        style={styles.slideInnerContainer, styles.shadow}
+        onPress={() => { alert(`You've clicked '${title}'`); }}
         >
           <View style={[styles.imageContainer, even ? styles.imageContainerEven : {}]}>
               { this.image }
@@ -92,9 +92,10 @@ const styles = StyleSheet.create({
         width: itemWidth,
         height: slideHeight,
         paddingHorizontal: itemHorizontalMargin,
-        paddingBottom: 18 // needed for shadow
+        paddingBottom: 15, // needed for shadow
     },
     shadow: {
+<<<<<<< HEAD
         position: 'absolute',
         top: 0,
         left: itemHorizontalMargin,
@@ -105,13 +106,25 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 10 },
         shadowRadius: 10,
         borderRadius: entryBorderRadius,
+=======
+      position: 'absolute',
+      top: 0,
+      left: itemHorizontalMargin,
+      right: itemHorizontalMargin,
+      bottom: 15,
+      shadowColor: '#1a1917',
+      shadowOpacity: 0.55,
+      shadowOffset: { width: 0, height: 10 },
+      shadowRadius: 10,
+      borderRadius: entryBorderRadius,
+>>>>>>> dvo
     },
     imageContainer: {
         flex: 1,
         marginBottom: IS_IOS ? 0 : -1, // Prevent a random Android rendering issue
         backgroundColor: 'white',
         borderTopLeftRadius: entryBorderRadius,
-        borderTopRightRadius: entryBorderRadius
+        borderTopRightRadius: entryBorderRadius,
     },
     imageContainerEven: {
         backgroundColor: 'black'
@@ -144,7 +157,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         backgroundColor: 'white',
         borderBottomLeftRadius: entryBorderRadius,
-        borderBottomRightRadius: entryBorderRadius
+        borderBottomRightRadius: entryBorderRadius,
     },
     textContainerEven: {
         backgroundColor: 'black'

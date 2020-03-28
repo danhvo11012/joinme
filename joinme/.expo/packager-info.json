@@ -2,8 +2,15 @@
   "devToolsPort": 19002,
   "expoServerPort": 19000,
   "packagerPort": 19001,
+<<<<<<< HEAD
   "packagerPid": 8498,
   "expoServerNgrokUrl": "https://2b-2p5.anonymous.joinme.exp.direct",
   "packagerNgrokUrl": "https://packager.2b-2p5.anonymous.joinme.exp.direct",
   "ngrokPid": 8506
+=======
+  "packagerPid": 2516,
+  "expoServerNgrokUrl": "https://vz-h67.anonymous.joinme.exp.direct",
+  "packagerNgrokUrl": "https://packager.vz-h67.anonymous.joinme.exp.direct",
+  "ngrokPid": 2668
+>>>>>>> dvo
 }
