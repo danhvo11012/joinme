@@ -328,7 +328,7 @@ export default class LoginScreen extends Component {
                   rightIcon={
                     <TouchableOpacity onPress={this.showOrHidePass.bind(this)}>
                       <TabBarIcon
-                        name={this.state.showPass ? "ios-eye" :"ios-eye-off"}
+                        name={this.state.showPass ? "ios-eye-off" :"ios-eye"}
                       />
                     </TouchableOpacity>
                   }
@@ -357,7 +357,7 @@ export default class LoginScreen extends Component {
                 />
                 {isSignUpPage && (
                   <Input
-                   leftIcon={<TabBarIcon name="ios-mail"/>}
+                   leftIcon={<TabBarIcon name="ios-lock"/>}
                     
                     value={passwordConfirmation}
                     secureTextEntry={!this.state.showPass}
