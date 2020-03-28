@@ -49,8 +49,8 @@ export default class SliderEntry extends Component {
     return (
       <TouchableOpacity
         activeOpacity={1}
-        style={styles.slideInnerContainer, styles.shadow}
-        onPress={() => { alert(`You've clicked '${title}'`); }}
+        style={[styles.slideInnerContainer, styles.shadow]}
+        onPress={() => onEntryClick(userId)}
         >
           <View style={[styles.imageContainer, even ? styles.imageContainerEven : {}]}>
               { this.image }
@@ -95,7 +95,6 @@ const styles = StyleSheet.create({
         paddingBottom: 15, // needed for shadow
     },
     shadow: {
-<<<<<<< HEAD
         position: 'absolute',
         top: 0,
         left: itemHorizontalMargin,
@@ -106,18 +105,6 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 10 },
         shadowRadius: 10,
         borderRadius: entryBorderRadius,
-=======
-      position: 'absolute',
-      top: 0,
-      left: itemHorizontalMargin,
-      right: itemHorizontalMargin,
-      bottom: 15,
-      shadowColor: '#1a1917',
-      shadowOpacity: 0.55,
-      shadowOffset: { width: 0, height: 10 },
-      shadowRadius: 10,
-      borderRadius: entryBorderRadius,
->>>>>>> dvo
     },
     imageContainer: {
         flex: 1,

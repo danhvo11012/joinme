@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 
 import { Input, Button, Icon } from 'react-native-elements';
-import Carousel, { Pagination } from 'react-native-snap-carousel';
+import Carousel, { Pagination, getInputRangeFromIndexes } from 'react-native-snap-carousel';
 import SliderEntry from '../components/SliderEntry';
 
 //width, height

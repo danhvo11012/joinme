@@ -26,7 +26,8 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "description": ""
   },
-  "name":"Join Me"
+  "name": "Join Me"
 }
