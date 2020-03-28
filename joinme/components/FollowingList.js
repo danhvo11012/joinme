@@ -31,88 +31,103 @@ import {
 
 import {Layout, Avatar} from '@ui-kitten/components';
 
-const Item = ({profile}) => {
-  const default_avatar = '../assets/images/default_avatar.jpg';
-  return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10,}}>
-      <Avatar
-        style={{  
-                  aspectRatio: 1.0,
-                  alignSelf: 'flex-start',
-                  borderWidth: 0.5,
-                  borderColor: 'grey',
-                }}
-        size="medium"
-        source={profile.avatar != '' ? {uri: profile.avatar} : require(default_avatar)}
-      />
-      <Text style={{marginLeft: 20, fontSize: 15}}>No Name</Text>
-    </View>
-  )
-}
-
 function FollowingList(props) {
+  const [ IdsReady, setIdsReady ] = useState(false);
   const [ listReady, setListReady ] = useState(false);
+  const [ followingIds, setFollowingIds ] = useState(null);
   const [ followingList, setFollowingList ] = useState(null);
-  // const FLCollection = props.followingListsCollection;
+  const [ shouldRender, setShouldRender ] =useState(false);
 
-  // useEffect(() => { 
-  //   if (!listReady) {
-  //     FLCollection.findOne({ userId: props.currentUserId })
-  //       .then(res => {
-  //         console.log(res);
-  //       })
-  //   }
-  // }, [ listReady ]);
+  const followingListsCollection = props.followingListsCollection;
+  const profilesCollection = props.profilesCollection;
 
-  const profile = { avatar: 'https://i.kinja-img.com/gawker-media/image/upload/todfqqyvpitss7ezk2ox.png' };
+  const default_avatar = '../assets/images/default_avatar.jpg';
 
-  return(
-    <View
-      style={{ 
-        width: 260, 
-        alignSelf: 'center',
-      }}
-    >
-    <Text 
-      style={{
-        marginBottom: 40, 
-        marginTop: 10, 
-        alignSelf: 'center', 
-        fontSize: 17,
-        fontWeight: 'bold', 
-        borderBottomWidth: 1, 
-        borderBottomColor: 'black' 
+  useEffect(() => { 
+    if (!IdsReady && !followingIds) {
+      followingListsCollection.findOne({ userId: props.currentUserId })
+        .then(res => {
+          if (res) {
+            setFollowingIds(res.followingList);
+          }
+        })
+    }
+  }, [ IdsReady, followingIds ]);
+
+  useEffect(() => {
+    if (followingIds && !IdsReady) {
+      setIdsReady(true);
+      console.log("FollowingIds is ready");
+    }
+  }, [ followingIds, IdsReady ]);
+
+  useEffect(() => {
+    if (IdsReady && !followingList) {
+      let tempList = [];
+      followingIds.map((userId, index) => {
+        profilesCollection.findOne({userId: userId})
+          .then(res => {
+            tempList.push(res);
+            if (index == followingIds.length -1 ) {
+              setFollowingList(tempList);
+            }
+          });
+      });
+    }
+  }, [ IdsReady, followingList ]);
+
+  useEffect(() => {
+    if (!listReady && followingList && followingIds ) {
+      console.log("Not even yet");
+      console.log(followingList.length + '; ' + followingIds.length);
+      if (followingList.length == followingIds.length) {
+        setListReady(true);
+        console.log("Even!");
+      } else { setFollowingList(null) }
+    }
+  }, [ followingList, followingIds, listReady ])
+
+  useEffect(() => {
+    if (!shouldRender && listReady) {
+      console.log("Done loading following list: " + followingList.length + '; ' + followingIds.length);
+      setShouldRender(true);
+    }
+  }, [ shouldRender, listReady ]);
+
+    return(
+      <View
+        style={{ 
+          width: 260, 
+          alignSelf: 'center',
         }}
-    >
-      Following List
-    </Text>
-    <ScrollView>
-    <Item profile={profile} />
-    <Item profile={profile} />
-    <Item profile={profile} />
-    <Item profile={profile} />
-    <Item profile={profile} />
-    <Item profile={profile} />
-    <Item profile={profile} />
-    <Item profile={profile} />
-    <Item profile={profile} />
-    <Item profile={profile} />
-    <Item profile={profile} />
-    <Item profile={profile} />
-    <Item profile={profile} />
-    <Item profile={profile} />
-    <Item profile={profile} />
-    <Item profile={profile} />
-    <Item profile={profile} />
-    <Item profile={profile} />
-    <Item profile={profile} />
-    <Item profile={profile} />
-    <Item profile={profile} />
-    <Item profile={profile} />
-    <Item profile={profile} />
-    </ScrollView>
-    </View>
-
-  )
+      >
+      <Text 
+        style={{
+          marginBottom: 40, 
+          marginTop: 10, 
+          alignSelf: 'center', 
+          fontSize: 17,
+          fontWeight: 'bold', 
+          borderBottomWidth: 1, 
+          borderBottomColor: 'black' 
+          }}
+      >
+        Following List
+      </Text>
+      <ScrollView>
+        {
+          shouldRender && followingList.map((profile, index) => (
+            <ListItem
+              key={index}
+              leftAvatar={{ source: { uri: profile.avatar } }}
+              title={profile.firstName + " " + profile.lastName}
+              subtitle={profile.email}
+              bottomDivider
+            />
+          ))
+        }
+      </ScrollView>
+      </View>
+  );
 }
 export default FollowingList;

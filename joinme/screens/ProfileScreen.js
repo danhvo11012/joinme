@@ -78,7 +78,7 @@ function ProfileScreen( { route, navigation }) {
     if (!followingListFound) {
       followingListsCollection.findOne({ userId: currentUserId })
         .then(res => {
-          console.log("result: " + res);
+          console.log(res);
           if (res) {
             setFollowingListFound(true);
           } else {
@@ -86,10 +86,9 @@ function ProfileScreen( { route, navigation }) {
             followingListsCollection.insertOne({
               userId: currentUserId,
               followingList: [
-                "5e44cdf8eb3cea946c1e2642", 
-                "5e61671b93037f34d9fd7935", 
+                "5e61671b93037f34d9fd7935",
                 "5e4759b2125403d353cc0a6f",
-                "2e61671b233037f13d9fd7935"
+                "2e61671b233037f13d9fd7935",
               ],
             })
               .then(res => {
@@ -137,7 +136,7 @@ function ProfileScreen( { route, navigation }) {
         work: profile.work,
         summary: profile.summary
       }
-    }); 
+    });
   }
 
   const handleIsListVisible = () => {
@@ -272,13 +271,13 @@ function ProfileScreen( { route, navigation }) {
           height='100%'
           overlayStyle={{ marginTop: 80}}
           animated={true}
-          children={
+          onBackdropPress={handleIsListVisible}
+        >
             <FollowingList 
               currentUserId={currentUserId} 
               followingListsCollection={followingListsCollection}
-            />}
-          onBackdropPress={handleIsListVisible}
-        >
+              profilesCollection={profiles}
+            />
         </Overlay>
       </View>
     </ScrollView>
