@@ -54,17 +54,6 @@ function ProfileScreen( { route, navigation }) {
   const styles = useStyleSheet(themedStyle);
   
   //icons
-  const MessageCircleIcon = () => {
-    return(
-      <TabBarIcon color="black" name="ios-mail"></TabBarIcon>
-    );
-  };
-
-  const PersonAddIcon = () => {
-    return(
-      <TabBarIcon color="white" name="ios-add"></TabBarIcon>
-    );
-  };
 
   const EditIcon = () => {
     return(
@@ -118,7 +107,7 @@ function ProfileScreen( { route, navigation }) {
     }); 
   }
 
-  const isSameUser = true;
+  
   const logOut = async () => {      
         client.auth.logout().then(user => {
           console.log(`User ${currentUserId} successfully logged out`);
@@ -158,7 +147,7 @@ function ProfileScreen( { route, navigation }) {
             {profile.city}
           </Text>
         </View>
-        {isSameUser &&
+        
           <View style={styles.profileButtonsContainer}>
             <Button
               style={styles.editButton}
@@ -168,24 +157,8 @@ function ProfileScreen( { route, navigation }) {
               EDIT
             </Button> 
           </View>
-        }
-        {!isSameUser &&
-          <View style={styles.profileButtonsContainer}>
-            <Button
-              style={styles.profileButton}
-              icon={PersonAddIcon}
-              onPress={onFollowButtonPress}>
-              FOLLOW
-            </Button>
-            <Button
-              style={styles.profileButton}
-              status='control'
-              icon={MessageCircleIcon}
-              onPress={onMessageButtonPress}>
-              MESSAGE
-            </Button>
-          </View>
-        }
+        
+        
         <View style={{ flexDirection: 'row', width: '100%' }} >
           <View style={{flex:1}}></View>
           <View style={styles.socialsContainer}>

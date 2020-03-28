@@ -34,7 +34,7 @@ export default class SliderEntry extends Component {
   }
 
   render () {
-    const { data: { firstName, lastName, email }, even } = this.props;
+    const { data: { userId, firstName, lastName, email }, even, onEntryClick } = this.props;
     const title = firstName + ' ' + lastName;
     const subtitle = email;
     const uppercaseTitle = title ? (
@@ -49,8 +49,8 @@ export default class SliderEntry extends Component {
     return (
       <TouchableOpacity
         activeOpacity={1}
-        style={styles.slideInnerContainer}
-        onPress={() => { alert(`You've clicked '${title}'`); }}
+        style={[styles.slideInnerContainer, styles.shadow]}
+        onPress={() => onEntryClick(userId)}
         >
           <View style={[styles.imageContainer, even ? styles.imageContainerEven : {}]}>
               { this.image }
@@ -65,7 +65,6 @@ export default class SliderEntry extends Component {
                 { subtitle }
               </Text>
           </View>
-          <View style={styles.shadow} />
       </TouchableOpacity>
     );
   }
@@ -102,10 +101,10 @@ const styles = StyleSheet.create({
         right: itemHorizontalMargin,
         bottom: 18,
         shadowColor: 'black',
-        shadowOpacity: 0.25,
+        shadowOpacity: 0.35,
         shadowOffset: { width: 0, height: 10 },
         shadowRadius: 10,
-        borderRadius: entryBorderRadius
+        borderRadius: entryBorderRadius,
     },
     imageContainer: {
         flex: 1,
