@@ -10,7 +10,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   YellowBox,
-  DeviceEventEmitter
+  DeviceEventEmitter,
 } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationEvents } from 'react-navigation';
@@ -25,15 +25,6 @@ import ProfileSchema from '../constants/ProfileSchema';
 import FollowingList from '../components/FollowingList';
 
 function ProfileScreen( { route, navigation }) {
-  //dvo
-  // useEffect(() => {
-  //   const unsubscribe = navigation.addListener('focus', () => {
-  //     setLoadingComplete(false);
-  //   });
-
-  //   return unsubscribe;
-  // }, [navigation]);
-
   useEffect (()=>{
     DeviceEventEmitter.addListener('listener', (e)=>{
         setLoadingComplete(false);
@@ -46,18 +37,30 @@ function ProfileScreen( { route, navigation }) {
   const db = mongoClient.db('joinme');
   const profiles = db.collection('profiles');
   const followingListsCollection = db.collection('followingLists');
+
   //state
   const { currentUserId, user } = route.params;
-  
   const [ loadingComplete, setLoadingComplete] = useState(false);
   const [ profile, setProfile ] = useState(null);
-const [ isListVisible, setIsListVisble ] = useState(false);
+  const [ isListVisible, setIsListVisble ] = useState(false);
+
   // Following List
   const [ followingListFound, setFollowingListFound ] = useState(false);
 
   const styles = useStyleSheet(themedStyle);
   
   //icons
+  const MessageCircleIcon = () => {
+    return(
+      <TabBarIcon color="black" name="ios-mail"></TabBarIcon>
+    );
+  };
+
+  const PersonAddIcon = () => {
+    return(
+      <TabBarIcon color="white" name="ios-add"></TabBarIcon>
+    );
+  };
 
   const EditIcon = () => {
     return(
@@ -98,33 +101,28 @@ const [ isListVisible, setIsListVisble ] = useState(false);
   }, [followingListFound]);
 
   useEffect(() => {
-    if(!loadingComplete)
-    {
+    if(!loadingComplete) {
       profiles.findOne({ userId: currentUserId })
       .then((result) => {
         if (result) {
           console.log('Profile found.');
           setProfile(result);
+
         } else {
           console.log('No profile found.');
           const profile = ProfileSchema(currentUserId, user.email);
           profiles.insertOne(profile)
-          .then(res => {
-            console.log('New profile added.');
-          });
+            .then(res => {
+              console.log('New profile added.');
+            });
           setProfile(profile);
         }
+      });
         setLoadingComplete(true);
-      }, [loadingComplete]);
     }
-  });
-
-  const handleIsListVisible = () => {
-    setIsListVisble(!isListVisible);
-  }
+  }, [loadingComplete]);
 
   function onEditButtonPress() {
-    
     navigation.navigate('Profile Settings', {
       //pass profile data to edit screen
       profile: {
@@ -138,10 +136,14 @@ const [ isListVisible, setIsListVisble ] = useState(false);
         work: profile.work,
         summary: profile.summary
       }
-    }); 
+    });
   }
 
-  
+  const handleIsListVisible = () => {
+    setIsListVisble(!isListVisible);
+  }
+
+  const isSameUser = true;
   const logOut = async () => {      
         client.auth.logout().then(user => {
           console.log(`User ${currentUserId} successfully logged out`);
@@ -181,7 +183,7 @@ const [ isListVisible, setIsListVisble ] = useState(false);
             {profile.city}
           </Text>
         </View>
-        
+        {isSameUser &&
           <View style={styles.profileButtonsContainer}>
             <Button
               style={styles.editButton}
@@ -191,8 +193,24 @@ const [ isListVisible, setIsListVisble ] = useState(false);
               EDIT
             </Button> 
           </View>
-        
-        
+        }
+        {!isSameUser &&
+          <View style={styles.profileButtonsContainer}>
+            <Button
+              style={styles.profileButton}
+              icon={PersonAddIcon}
+              onPress={onFollowButtonPress}>
+              FOLLOW
+            </Button>
+            <Button
+              style={styles.profileButton}
+              status='control'
+              icon={MessageCircleIcon}
+              onPress={onMessageButtonPress}>
+              MESSAGE
+            </Button>
+          </View>
+        }
         <View style={{ flexDirection: 'row', width: '100%' }} >
           <View style={{flex:1}}></View>
           <View style={styles.socialsContainer}>
@@ -266,7 +284,6 @@ const [ isListVisible, setIsListVisble ] = useState(false);
     );
   }
 };
-
 export default ProfileScreen;
 
 const themedStyle = StyleService.create({
@@ -309,24 +326,9 @@ const themedStyle = StyleService.create({
     width: '40%',
   },
   logOutButton: {
-    //Danh modified:
     width: 70,
     left: -25,
     bottom: -20
-
-    // Khiem's
-    // width:'12%', 
-    // borderRadius: 0,
-    // bottom: '48%',
-    // backgroundColor:'#f2f3f5',
-    // borderColor:'white',
-    // shadowColor: '#000000',
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 3
-    // },
-    // shadowRadius: 1.2,
-    // shadowOpacity: 0.3
   },
   socialsContainer: {
     flex: 10,
