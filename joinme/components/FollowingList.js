@@ -30,19 +30,16 @@ import {
 } from 'react-native-elements';
 
 import {Layout, Avatar} from '@ui-kitten/components';
+import { itemWidth } from './SliderEntry';
 
 function FollowingList(props) {
-  const [ IdsReady, setIdsReady ] = useState(false);
-  const [ listReady, setListReady ] = useState(false);
-  const [ followingIds, setFollowingIds ] = useState(null);
-  const [ followingList, setFollowingList ] = useState(null);
-  const [ shouldRender, setShouldRender ] =useState(false);
-
   const followingListsCollection = props.followingListsCollection;
   const profilesCollection = props.profilesCollection;
 
   const default_avatar = '../assets/images/default_avatar.jpg';
-
+  
+  const [ IdsReady, setIdsReady ] = useState(false);
+  const [ followingIds, setFollowingIds ] = useState(null);
   useEffect(() => { 
     if (!IdsReady && !followingIds) {
       followingListsCollection.findOne({ userId: props.currentUserId })
@@ -57,13 +54,14 @@ function FollowingList(props) {
   useEffect(() => {
     if (followingIds && !IdsReady) {
       setIdsReady(true);
-      console.log("FollowingIds is ready");
     }
   }, [ followingIds, IdsReady ]);
 
+  const [ followingList, setFollowingList ] = useState(null);
   useEffect(() => {
     if (IdsReady && !followingList) {
       let tempList = [];
+      
       followingIds.map((userId, index) => {
         profilesCollection.findOne({userId: userId})
           .then(res => {
@@ -76,58 +74,83 @@ function FollowingList(props) {
     }
   }, [ IdsReady, followingList ]);
 
-  useEffect(() => {
-    if (!listReady && followingList && followingIds ) {
-      console.log("Not even yet");
-      console.log(followingList.length + '; ' + followingIds.length);
-      if (followingList.length == followingIds.length) {
-        setListReady(true);
-        console.log("Even!");
-      } else { setFollowingList(null) }
-    }
-  }, [ followingList, followingIds, listReady ])
+
+
+
+  const [ followingListFullyLoaded, setFollowingListFullyLoaded ] = useState(false);
+  const [ reconsider, setReconsider ] = useState(false);
 
   useEffect(() => {
-    if (!shouldRender && listReady) {
-      console.log("Done loading following list: " + followingList.length + '; ' + followingIds.length);
-      setShouldRender(true);
-    }
-  }, [ shouldRender, listReady ]);
+    if (!reconsider) {
 
-    return(
-      <View
-        style={{ 
-          width: 260, 
-          alignSelf: 'center',
-        }}
-      >
-      <Text 
-        style={{
-          marginBottom: 40, 
-          marginTop: 10, 
-          alignSelf: 'center', 
-          fontSize: 17,
-          fontWeight: 'bold', 
-          borderBottomWidth: 1, 
-          borderBottomColor: 'black' 
-          }}
-      >
-        Following List
-      </Text>
-      <ScrollView>
-        {
-          shouldRender && followingList.map((profile, index) => (
-            <ListItem
-              key={index}
-              leftAvatar={{ source: { uri: profile.avatar } }}
-              title={profile.firstName + " " + profile.lastName}
-              subtitle={profile.email}
-              bottomDivider
-            />
-          ))
+    if (followingList && !followingListFullyLoaded) {
+      if (followingList.length === followingIds.length) {
+        setFollowingListFullyLoaded(true);
+        setReconsider(false);
+      } else if (followingList.length != followingIds.length) {
+        console.log("problem explodes");
+        setReconsider(true);
+      }
+    }
+  }
+  }, [ followingListFullyLoaded, followingList, reconsider ]);
+
+  useEffect(() => {
+      console.log("reconsidering..")
+      if (followingList) {
+        if (followingList.length == followingIds.length) {
+          setReconsider(true);
+        } else {
+          setReconsider(false);
         }
-      </ScrollView>
-      </View>
+      }
+      console.log("reconsidered is set to " + reconsider);
+  }, [ reconsider ]);
+
+  function followingListPrep() {
+    let Items = []
+
+    followingList.map((profile, index) => {
+      Items.push(
+        <ListItem
+          key={index}
+          leftAvatar={{ source: { uri: profile.avatar } }}
+          title={profile.firstName + " " + profile.lastName}
+          subtitle={profile.email}
+          bottomDivider
+        />
+      );
+    });
+
+    return Items;
+  }
+
+  return(
+    <View
+      style={{ 
+        width: 260, 
+        alignSelf: 'center',
+      }}
+    >
+    <Text 
+      style={{
+        marginBottom: 40, 
+        marginTop: 10, 
+        alignSelf: 'center', 
+        fontSize: 17,
+        fontWeight: 'bold', 
+        borderBottomWidth: 1, 
+        borderBottomColor: 'black' 
+        }}
+    >
+      Following List
+    </Text>
+    <ScrollView>
+      {
+        followingListFullyLoaded && followingListPrep()
+      }
+    </ScrollView>
+    </View>
   );
 }
 export default FollowingList;
