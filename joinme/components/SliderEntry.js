@@ -15,7 +15,7 @@ export default class SliderEntry extends Component {
     get image () {
       const { data: { avatar }, parallax, parallaxProps, even } = this.props;
 
-      return parallax ? (
+      return false ? (
         <ParallaxImage
           source={avatar != '' ? {uri: avatar} : require('../assets/images/default_avatar.jpg')}
           containerStyle={[ styles.imageContainer, even ? styles.imageContainerEven : {} ]}
@@ -27,7 +27,7 @@ export default class SliderEntry extends Component {
         />
       ) : (
       <Image
-        source={{ uri: avatar }}
+        source={avatar != '' ? {uri: avatar} : require('../assets/images/default_avatar.jpg')}
         style={styles.image}
       />
     );
@@ -121,7 +121,8 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
         borderRadius: IS_IOS ? entryBorderRadius : 0,
         borderTopLeftRadius: entryBorderRadius,
-        borderTopRightRadius: entryBorderRadius
+        borderTopRightRadius: entryBorderRadius,
+        width: '100%'
     },
     // image's border radius is buggy on iOS; let's hack it!
     radiusMask: {

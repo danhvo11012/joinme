@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
       
   },
   exampleContainerDark: {
-    backgroundColor: 'grey'
+    backgroundColor: 'white'
   },
   exampleContainerLight: {
     backgroundColor: 'white'
