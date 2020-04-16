@@ -4,30 +4,19 @@
  * @author Danh Vo
  * @version 1.0
  */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 
 import {
-  StyleSheet,
   View,
-  ImageBackground,
-  Dimensions,
-  LayoutAnimation,
-  UIManager,
-  KeyboardAvoidingView,
-  ShadowPropTypesIOS,
   TextInput
 } from 'react-native';
 
 import {
-  Text,
-  Card,
-  Divider,
-  ListItem,
   Button,
   Icon
 } from 'react-native-elements';
 
-import {Layout, Avatar} from '@ui-kitten/components';
+import {Avatar} from '@ui-kitten/components';
 
 function CommentTextBox(props) {
   const [ contentBoxHeight, setContentBoxHeight ] = useState(0);
@@ -48,7 +37,7 @@ function CommentTextBox(props) {
   */
 
   const handleSendComment = () => {
-    if (content == null) { alert('Please enter your comment.')}
+    if (content === null) { alert('Please enter your comment.')}
     else {
       props.getCommentCallback({
         ownerId: props.currentUserId,
@@ -56,7 +45,6 @@ function CommentTextBox(props) {
         date: new Date(),
         content: content,
         likes: 0,
-        // likers: [],
       });
       setContent(null);
       textInput.current.clear();
@@ -71,7 +59,7 @@ function CommentTextBox(props) {
             height: 90,
           }}
           size="large"
-          source={props.userAvatar != '' ? {uri: props.userAvatar} : require(default_avatar)}
+          source={props.userAvatar !== '' ? {uri: props.userAvatar} : require(default_avatar)}
       />
 
       <TextInput

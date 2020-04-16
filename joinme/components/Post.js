@@ -82,9 +82,9 @@ function Post(props) {
     setLiked(!liked);
     setNoOfLike(!liked ? noOfLike + 1 : noOfLike -1);
     if (!liked) { 
-      props.post.likers.push(props.currentUserId); 
+      props.post.likers.push(props.ownerId); 
     } else { 
-      props.post.likers = props.post.likers.filter((userId) => { return userId != props.currentUserId });
+      props.post.likers = props.post.likers.filter((userId) => { return userId != props.ownerId });
 
     }
   }
@@ -94,7 +94,7 @@ function Post(props) {
   }
 
   const isUserFound = () => {
-    const userFound = props.post.likers.find((userId) => { return userId == props.currentUserId });
+    const userFound = props.post.likers.find((userId) => { return userId == props.ownerId });
     return (userFound ? true : false);
   }
 
@@ -108,7 +108,7 @@ function Post(props) {
 
   const handleSendComment = (commentFromCommentTBox) => {
     if (commentFromCommentTBox) {
-
+      console.log(commentFromCommentTBox);
       comments.insertOne(commentFromCommentTBox)
         .then((res) => {
           LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -120,7 +120,7 @@ function Post(props) {
 
   useEffect(() => {
     if (!profile) {
-      profiles.findOne({ userId: props.currentUserId })
+      profiles.findOne({ userId: props.ownerId })
         .then(res => {
           setProfile(res);
         })
@@ -184,7 +184,6 @@ function Post(props) {
   const cmtBtnTitle = viewCommentOn ? "Hide Comments" : "View Comments"; 
 
   const postTitle = profile ? (profile.firstName + ' ' + profile.lastName + ' - ' + props.post.category.toUpperCase() + ' crews needed') : 'post title undefined.'
-
   if (!profile) { return null }
   else {
     return(
@@ -246,7 +245,7 @@ function Post(props) {
               />
             </View>
 
-            <View style={{ flexGrow: 1, alignItems: 'flex-end'}} >
+            {props.deletable && <View style={{ flexGrow: 1, alignItems: 'flex-end'}} >
               <Button 
                 style={{ width: 50}} 
                 type="clear" 
@@ -258,8 +257,7 @@ function Post(props) {
                 }
                 onPress={handleDeletePost}
               />
-                
-            </View>
+              </View>}
           </View>
 
           <Divider />
@@ -268,9 +266,9 @@ function Post(props) {
           </View>
           <Divider />
           <CommentTextBox 
-            post={props.post} 
-            currentUserId={props.currentUserId} 
-            userAvatar={profile.avatar} 
+            post={props.post}
+            currentUserId={props.currentUserId}
+            userAvatar={props.currentUserAvatar}
             getCommentCallback={getCommentFromCommentTBox}
           />
       </Card>

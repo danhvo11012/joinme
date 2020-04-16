@@ -234,13 +234,16 @@ function MyDeskScreen({ route, navigation }) {
         key={i} 
         profiles={profiles}
         comments={comments}
-        currentUserId={currentUserId} 
+        ownerId={currentUserId}
+        currentUserId={currentUserId}
+        currentUserAvatar={profile.avatar}
         userAvatar={avatarHandler}
         post={post} 
         postKey={i} 
         postToDelete={getPostToDelete} 
         likeSignal={getLikeSignal} 
         commentToSend={handleSendComment}
+        deletable={true}
       />
     )
   }) : null;
