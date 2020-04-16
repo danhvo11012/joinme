@@ -36,12 +36,10 @@ function FollowingList(props) {
   const followingListsCollection = props.followingListsCollection;
   const profilesCollection = props.profilesCollection;
 
-  const default_avatar = '../assets/images/default_avatar.jpg';
-  
-  const [ IdsReady, setIdsReady ] = useState(false);
-  const [ followingIds, setFollowingIds ] = useState(null);
+  // const default_avatar = '../assets/images/default_avatar.jpg';
+  const [ followingIds, setFollowingIds ] = useState(new Array());
   useEffect(() => { 
-    if (!IdsReady && !followingIds) {
+    if (!followingIds.length) {
       followingListsCollection.findOne({ userId: props.currentUserId })
         .then(res => {
           if (res) {
@@ -49,82 +47,34 @@ function FollowingList(props) {
           }
         })
     }
-  }, [ IdsReady, followingIds ]);
+  }, [ followingIds ]);
 
+  const [ followingList, setFollowingList ] = useState(new Array());
   useEffect(() => {
-    if (followingIds && !IdsReady) {
-      setIdsReady(true);
-    }
-  }, [ followingIds, IdsReady ]);
-
-  const [ followingList, setFollowingList ] = useState(null);
-  useEffect(() => {
-    if (IdsReady && !followingList) {
-      let tempList = [];
-      
-      followingIds.map((userId, index) => {
+    var myPromise = (userId) => {
+      return new Promise((resolve, reject) => {
         profilesCollection.findOne({userId: userId})
           .then(res => {
-            tempList.push(res);
-            if (index == followingIds.length -1 ) {
-              setFollowingList(tempList);
-            }
-          });
-      });
+            resolve(res);
+          })
+      })
     }
-  }, [ IdsReady, followingList ]);
-
-
-
+      if (followingIds.length) {
+        const list = followingIds;
+        Promise.all(list.map(userId => myPromise(userId)))
+          .then(data => setFollowingList(data));
+    }        
+  }, [ followingIds ]);
 
   const [ followingListFullyLoaded, setFollowingListFullyLoaded ] = useState(false);
-  const [ reconsider, setReconsider ] = useState(false);
-
   useEffect(() => {
-    if (!reconsider) {
-
-    if (followingList && !followingListFullyLoaded) {
-      if (followingList.length === followingIds.length) {
-        setFollowingListFullyLoaded(true);
-        setReconsider(false);
-      } else if (followingList.length != followingIds.length) {
-        console.log("problem explodes");
-        setReconsider(true);
-      }
+    if (!(followingList.length > 0 && followingList.length == followingIds.length)) {                         
+      setFollowingListFullyLoaded(false);
+    } else {
+      setFollowingListFullyLoaded(true);
     }
-  }
-  }, [ followingListFullyLoaded, followingList, reconsider ]);
-
-  useEffect(() => {
-      console.log("reconsidering..")
-      if (followingList) {
-        if (followingList.length == followingIds.length) {
-          setReconsider(true);
-        } else {
-          setReconsider(false);
-        }
-      }
-      console.log("reconsidered is set to " + reconsider);
-  }, [ reconsider ]);
-
-  function followingListPrep() {
-    let Items = []
-
-    followingList.map((profile, index) => {
-      Items.push(
-        <ListItem
-          key={index}
-          leftAvatar={{ source: { uri: profile.avatar } }}
-          title={profile.firstName + " " + profile.lastName}
-          subtitle={profile.email}
-          bottomDivider
-        />
-      );
-    });
-
-    return Items;
-  }
-
+  }, [ followingList, followingListFullyLoaded ]);
+ 
   return(
     <View
       style={{ 
@@ -132,7 +82,7 @@ function FollowingList(props) {
         alignSelf: 'center',
       }}
     >
-    <Text 
+    <Text       
       style={{
         marginBottom: 40, 
         marginTop: 10, 
@@ -147,7 +97,17 @@ function FollowingList(props) {
     </Text>
     <ScrollView>
       {
-        followingListFullyLoaded && followingListPrep()
+        followingListFullyLoaded && followingList.map((profile, index) => {
+            return(
+              <ListItem
+                key={index}
+                leftAvatar={{ source: { uri: profile.avatar } }}
+                title={profile.firstName + " " + profile.lastName}
+                subtitle={profile.email}
+                bottomDivider
+              />
+            )
+          })
       }
     </ScrollView>
     </View>
