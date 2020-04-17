@@ -136,7 +136,9 @@ function MyDeskScreen({ route, navigation }) {
           setProfile(res);
         });
     } else {
-      if (profile.avatar.length > 1) setAvatarHandler(profile.avatar);
+      if (profile.avatar) {
+        if (profile.avatar.length > 1) setAvatarHandler(profile.avatar);
+      }
     }
   },[profile]);
 
