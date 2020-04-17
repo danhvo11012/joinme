@@ -268,7 +268,7 @@ function Post(props) {
           <CommentTextBox 
             post={props.post}
             currentUserId={props.currentUserId}
-            userAvatar={props.currentUserAvatar}
+            // userAvatar={props.currentUserAvatar}
             getCommentCallback={getCommentFromCommentTBox}
           />
       </Card>

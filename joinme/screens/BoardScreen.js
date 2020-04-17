@@ -60,17 +60,9 @@ function BoardScreen({ route, navigation }) {
   },[profile]);
 
   const [ avatarHandler, setAvatarHandler ] = useState('../assets/images/default_avatar.jpg');
-
-  const [ isPostReceived, setIsPostReceived ] = useState(false);
-  const [ isPostReady, setIsPostReady ] = useState(false);
   const [ isCommentReceived, setIsCommentReceived ] = useState(false);
-  const [ postsCommentsLoaded, setPostsCommentsLoaded ] = useState(false);
 
   const [ myPosts, setMyPosts] = useState(null);
-  const [ showCreateNewPostModal, setShowCreateNewPostModal ] = useState(false);
-  const [ postFromModal, setPostFromModal ] = useState(null);
-  const [ fullPost, setFullPost ] = useState(null);
- 
   const [ showSpinner, setShowSpinner ] = useState(false);
 
   UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -107,12 +99,6 @@ function BoardScreen({ route, navigation }) {
     setShowSpinner(true);
     setLoadingComplete(false);
     setShouldReload(true);
-  }
-
-  const resetLogicStates = () => {
-    setShouldReload(false);
-    setIsPostReady(false);
-    setIsPostReceived(false);
   }
 
   const getLikeSignal = (likeSignalFromPost) => {
@@ -172,7 +158,7 @@ const Posts = myPosts && profile ? myPosts.map((post, i) => {
       comments={comments}
       ownerId={post.ownerId}
       currentUserId={currentUserId}
-      currentUserAvatar={profile.avatar}
+      // currentUserAvatar={profile.avatar}
       userAvatar={avatarHandler}
       post={post} 
       postKey={i} 
@@ -189,7 +175,29 @@ if (!loadingComplete) { return (Indicator) }
       <ScrollView>
         <View style={{marginTop: 10, justifyContent: 'center', alignItems: 'center'}}>
           <Text style={{fontSize: 20, marginVertical: 10}}>Using Search Token: {"\n"}{"\n"}TYPE: {searchToken.type}{"\n"}VALUE: {searchToken.value}</Text>
-          
+          {/* <View>
+            <FormControl className={classes.formControl}>
+              <InputLabel shrink id="demo-simple-select-placeholder-label-label">
+                Age
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-placeholder-label-label"
+                id="demo-simple-select-placeholder-label"
+                value={age}
+                onChange={handleChange}
+                displayEmpty
+                className={classes.selectEmpty}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value={10}>Ten</MenuItem>
+                <MenuItem value={20}>Twenty</MenuItem>
+                <MenuItem value={30}>Thirty</MenuItem>
+              </Select>
+              <FormHelperText>Label + placeholder</FormHelperText>
+            </FormControl>
+          </View> */}
           <Button 
             title="Refresh"         
             style={{ width: 200, marginVertical: 5 }}
