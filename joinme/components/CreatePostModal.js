@@ -85,7 +85,7 @@ function CreatePostModal (props) {
           title="Create new Post"
         >
           <View style={{flexDirection: 'column', marginTop: 15 }}>
-            <Text style={{fontSize: 20, marginVertical: 5}}>Pick a category for this post:</Text>
+            {/* <Text style={{fontSize: 20, marginVertical: 5}}>Pick a category for this post:</Text> */}
             <Picker
               selectedValue={postCategory}
               style={{ alignSelf: 'center', width: '100%'}}

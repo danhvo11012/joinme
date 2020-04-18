@@ -104,6 +104,7 @@ function Post(props) {
 
   const handleViewComments = () => {
     setViewCommentOn(!viewCommentOn);
+    setShouldRenderComments(true);
   }
 
   const handleSendComment = (commentFromCommentTBox) => {
@@ -131,7 +132,6 @@ function Post(props) {
   useEffect(() => {
     if (viewCommentOn) {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-      setShouldRenderComments(true);
       setCmtsViewHeight('auto');
     } else {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);

@@ -19,11 +19,12 @@ import {
   ScrollView,
   Modal,
   Alert,
+  Picker,
   ActivityIndicator,
 } from 'react-native';
 
 import Post from '../components/Post'
-import { Input, Button, Icon, colors } from 'react-native-elements';
+import { Input, Button, Icon, colors, Card } from 'react-native-elements';
 
 import Comment from '../components/Comment';
 
@@ -38,10 +39,6 @@ function BoardScreen({ route, navigation }) {
 
   //profile, if not existed navigate => ProfileSettingScreen 
   const profiles = db.collection('profiles');
-
-  // const [ currentUserId, setCurrentUserId ] = useState( null );
-  const [ email, setEmail ] = useState( '' );
-  const [ UserAuth, setUserAuth ] = useState(null);
 
   //posts
   const [ loadingComplete, setLoadingComplete] = useState(false);
@@ -150,7 +147,6 @@ useEffect(()=> {
 }, [shouldReload, loadingComplete, showSpinner]);
 
 const Posts = myPosts && profile ? myPosts.map((post, i) => {
-  // console.log(post.ownerId);
   return (
     <Post 
       key={i} 
@@ -173,31 +169,22 @@ if (!loadingComplete) { return (Indicator) }
   else {
     return(
       <ScrollView>
-        <View style={{marginTop: 10, justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={{fontSize: 20, marginVertical: 10}}>Using Search Token: {"\n"}{"\n"}TYPE: {searchToken.type}{"\n"}VALUE: {searchToken.value}</Text>
-          {/* <View>
-            <FormControl className={classes.formControl}>
-              <InputLabel shrink id="demo-simple-select-placeholder-label-label">
-                Age
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-placeholder-label-label"
-                id="demo-simple-select-placeholder-label"
-                value={age}
-                onChange={handleChange}
-                displayEmpty
-                className={classes.selectEmpty}
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
-              </Select>
-              <FormHelperText>Label + placeholder</FormHelperText>
-            </FormControl>
-          </View> */}
+        <View style={{marginTop: 10, justifyContent: 'center', alignItems: 'center'}}>        
+          <View style={{flex: 1, paddingTop: 0, alignItems: "center" }}>
+          <Text style={{fontSize: 20, marginVertical: 5}}>Currently using filter: </Text>
+          <Picker
+            selectedValue={searchToken.value}
+            style={{ alignSelf: 'center', width: '100%' }}
+            itemStyle={{ fontSize: 17, height: 100, width: 300 }}
+            onValueChange={(itemValue, itemIndex) => setSearchToken({ type: "category", value: itemValue })}
+          >
+            {/* <Picker.Item label="Select a category to filter.." value="dummyValue" /> */}
+            <Picker.Item label="Project" value="project" />
+            <Picker.Item label="Peer to Peer Learning" value="p2pLearning" />
+            <Picker.Item label="A dummy Value" value="dummyValue" />
+          </Picker>
+          </View>
+          
           <Button 
             title="Refresh"         
             style={{ width: 200, marginVertical: 5 }}
