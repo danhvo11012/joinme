@@ -34,7 +34,7 @@ export default class SliderEntry extends Component {
   }
 
   render () {
-    const { data: { userId, firstName, lastName, email }, even, onEntryClick } = this.props;
+    const { data: { userId, firstName, lastName, email,summary }, even, onEntryClick } = this.props;
     const title = firstName + ' ' + lastName;
     const subtitle = email;
     const uppercaseTitle = title ? (
@@ -64,6 +64,13 @@ export default class SliderEntry extends Component {
               >
                 { subtitle }
               </Text>
+              <Text
+                style={[styles.subtitle, even ? styles.subtitleEven : {}]}
+                numberOfLines={2}
+              >
+                { summary }
+              </Text>
+              
           </View>
       </TouchableOpacity>
     );
@@ -122,7 +129,8 @@ const styles = StyleSheet.create({
         borderRadius: IS_IOS ? entryBorderRadius : 0,
         borderTopLeftRadius: entryBorderRadius,
         borderTopRightRadius: entryBorderRadius,
-        width: '100%'
+        width: '100%',
+        height: "80%"
     },
     // image's border radius is buggy on iOS; let's hack it!
     radiusMask: {
@@ -138,9 +146,7 @@ const styles = StyleSheet.create({
     },
     textContainer: {
         height: 150,
-        justifyContent: 'center',
         alignItems: 'center',
-        paddingTop: 20 - entryBorderRadius,
         paddingBottom: 20,
         paddingHorizontal: 16,
         backgroundColor: 'white',
