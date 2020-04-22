@@ -36,7 +36,8 @@ function FollowingList(props) {
   const followingListsCollection = props.followingListsCollection;
   const profilesCollection = props.profilesCollection;
 
-  // const default_avatar = '../assets/images/default_avatar.jpg';
+  const default_avatar = '../assets/images/default_avatar.jpg';
+
   const [ followingIds, setFollowingIds ] = useState(new Array());
   useEffect(() => { 
     if (!followingIds.length) {
@@ -55,6 +56,7 @@ function FollowingList(props) {
       return new Promise((resolve, reject) => {
         profilesCollection.findOne({userId: userId})
           .then(res => {
+            // if (!res.avatar) { res.avatar = default_avatar }
             resolve(res);
           })
       })
@@ -63,7 +65,7 @@ function FollowingList(props) {
         const list = followingIds;
         Promise.all(list.map(userId => myPromise(userId)))
           .then(data => setFollowingList(data));
-    }        
+    }
   }, [ followingIds ]);
 
   const [ followingListFullyLoaded, setFollowingListFullyLoaded ] = useState(false);
@@ -101,7 +103,7 @@ function FollowingList(props) {
             return(
               <ListItem
                 key={index}
-                leftAvatar={{ source: { uri: profile.avatar } }}
+                leftAvatar={{ source: profile.avatar !== '' ? { uri: profile.avatar } : require(default_avatar) }}
                 title={profile.firstName + " " + profile.lastName}
                 subtitle={profile.email}
                 bottomDivider

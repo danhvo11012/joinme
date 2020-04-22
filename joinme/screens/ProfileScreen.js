@@ -24,16 +24,86 @@ import { Avatar, Button, List, StyleService, Text, useStyleSheet } from '@ui-kit
 import ProfileSchema from '../constants/ProfileSchema';
 import FollowingList from '../components/FollowingList';
 
+const themedStyle = StyleService.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'background-basic-color-2',
+  },
+  header: {
+    paddingVertical: 24,
+    alignItems: 'center',
+  },
+  profileAvatar: {
+    width: 124,
+    height: 124,
+    borderRadius: 62,
+    top: '-5%',
+    marginTop: 10
+  },
+  profileName: {
+    zIndex: 1,
+  },
+  locationContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  location: {
+    marginVertical: 8,
+    marginLeft: 8
+  },
+  profileButtonsContainer: {
+    flexDirection: 'row',
+    marginVertical: 32,
+    marginHorizontal: 20,
+  },
+  profileButton: {
+    flex: 1,
+    marginHorizontal: 4,
+  },
+  editButton: {
+    width: '40%',
+  },
+  logOutButton: {
+    width: 70,
+    left: -25,
+    bottom: -20
+  },
+  socialsContainer: {
+    flex: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    width: '80%',
+    marginVertical: 5,
+  },
+  profileSocial: {
+    flex: 1,
+  },
+  sectionLabel: {
+    marginTop: 24,
+    marginBottom: 8,
+    marginHorizontal: 16,
+  },
+  profileDescription: {
+    marginHorizontal: 16,
+  },
+  friendsList: {
+    marginHorizontal: 8,
+  },
+  friendItem: {
+    alignItems: 'center',
+    marginHorizontal: 8,
+  },
+  friendName: {
+    marginTop: 8,
+  },
+  postItem: {
+    flex: 1,
+    aspectRatio: 1.0,
+  },
+});
+
 function ProfileScreen( { route, navigation }) {
-  //dvo
-  // useEffect(() => {
-  //   const unsubscribe = navigation.addListener('focus', () => {
-  //     setLoadingComplete(false);
-  //   });
-
-  //   return unsubscribe;
-  // }, [navigation]);
-
   useEffect (()=>{
     DeviceEventEmitter.addListener('listener', (e)=>{
         setLoadingComplete(false);
@@ -46,12 +116,13 @@ function ProfileScreen( { route, navigation }) {
   const db = mongoClient.db('joinme');
   const profiles = db.collection('profiles');
   const followingListsCollection = db.collection('followingLists');
+
   //state
   const { currentUserId, user } = route.params;
-  
   const [ loadingComplete, setLoadingComplete] = useState(false);
   const [ profile, setProfile ] = useState(null);
-const [ isListVisible, setIsListVisble ] = useState(false);
+  const [ isListVisible, setIsListVisble ] = useState(false);
+
   // Following List
   const [ followingListFound, setFollowingListFound ] = useState(false);
 
@@ -71,22 +142,19 @@ const [ isListVisible, setIsListVisble ] = useState(false);
     );
   };
 
+  const [ shouldDisableFollowingList, setShouldDisableFollowingList ] = useState(false);
   useEffect(() => {
     if (!followingListFound) {
       followingListsCollection.findOne({ userId: currentUserId })
         .then(res => {
-          console.log(res);
           if (res) {
             setFollowingListFound(true);
+            if (!res.followingList.length) { setShouldDisableFollowingList(true) }
           } else {
             console.log("Following list not found.");
             followingListsCollection.insertOne({
               userId: currentUserId,
-              followingList: [
-                "5e61671b93037f34d9fd7935",
-                "5e4759b2125403d353cc0a6f",
-                "2e61671b233037f13d9fd7935",
-              ],
+              followingList: [],
             })
               .then(res => {
                 console.log("New following list created.");
@@ -223,29 +291,29 @@ const [ isListVisible, setIsListVisble ] = useState(false);
           </View>
         </View>
       </ImageOverlay>
-      <Text
-        style={styles.sectionLabel}
-        category='s1'>
-        About
-      </Text>
-      <Text
-        style={styles.profileDescription}
-        appearance='hint'>
-        {profile.summary}
-      </Text>
       <View>
+        <Text
+          style={styles.sectionLabel}
+          category='s1'>
+          About
+        </Text>
+        <Text
+          style={styles.profileDescription}
+          appearance='hint'>
+          {profile.summary}
+        </Text>
         <Text
           style={styles.sectionLabel}
           category='s1'>
           Following
         </Text>
-        <ElementsButton
+        { !shouldDisableFollowingList ? <ElementsButton
           style={{width: 300, heigh: 100, alignSelf: 'center'}}
           type="outline"
           titleStyle={{ fontSize: 15}}
           title="View Full Following List"
           onPress={handleIsListVisible}>
-        </ElementsButton>
+        </ElementsButton> : <Text style={styles.profileDescription} appearance='hint'>You're not following anyone.</Text> }
       </View>
       <View>
         <Overlay 
@@ -268,97 +336,3 @@ const [ isListVisible, setIsListVisble ] = useState(false);
 };
 
 export default ProfileScreen;
-
-const themedStyle = StyleService.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'background-basic-color-2',
-  },
-  header: {
-    paddingVertical: 24,
-    alignItems: 'center',
-  },
-  profileAvatar: {
-    width: 124,
-    height: 124,
-    borderRadius: 62,
-    top: '-5%',
-    marginTop: 10
-  },
-  profileName: {
-    zIndex: 1,
-  },
-  locationContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  location: {
-    marginVertical: 8,
-    marginLeft: 8
-  },
-  profileButtonsContainer: {
-    flexDirection: 'row',
-    marginVertical: 32,
-    marginHorizontal: 20,
-  },
-  profileButton: {
-    flex: 1,
-    marginHorizontal: 4,
-  },
-  editButton: {
-    width: '40%',
-  },
-  logOutButton: {
-    //Danh modified:
-    width: 70,
-    left: -25,
-    bottom: -20
-
-    // Khiem's
-    // width:'12%', 
-    // borderRadius: 0,
-    // bottom: '48%',
-    // backgroundColor:'#f2f3f5',
-    // borderColor:'white',
-    // shadowColor: '#000000',
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 3
-    // },
-    // shadowRadius: 1.2,
-    // shadowOpacity: 0.3
-  },
-  socialsContainer: {
-    flex: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-    width: '80%',
-    marginVertical: 5,
-  },
-  profileSocial: {
-    flex: 1,
-  },
-  sectionLabel: {
-    marginTop: 24,
-    marginBottom: 8,
-    marginHorizontal: 16,
-  },
-  profileDescription: {
-    marginHorizontal: 16,
-  },
-  friendsList: {
-    marginHorizontal: 8,
-  },
-  friendItem: {
-    alignItems: 'center',
-    marginHorizontal: 8,
-  },
-  friendName: {
-    marginTop: 8,
-  },
-  postItem: {
-    flex: 1,
-    aspectRatio: 1.0,
-  },
-});

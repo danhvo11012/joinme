@@ -238,7 +238,7 @@ function MyDeskScreen({ route, navigation }) {
         comments={comments}
         ownerId={currentUserId}
         currentUserId={currentUserId}
-        // currentUserAvatar={profile.avatar}
+        currentUserAvatar={avatarHandler}
         userAvatar={avatarHandler}
         post={post} 
         postKey={i} 

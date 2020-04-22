@@ -85,7 +85,6 @@ function Post(props) {
       props.post.likers.push(props.ownerId); 
     } else { 
       props.post.likers = props.post.likers.filter((userId) => { return userId != props.ownerId });
-
     }
   }
 
@@ -268,7 +267,7 @@ function Post(props) {
           <CommentTextBox 
             post={props.post}
             currentUserId={props.currentUserId}
-            userAvatar={profile.avatar}
+            userAvatar={props.currentUserAvatar}
             getCommentCallback={getCommentFromCommentTBox}
           />
       </Card>
@@ -278,6 +277,3 @@ function Post(props) {
 };
 
 export default Post;
-
-
-// assert(

@@ -2,15 +2,17 @@ import React, { Component } from 'react';
 import { View, Text, Image, TouchableOpacity,Dimensions,StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 import { ParallaxImage } from 'react-native-snap-carousel';
+import DoubleClick from './DoubleTap';
+
 
 export default class SliderEntry extends Component {
-
     static propTypes = {
         data: PropTypes.object.isRequired,
         even: PropTypes.bool,
         parallax: PropTypes.bool,
         parallaxProps: PropTypes.object
     };
+
 
     get image () {
       const { data: { avatar }, parallax, parallaxProps, even } = this.props;
@@ -25,16 +27,14 @@ export default class SliderEntry extends Component {
           spinnerColor={even ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.25)'}
           {...parallaxProps}
         />
-      ) : (
-      <Image
-        source={avatar != '' ? {uri: avatar} : require('../assets/images/default_avatar.jpg')}
-        style={styles.image}
-      />
-    );
-  }
+      ) : (<Image
+            source={avatar != '' ? {uri: avatar} : require('../assets/images/default_avatar.jpg')}
+            style={styles.image}
+          />);
+    }
 
   render () {
-    const { data: { userId, firstName, lastName, email }, even, onEntryClick } = this.props;
+    const { data: { userId, firstName, lastName, email }, even, onEntryClick, onEntryDoubleClick } = this.props;
     const title = firstName + ' ' + lastName;
     const subtitle = email;
     const uppercaseTitle = title ? (
@@ -47,25 +47,35 @@ export default class SliderEntry extends Component {
     ) : false;
 
     return (
-      <TouchableOpacity
-        activeOpacity={1}
-        style={[styles.slideInnerContainer, styles.shadow]}
-        onPress={() => onEntryClick(userId)}
+      <DoubleClick
+          style={[styles.slideInnerContainer, styles.shadow]}
+          activeOpacity={0.95}
+          singleTap={() => {
+            onEntryClick();
+          }}
+          doubleTap={() => {
+            onEntryDoubleClick();
+          }}
+          delay={350}
         >
-          <View style={[styles.imageContainer, even ? styles.imageContainerEven : {}]}>
-              { this.image }
-              <View style={[styles.radiusMask, even ? styles.radiusMaskEven : {}]} />
-          </View>
-          <View style={[styles.textContainer, even ? styles.textContainerEven : {}]}>
-              { uppercaseTitle }
-              <Text
-                style={[styles.subtitle, even ? styles.subtitleEven : {}]}
-                numberOfLines={2}
-              >
-                { subtitle }
-              </Text>
-          </View>
-      </TouchableOpacity>
+
+        <View style={[styles.slideInnerContainer]} >
+
+            <View style={[styles.imageContainer, even ? styles.imageContainerEven : {}]}>
+                { this.image }
+                <View style={[styles.radiusMask, even ? styles.radiusMaskEven : {}]} />
+            </View>
+            <View style={[styles.textContainer, even ? styles.textContainerEven : {}]}>
+                { uppercaseTitle }
+                <Text
+                  style={[styles.subtitle, even ? styles.subtitleEven : {}]}
+                  numberOfLines={2}
+                >
+                  { subtitle }
+                </Text>
+            </View>
+        </View>
+      </DoubleClick>
     );
   }
 }

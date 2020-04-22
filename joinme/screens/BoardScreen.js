@@ -154,7 +154,7 @@ const Posts = myPosts && profile ? myPosts.map((post, i) => {
       comments={comments}
       ownerId={post.ownerId}
       currentUserId={currentUserId}
-      // currentUserAvatar={profile.avatar}
+      currentUserAvatar={avatarHandler}
       userAvatar={avatarHandler}
       post={post} 
       postKey={i} 
