@@ -46,15 +46,26 @@ function BoardScreen({ route, navigation }) {
 
   const [ profile, setProfile ] = useState(null);
   useEffect(() => {
-    if (!profile) {
-      profiles.findOne({userId: currentUserId})
-        .then(res => {
-          setProfile(res);
-        });
-    } else {
-      if (profile.avatar.length > 1) setAvatarHandler(profile.avatar);
+    if(!loadingComplete)
+    {
+      profiles.findOne({ userId: currentUserId })
+      .then((result) => {
+        if (result) {
+          console.log('Profile found.');
+          setProfile(result);
+        } else {
+          console.log('No profile found.');
+          const profile = ProfileSchema(currentUserId, user.email);
+          profiles.insertOne(profile)
+          .then(res => {
+            console.log('New profile added.');
+          });
+          setProfile(profile);
+        }
+        setLoadingComplete(true);
+      }, [loadingComplete]);
     }
-  },[profile]);
+  });
 
   const [ avatarHandler, setAvatarHandler ] = useState('../assets/images/default_avatar.jpg');
   const [ isCommentReceived, setIsCommentReceived ] = useState(false);
@@ -126,7 +137,7 @@ useEffect(()=> {
         break;
 
       // Add more
-
+                     
       default:
         alert("Error: No token type found!");
         break;
@@ -136,6 +147,7 @@ useEffect(()=> {
         .toArray()
         .then(res => {
           res.sort((a, b) => a._id < b._id);  // Sort results by document's id
+          // console.log(res)
           handleSetPosts(res);
           setLoadingComplete(true);
         });

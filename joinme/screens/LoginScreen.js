@@ -144,13 +144,6 @@ export default class LoginScreen extends Component {
     const { email, password } = this.state;
     this.setState({ isLoading: true });
 
-    // const credential = new UserPasswordCredential(
-    //   'danhvo11012@gmail.com',  // Testing
-    //   '12345678',
-    // );
-    // this.setState({email: 'danhvo11012@gmail.com', password: '12345678'});
-   
-
     LayoutAnimation.easeInEaseOut();
 
     // Handle login with user credential
