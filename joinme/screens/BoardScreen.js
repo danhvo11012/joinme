@@ -137,7 +137,6 @@ useEffect(()=> {
         break;
 
       // Add more
-                     
       default:
         alert("Error: No token type found!");
         break;

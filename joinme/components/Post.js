@@ -117,14 +117,15 @@ function Post(props) {
         });
     }
   }
-
+  const [ shouldReload, setShouldReload] = useState(false);
   useEffect(() => {
-    if (!profile) {
+    // if (!profile) {
       profiles.findOne({ userId: props.ownerId })
         .then(res => {
           setProfile(res);
+          setShouldReload(true);
         })
-    }
+          // }
   }, [profile])
 
   // Hooks handle view comment toggler logic
